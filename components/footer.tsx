@@ -1,6 +1,8 @@
 "use client"
 
+import { useRef } from "react"
 import { motion } from "framer-motion"
+import { Facebook, Instagram, Linkedin } from "lucide-react"
 
 const footerLinks = [
   {
@@ -13,54 +15,77 @@ const footerLinks = [
   },
   {
     title: "Soporte",
-    links: ["Centro de ayuda", "Seguridad", "Terminos", "Privacidad"],
+    links: ["Centro de ayuda", "Seguridad", "Términos", "Privacidad"],
   },
 ]
 
+const socialIcons = [
+  { icon: Facebook, label: "Facebook", href: "#" },
+  { icon: Instagram, label: "Instagram", href: "#" },
+  { icon: Linkedin, label: "LinkedIn", href: "#" },
+]
+
+const easeSmooth = [0.4, 0, 0.2, 1] as const
+
 export function Footer() {
+  const footerRef = useRef<HTMLElement>(null)
+
   return (
-    <footer className="border-t border-border bg-background">
-      <div className="mx-auto max-w-7xl px-8 py-20 lg:px-16">
-        <div className="flex flex-col gap-16 lg:flex-row lg:justify-between">
-          {/* Brand */}
+    <footer ref={footerRef} className="border-t border-border bg-surface-subtle">
+      <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20 lg:px-14">
+        <div className="flex flex-col gap-14 lg:flex-row lg:justify-between">
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="max-w-xs"
+            transition={{ duration: 0.55, ease: easeSmooth }}
+            className="max-w-sm"
           >
-            <span className="text-lg font-medium tracking-tight text-foreground">
+            <span className="font-logo text-lg font-semibold tracking-tight text-primary">
               MotoMarket
             </span>
-            <p className="mt-5 text-sm font-light leading-relaxed text-muted-foreground">
+            <p className="mt-5 font-body text-body leading-relaxed text-primary-secondary">
               El marketplace de motos, piezas y servicios verificados en Cuba.
               Compra y vende con confianza.
             </p>
+            <div className="mt-6 flex items-center gap-4">
+              {socialIcons.map(({ icon: Icon, label, href }) => (
+                <motion.a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="text-primary-muted transition-colors duration-smooth hover:text-accent"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Icon className="h-5 w-5" />
+                </motion.a>
+              ))}
+            </div>
           </motion.div>
 
-          {/* Links */}
-          <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:gap-20">
+          <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:gap-16">
             {footerLinks.map((group, i) => (
               <motion.div
                 key={group.title}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: i * 0.08 }}
+                transition={{ duration: 0.55, delay: i * 0.06, ease: easeSmooth }}
               >
-                <h4 className="text-xs font-medium uppercase tracking-[0.15em] text-foreground">
+                <h4 className="font-body text-label font-medium tracking-widest text-primary">
                   {group.title}
                 </h4>
                 <ul className="mt-5 flex flex-col gap-3">
                   {group.links.map((link) => (
                     <li key={link}>
-                      <a
+                      <motion.a
                         href="#"
-                        className="text-sm font-light text-muted-foreground transition-colors hover:text-foreground"
+                        className="inline-block font-body text-body text-primary-secondary transition-colors duration-smooth hover:text-primary"
+                        whileHover={{ x: 2 }}
                       >
                         {link}
-                      </a>
+                      </motion.a>
                     </li>
                   ))}
                 </ul>
@@ -69,23 +94,29 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="mt-20 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
-          <p className="text-xs font-light text-muted-foreground">
-            {'2026 MotoMarket Cuba. Todos los derechos reservados.'}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row"
+        >
+          <p className="font-body text-label text-primary-muted">
+            © 2026 MotoMarket Cuba. Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-6">
-            {["Terminos", "Privacidad", "Cookies"].map((label) => (
-              <a
+            {["Términos", "Privacidad", "Cookies"].map((label) => (
+              <motion.a
                 key={label}
                 href="#"
-                className="text-xs font-light text-muted-foreground transition-colors hover:text-foreground"
+                className="font-body text-label text-primary-muted transition-colors duration-smooth hover:text-primary"
+                whileHover={{ x: 2 }}
               >
                 {label}
-              </a>
+              </motion.a>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   )

@@ -1,57 +1,59 @@
 "use client"
 
-import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
+import { motion } from "framer-motion"
 import { ShieldCheck, Star, MessageCircle, Zap } from "lucide-react"
 
 const features = [
   {
-    icon: ShieldCheck,
-    title: "Verificacion real",
-    description:
-      "Cada vendedor pasa un proceso de verificacion para garantizar tu seguridad.",
+    icon: Star,
+    title: "Reputación",
+    description: "Calificaciones y reseñas de compradores reales que puedes consultar antes de decidir.",
   },
   {
-    icon: Star,
-    title: "Reputacion visible",
-    description:
-      "Calificaciones y resenas de compradores reales que puedes consultar antes de decidir.",
+    icon: ShieldCheck,
+    title: "Verificación",
+    description: "Cada vendedor pasa un proceso de verificación para garantizar tu seguridad.",
   },
   {
     icon: MessageCircle,
-    title: "Soporte dedicado",
-    description:
-      "Asistencia personal para resolver dudas y asegurar una experiencia sin fricciones.",
+    title: "Soporte real",
+    description: "Asistencia personal para resolver dudas y asegurar una experiencia sin fricciones.",
   },
   {
     icon: Zap,
-    title: "Publicacion rapida",
-    description:
-      "Publica tu anuncio con fotos y descripcion en menos de 2 minutos.",
+    title: "Publicar rápido",
+    description: "Publica tu anuncio con fotos y descripción en menos de 2 minutos.",
   },
 ]
 
+const easeSmooth = [0.4, 0, 0.2, 1] as const
+
 export function TrustSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: "-80px" })
+  const sectionRef = useRef<HTMLDivElement>(null)
 
   return (
-    <section id="confianza" ref={ref} className="relative py-28 sm:py-36">
-      <div className="mx-auto max-w-7xl px-8 lg:px-16">
+    <section
+      id="confianza"
+      ref={sectionRef}
+      className="relative py-24 md:py-32"
+    >
+      <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-14">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: easeSmooth }}
           className="mb-20 text-center"
         >
-          <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          <span className="font-body text-label font-medium tracking-widest text-primary-muted">
             Confianza
           </span>
-          <h2 className="mt-4 text-balance text-3xl font-light tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="mt-5 font-heading text-display font-semibold tracking-tight text-primary">
             Compra con total seguridad
           </h2>
-          <p className="mx-auto mt-5 max-w-md text-pretty text-base font-light text-muted-foreground">
-            Cada detalle esta pensado para que tu experiencia sea segura y confiable
+          <p className="mx-auto mt-5 max-w-md font-body text-body-lg leading-relaxed text-primary-secondary">
+            Cada detalle está pensado para que tu experiencia sea segura y confiable
           </p>
         </motion.div>
 
@@ -59,22 +61,23 @@ export function TrustSection() {
           {features.map((feature, i) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{
-                duration: 0.7,
-                delay: i * 0.1,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.55, delay: i * 0.08, ease: easeSmooth }}
+              className="group flex flex-col items-center text-center"
             >
-              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-card text-foreground">
-                <feature.icon className="h-6 w-6" strokeWidth={1.5} />
-              </div>
-              <h3 className="text-base font-medium text-foreground">
+              <motion.div
+                className="mb-6 flex h-16 w-16 items-center justify-center rounded-card bg-surface-subtle text-accent shadow-soft transition-all duration-smooth group-hover:shadow-card md:h-[72px] md:w-[72px]"
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.4 }}
+              >
+                <feature.icon className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.5} />
+              </motion.div>
+              <h3 className="font-body text-lg font-medium text-primary transition-colors duration-smooth group-hover:text-accent md:text-xl">
                 {feature.title}
               </h3>
-              <p className="mt-3 text-sm font-light leading-relaxed text-muted-foreground">
+              <p className="mt-3 font-body text-base leading-relaxed text-primary-secondary">
                 {feature.description}
               </p>
             </motion.div>

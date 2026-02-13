@@ -1,7 +1,7 @@
 "use client"
 
-import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
+import { motion } from "framer-motion"
 import Image from "next/image"
 import { MapPin, Star, BadgeCheck } from "lucide-react"
 
@@ -27,7 +27,7 @@ const listings = [
   {
     title: "Mishozuki Pro",
     price: "$1,200",
-    location: "Camaguey",
+    location: "Camagüey",
     rating: 4.5,
     verified: false,
     image: "/images/listing-3.jpg",
@@ -44,91 +44,104 @@ const listings = [
   },
 ]
 
+const easeSmooth = [0.4, 0, 0.2, 1] as const
+
+function ListingCard({
+  listing,
+  index,
+}: {
+  listing: (typeof listings)[0]
+  index: number
+}) {
+  return (
+    <motion.a
+      href="#"
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: easeSmooth }}
+      className="group relative overflow-hidden rounded-card bg-surface-elevated shadow-soft transition-all duration-smooth hover:shadow-card"
+      whileHover={{ y: -4 }}
+    >
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <Image
+          src={listing.image || "/placeholder.svg"}
+          alt={listing.title}
+          fill
+          className="object-cover transition-transform duration-smooth group-hover:scale-[1.03]"
+        />
+        {listing.badge && (
+          <span className="absolute left-4 top-4 rounded-badge bg-metallic/90 px-3 py-1 font-sans text-xs font-medium tracking-wide text-white backdrop-blur-sm">
+            {listing.badge}
+          </span>
+        )}
+      </div>
+      <div className="p-5 md:p-6">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="font-body text-lg font-medium text-primary transition-colors duration-smooth group-hover:text-accent">
+            {listing.title}
+          </h3>
+          {listing.verified && (
+            <BadgeCheck className="h-5 w-5 shrink-0 text-accent" strokeWidth={1.5} />
+          )}
+        </div>
+        <p className="mt-2 font-display text-xl font-semibold text-primary">
+          {listing.price}
+        </p>
+        <div className="mt-3 flex items-center gap-4 font-body text-sm text-primary-secondary">
+          <span className="flex items-center gap-1.5">
+            <MapPin className="h-3.5 w-3.5" />
+            {listing.location}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Star className="h-3.5 w-3.5 fill-metallic text-metallic" />
+            {listing.rating}
+          </span>
+        </div>
+      </div>
+    </motion.a>
+  )
+}
+
 export function FeaturedListings() {
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: "-80px" })
+  const sectionRef = useRef<HTMLDivElement>(null)
 
   return (
-    <section id="destacados" ref={ref} className="relative bg-foreground py-28 sm:py-36">
-      <div className="mx-auto max-w-7xl px-8 lg:px-16">
+    <section
+      id="destacados"
+      ref={sectionRef}
+      className="relative py-24 md:py-32"
+    >
+      <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-14">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-20 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+          className="mb-16 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"
         >
           <div>
-            <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-background/50">
-              Seleccion destacada
+            <span className="font-body text-label font-medium tracking-widest text-primary-muted">
+              Selección destacada
             </span>
-            <h2 className="mt-4 text-balance text-3xl font-light tracking-tight text-background sm:text-4xl md:text-5xl">
+            <h2 className="mt-4 font-heading text-display font-semibold tracking-tight text-primary">
               Anuncios destacados
             </h2>
           </div>
-          <a
+          <motion.a
             href="#"
-            className="shrink-0 text-sm font-medium text-background/70 transition-colors hover:text-background"
+            className="inline-flex items-center gap-1.5 font-body text-base font-medium text-primary transition-colors duration-smooth hover:text-accent"
+            whileHover={{ x: 2 }}
+            transition={{ duration: 0.4 }}
           >
-            Ver todos &#8594;
-          </a>
+            Ver todos
+            <span className="text-lg">→</span>
+          </motion.a>
         </motion.div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {listings.map((listing, i) => (
-            <motion.a
-              key={listing.title}
-              href="#"
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.8,
-                delay: i * 0.1,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="group"
-            >
-              {/* Image */}
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-                <Image
-                  src={listing.image || "/placeholder.svg"}
-                  alt={listing.title}
-                  fill
-                  className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-105"
-                />
-                {listing.badge && (
-                  <div className="absolute left-3 top-3">
-                    <span className="rounded-full bg-background/90 px-3 py-1 text-[11px] font-medium text-foreground backdrop-blur-sm">
-                      {listing.badge}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Content */}
-              <div className="mt-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base font-medium text-background">
-                    {listing.title}
-                  </h3>
-                  {listing.verified && (
-                    <BadgeCheck className="h-4 w-4 shrink-0 text-background/50" />
-                  )}
-                </div>
-                <p className="mt-1 text-lg font-medium text-background/90">
-                  {listing.price}
-                </p>
-                <div className="mt-2 flex items-center gap-4">
-                  <span className="flex items-center gap-1 text-xs text-background/50">
-                    <MapPin className="h-3 w-3" />
-                    {listing.location}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs text-background/50">
-                    <Star className="h-3 w-3" />
-                    {listing.rating}
-                  </span>
-                </div>
-              </div>
-            </motion.a>
+            <ListingCard key={listing.title} listing={listing} index={i} />
           ))}
         </div>
       </div>

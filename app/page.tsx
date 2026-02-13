@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/navbar"
 import { Hero } from "@/components/hero"
+import { SearchBar } from "@/components/search-bar"
 import { Categories } from "@/components/categories"
 import { BrandStory } from "@/components/brand-story"
 import { FeaturedListings } from "@/components/featured-listings"
@@ -12,6 +13,7 @@ export default function Home() {
     <main className="relative min-h-screen">
       <Navbar />
       <Hero />
+      <SearchBar />
       <Categories />
       <BrandStory />
       <FeaturedListings />
