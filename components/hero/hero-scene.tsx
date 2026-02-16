@@ -86,7 +86,7 @@ export function HeroScene({
   const glConfig = useMemo(
     () => ({
       antialias: true,
-      alpha: false,
+      alpha: true,
       powerPreference: "high-performance" as const,
       stencil: false,
       depth: true,
@@ -104,7 +104,7 @@ export function HeroScene({
   }
 
   return (
-    <div className={className} style={{ background: HERO_BG, width: '100%', height: '100%' }}>
+    <div className={className} style={{ background: 'transparent', width: '100%', height: '100%' }}>
       <Canvas
         gl={{
           ...glConfig,
@@ -126,7 +126,6 @@ export function HeroScene({
           }
         }}
       >
-        <color attach="background" args={[HERO_BG]} />
         <Suspense fallback={null}>
           <SceneContent scrollProgress={scrollProgress} onLoaded={handleLoaded} />
         </Suspense>

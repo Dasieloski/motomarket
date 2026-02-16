@@ -46,23 +46,23 @@ export function Hero() {
       ref={sectionRef}
       className="relative flex h-[100vh] min-h-[100dvh] items-center justify-center overflow-hidden bg-[#0A0D14] pt-24 md:pt-28"
     >
-      {/* 3D Canvas - DO NOT MODIFY */}
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <HeroScene
-          className="h-full w-full"
-          scrollProgress={scrollFor3D}
-          onModelLoaded={handleModelLoaded}
-        />
-      </div>
-
-      {/* === ANIMATED GRADIENT BACKGROUND === */}
-      <div className="pointer-events-none absolute inset-0 z-[1] hero-gradient-overlay">
+      {/* === ANIMATED GRADIENT BACKGROUND (behind 3D) === */}
+      <div className="pointer-events-none absolute inset-0 z-0 hero-gradient-overlay">
         {/* Orb 1 - TEST: Red glow top-left */}
         <div className="hero-orb-1 absolute -left-20 -top-20 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(255,0,0,0.5)_0%,transparent_70%)] blur-3xl md:h-[700px] md:w-[700px]" />
         {/* Orb 2 - TEST: Yellow glow bottom-right */}
         <div className="hero-orb-2 absolute -right-32 bottom-0 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(255,220,0,0.4)_0%,transparent_65%)] blur-3xl md:h-[600px] md:w-[600px]" />
         {/* Orb 3 - TEST: Cyan glow center */}
         <div className="hero-orb-3 absolute left-1/3 top-1/4 h-[350px] w-[350px] rounded-full bg-[radial-gradient(circle,rgba(0,255,255,0.45)_0%,transparent_60%)] blur-3xl md:h-[500px] md:w-[500px]" />
+      </div>
+
+      {/* 3D Canvas (transparent, so gradient shows through) */}
+      <div className="pointer-events-none absolute inset-0 z-[1]">
+        <HeroScene
+          className="h-full w-full"
+          scrollProgress={scrollFor3D}
+          onModelLoaded={handleModelLoaded}
+        />
       </div>
 
       {/* Left gradient for text legibility */}
