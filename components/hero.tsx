@@ -44,7 +44,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex h-[100vh] min-h-[100dvh] items-center justify-center overflow-hidden bg-[#0A0D14] pt-24 md:pt-28"
+      className="relative flex h-[100vh] min-h-[100dvh] items-center justify-center overflow-hidden bg-[#0A0D14] pt-16 md:pt-28"
     >
       {/* === ANIMATED GRADIENT BACKGROUND (behind 3D) === */}
       <div className="pointer-events-none absolute inset-0 z-0 hero-gradient-overlay">
@@ -78,18 +78,18 @@ export function Hero() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-40 bg-gradient-to-t from-[var(--surface)] to-transparent" />
 
       {/* Content grid */}
-      <div className="relative z-[3] mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-6 md:grid-cols-2 md:gap-16">
+      <div className="relative z-[3] mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-6 px-4 sm:px-6 md:grid-cols-2 md:gap-16">
         <motion.div
           style={{ opacity: contentOpacity, y: contentY }}
           className="relative w-full max-w-xl"
         >
-          <div className="relative px-4 py-6 md:px-6 md:py-8">
+          <div className="relative px-1 py-2 sm:px-4 sm:py-4 md:px-6 md:py-8">
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
-              className="mb-6 inline-flex items-center gap-2.5 rounded-full bg-accent/8 px-4 py-1.5 backdrop-blur-sm edge-card"
+              className="mb-4 inline-flex items-center gap-2 rounded-full bg-accent/8 px-3 py-1 backdrop-blur-sm edge-card sm:mb-6 sm:gap-2.5 sm:px-4 sm:py-1.5"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-glow" />
               <span className="font-body text-xs font-medium uppercase tracking-wider text-accent">
@@ -101,7 +101,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              className="font-display text-[2.6rem] leading-[1.05] tracking-tight text-white md:text-[3.5rem]"
+              className="font-display text-[1.75rem] leading-[1.1] tracking-tight text-white sm:text-[2.2rem] md:text-[3.5rem]"
             >
               <span className="block">El futuro de</span>
               <span className="block">comprar y vender</span>
@@ -112,7 +112,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.45, ease: [0.4, 0, 0.2, 1] }}
-              className="mt-6 max-w-md font-sans text-[15px] leading-relaxed text-white/50 md:text-[16px]"
+              className="mt-4 max-w-md font-sans text-[13px] leading-relaxed text-white/50 sm:mt-5 sm:text-[14px] md:mt-6 md:text-[16px]"
             >
               Publica en minutos. Conecta directo con compradores. Motos, piezas, accesorios y talleres verificados en un solo lugar.
             </motion.p>
@@ -121,12 +121,12 @@ export function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6, ease: [0.4, 0, 0.2, 1] }}
-              className="mt-8 flex flex-col gap-4 md:flex-row md:items-center"
+              className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:items-center sm:gap-4 md:mt-8"
             >
               <Link href="/motos-destacadas">
                 <motion.button
                   type="button"
-                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-[var(--radius-button)] bg-accent px-8 py-4 text-sm font-semibold text-[#0A0D14] transition-all duration-300 hover:bg-accent-hover glow-accent glow-accent-hover"
+                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-[var(--radius-button)] bg-accent px-6 py-3 text-xs font-semibold text-[#0A0D14] transition-all duration-300 hover:bg-accent-hover glow-accent glow-accent-hover sm:px-8 sm:py-4 sm:text-sm"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
@@ -138,7 +138,7 @@ export function Hero() {
               <Link href="/vender">
                 <motion.button
                   type="button"
-                  className="inline-flex items-center justify-center rounded-[var(--radius-button)] px-7 py-3.5 text-sm font-medium text-white/80 backdrop-blur-sm transition-all duration-300 edge-button hover:text-white"
+                  className="inline-flex items-center justify-center rounded-[var(--radius-button)] px-5 py-2.5 text-xs font-medium text-white/80 backdrop-blur-sm transition-all duration-300 edge-button hover:text-white sm:px-7 sm:py-3.5 sm:text-sm"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -151,7 +151,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.75, ease: [0.4, 0, 0.2, 1] }}
-              className="mt-8 flex flex-wrap items-center gap-3"
+              className="mt-5 flex flex-wrap items-center gap-2 sm:mt-6 sm:gap-3 md:mt-8"
             >
               {quickLinks.map((item, i) => (
                 <motion.a
@@ -164,7 +164,7 @@ export function Hero() {
                     delay: 0.8 + i * 0.06,
                     ease: [0.4, 0, 0.2, 1],
                   }}
-                  className="inline-flex h-10 items-center rounded-full px-5 text-xs font-medium text-white/50 backdrop-blur-sm transition-all duration-300 edge-button hover:text-accent md:h-11 md:text-sm"
+                  className="inline-flex h-8 items-center rounded-full px-3.5 text-[11px] font-medium text-white/50 backdrop-blur-sm transition-all duration-300 edge-button hover:text-accent sm:h-10 sm:px-5 sm:text-xs md:h-11 md:text-sm"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
