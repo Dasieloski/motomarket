@@ -7,8 +7,8 @@ import { motion } from "framer-motion"
 import * as THREE from "three"
 import { MotoModel } from "./moto-model"
 
-// Fondo hero: dark matching the brand
-const HERO_BG = "#000000"
+// Fondo hero: deep Prussian dark (NOT pure black)
+const HERO_BG = "#0A0D14"
 
 // Componente para detectar cuando el canvas está listo
 function CanvasReady({ onReady }: { onReady: () => void }) {
@@ -137,7 +137,7 @@ export function HeroScene({
           animate={{ opacity: isLoaded ? 0 : 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
-          className="absolute inset-0 z-10 flex items-center justify-center bg-black"
+          className="absolute inset-0 z-10 flex items-center justify-center bg-[#0A0D14]"
         >
           <div className="flex flex-col items-center gap-4">
             <div className="relative h-1 w-32 overflow-hidden rounded-full bg-white/10">

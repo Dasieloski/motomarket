@@ -11,14 +11,14 @@ const quickLinks = [
   { label: "Servicios", href: "#categorias" },
 ]
 
-const HERO_BG = "#000000"
+const HERO_BG = "#0A0D14"
 
 const HeroScene = dynamic(
   () => import("./hero/hero-scene").then((m) => m.HeroScene),
   {
     ssr: false,
     loading: () => (
-      <div className="relative h-[320px] w-full overflow-hidden rounded-3xl bg-black md:h-[520px]" />
+      <div className="relative h-[320px] w-full overflow-hidden bg-[#0A0D14] md:h-[520px]" />
     ),
   }
 )
@@ -46,11 +46,21 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex h-[100vh] min-h-[100dvh] items-center justify-center overflow-hidden bg-black pt-24 md:pt-28"
+      className="relative flex h-[100vh] min-h-[100dvh] items-center justify-center overflow-hidden pt-24 md:pt-28"
       style={{ backgroundColor: HERO_BG }}
     >
+      {/* === ANIMATED GRADIENT BACKGROUND === */}
+      <div className="pointer-events-none absolute inset-0 z-0 hero-bg-animated">
+        {/* Orb 1 - Large Prussian glow top-left */}
+        <div className="hero-orb-1 absolute -left-20 -top-20 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(20,33,61,0.50)_0%,transparent_70%)] blur-3xl md:h-[700px] md:w-[700px]" />
+        {/* Orb 2 - Warm accent glow bottom-right */}
+        <div className="hero-orb-2 absolute -right-32 bottom-0 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(252,163,17,0.06)_0%,transparent_65%)] blur-3xl md:h-[600px] md:w-[600px]" />
+        {/* Orb 3 - Subtle center Prussian float */}
+        <div className="hero-orb-3 absolute left-1/3 top-1/4 h-[350px] w-[350px] rounded-full bg-[radial-gradient(circle,rgba(20,33,61,0.30)_0%,transparent_60%)] blur-3xl md:h-[500px] md:w-[500px]" />
+      </div>
+
       {/* 3D Canvas - DO NOT MODIFY */}
-      <div className="pointer-events-none absolute inset-0 z-0">
+      <div className="pointer-events-none absolute inset-0 z-[1]">
         <HeroScene
           className="h-full w-full"
           scrollProgress={scrollFor3D}
@@ -59,32 +69,26 @@ export function Hero() {
       </div>
 
       {/* Left gradient for text legibility */}
-      <div className="pointer-events-none absolute inset-0 z-10">
-        <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-r from-black/80 via-black/50 to-transparent md:w-[50%]" />
-      </div>
-
-      {/* Subtle ambient gradients */}
-      <div className="pointer-events-none absolute inset-0 z-10 opacity-40">
-        <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-gradient-to-br from-prussian/30 via-transparent to-transparent blur-3xl" />
-        <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-gradient-to-tl from-accent/5 via-transparent to-transparent blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 z-[2]">
+        <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-r from-[#0A0D14]/90 via-[#0A0D14]/60 to-transparent md:w-[55%]" />
       </div>
 
       {/* Bottom edge gradient */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-black to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-40 bg-gradient-to-t from-[var(--surface)] to-transparent" />
 
       {/* Content grid */}
-      <div className="relative z-20 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-6 md:grid-cols-2 md:gap-16">
+      <div className="relative z-[3] mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-6 md:grid-cols-2 md:gap-16">
         <motion.div
           style={{ opacity: contentOpacity, y: contentY }}
           className="relative w-full max-w-xl"
         >
-          <div className="relative px-6 py-6 md:px-8 md:py-8">
-            {/* Aspirational badge */}
+          <div className="relative px-4 py-6 md:px-6 md:py-8">
+            {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 backdrop-blur-sm"
+              className="mb-6 inline-flex items-center gap-2.5 rounded-full bg-accent/8 px-4 py-1.5 backdrop-blur-sm edge-card"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-glow" />
               <span className="font-body text-xs font-medium uppercase tracking-wider text-accent">
@@ -107,7 +111,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.45, ease: [0.4, 0, 0.2, 1] }}
-              className="mt-6 max-w-md font-sans text-[15px] leading-relaxed text-white/60 md:text-[16px]"
+              className="mt-6 max-w-md font-sans text-[15px] leading-relaxed text-white/50 md:text-[16px]"
             >
               Publica en minutos. Conecta directo con compradores. Motos, piezas, accesorios y talleres verificados en un solo lugar.
             </motion.p>
@@ -121,7 +125,7 @@ export function Hero() {
               <Link href="/motos-destacadas">
                 <motion.button
                   type="button"
-                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-button bg-accent px-8 py-4 text-sm font-semibold text-black shadow-glow transition-all duration-300 hover:bg-accent-hover hover:shadow-[0_0_40px_rgba(252,163,17,0.3)]"
+                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-[var(--radius-button)] bg-accent px-8 py-4 text-sm font-semibold text-[#0A0D14] transition-all duration-300 hover:bg-accent-hover glow-accent glow-accent-hover"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
@@ -133,7 +137,7 @@ export function Hero() {
               <Link href="/vender">
                 <motion.button
                   type="button"
-                  className="inline-flex items-center justify-center rounded-button border border-white/15 bg-white/[0.04] px-7 py-3.5 text-sm font-medium text-white/90 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.08]"
+                  className="inline-flex items-center justify-center rounded-[var(--radius-button)] px-7 py-3.5 text-sm font-medium text-white/80 backdrop-blur-sm transition-all duration-300 edge-button hover:text-white"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -159,7 +163,7 @@ export function Hero() {
                     delay: 0.8 + i * 0.06,
                     ease: [0.4, 0, 0.2, 1],
                   }}
-                  className="inline-flex h-10 items-center rounded-full border border-white/10 bg-white/[0.04] px-5 text-xs font-medium text-white/60 backdrop-blur-sm transition-all duration-300 hover:border-accent/30 hover:bg-accent/5 hover:text-accent md:h-11 md:text-sm"
+                  className="inline-flex h-10 items-center rounded-full px-5 text-xs font-medium text-white/50 backdrop-blur-sm transition-all duration-300 edge-button hover:text-accent md:h-11 md:text-sm"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
