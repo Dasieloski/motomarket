@@ -126,12 +126,12 @@ export function ProductCard({ moto, index }: ProductCardProps) {
     >
       <Link href={`/producto/${moto.id}`} className="block h-full">
         <motion.article
-          className="relative flex h-[300px] flex-col overflow-hidden rounded-[20px] border border-border shadow-[var(--shadow-card)] transition-shadow duration-300 hover:shadow-[var(--shadow-card-hover)] sm:h-[320px] md:rounded-[24px]"
+          className="relative flex h-[300px] flex-col overflow-hidden rounded-[20px] border border-white/[0.06] bg-surface-card shadow-[var(--shadow-card)] transition-all duration-300 hover:shadow-[var(--shadow-card-hover)] hover:border-accent/20 sm:h-[320px] md:rounded-[24px]"
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
         >
           {/* 1. Imagen a fondo completo (ocupa todo el card) */}
-          <div className="absolute inset-0 bg-surface-subtle">
+          <div className="absolute inset-0 bg-surface-card">
             {!imageLoaded && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <motion.div
@@ -167,7 +167,7 @@ export function ProductCard({ moto, index }: ProductCardProps) {
                   {categoryLabel}
                 </span>
                 {business && (
-                  <span className="rounded-full bg-accent/90 px-2 py-0.5 font-body text-[9px] font-medium text-white shadow-soft">
+                  <span className="rounded-full bg-accent/90 px-2 py-0.5 font-body text-[9px] font-medium text-black shadow-soft">
                     Negocio
                   </span>
                 )}
@@ -227,7 +227,7 @@ export function ProductCard({ moto, index }: ProductCardProps) {
                 <QuickSpecs moto={moto} />
               </div>
               <motion.span
-                className="flex w-full items-center justify-center gap-2 rounded-[14px] bg-white/95 py-2.5 font-body text-sm font-semibold text-primary shadow-soft backdrop-blur-sm transition-colors hover:bg-white sm:rounded-[16px] sm:py-3 sm:text-[15px]"
+                className="flex w-full items-center justify-center gap-2 rounded-[14px] bg-accent/90 py-2.5 font-body text-sm font-semibold text-black shadow-soft backdrop-blur-sm transition-colors hover:bg-accent sm:rounded-[16px] sm:py-3 sm:text-[15px]"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >

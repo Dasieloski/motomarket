@@ -3,7 +3,6 @@
 import { useRef, useState, useCallback } from "react"
 import dynamic from "next/dynamic"
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion"
-import { ChevronDown, Sparkles } from "lucide-react"
 import Link from "next/link"
 
 const quickLinks = [
@@ -12,14 +11,14 @@ const quickLinks = [
   { label: "Servicios", href: "#categorias" },
 ]
 
-const HERO_BG = "#F5F5F3"
+const HERO_BG = "#000000"
 
 const HeroScene = dynamic(
   () => import("./hero/hero-scene").then((m) => m.HeroScene),
   {
     ssr: false,
     loading: () => (
-      <div className="relative h-[320px] w-full overflow-hidden rounded-3xl bg-[radial-gradient(circle_at_0%_0%,#ffffff_0,#f5f5f3_45%,#e7e5dd_100%)] md:h-[520px]" />
+      <div className="relative h-[320px] w-full overflow-hidden rounded-3xl bg-black md:h-[520px]" />
     ),
   }
 )
@@ -32,7 +31,6 @@ export function Hero() {
     offset: ["start start", "end start"],
   })
 
-  // Valor numérico derivado de scrollYProgress para animar la moto (equivalente a ScrollTrigger suave)
   const [scrollFor3D, setScrollFor3D] = useState(0)
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     setScrollFor3D(latest)
@@ -41,7 +39,6 @@ export function Hero() {
   const contentOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0.1])
   const contentY = useTransform(scrollYProgress, [0, 0.4], [0, 32])
 
-  // Memoizar el callback para evitar re-renders innecesarios
   const handleModelLoaded = useCallback(() => {
     setIsModelLoaded(true)
   }, [])
@@ -49,10 +46,10 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex h-[100vh] min-h-[100dvh] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_0%_0%,#ffffff_0,#f5f5f3_40%,#e7e5dd_100%)] pt-24 md:pt-28"
+      className="relative flex h-[100vh] min-h-[100dvh] items-center justify-center overflow-hidden bg-black pt-24 md:pt-28"
       style={{ backgroundColor: HERO_BG }}
     >
-      {/* Capa intermedia: Canvas 3D ocupando todo el hero como fondo dinámico */}
+      {/* 3D Canvas - DO NOT MODIFY */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <HeroScene
           className="h-full w-full"
@@ -61,60 +58,74 @@ export function Hero() {
         />
       </div>
 
-      {/* Gradient lateral oscuro solo en la zona del texto para máxima legibilidad */}
+      {/* Left gradient for text legibility */}
       <div className="pointer-events-none absolute inset-0 z-10">
-        <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-r from-black/65 via-black/40 to-transparent md:w-[45%]" />
+        <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-r from-black/80 via-black/50 to-transparent md:w-[50%]" />
       </div>
 
-      {/* Capa inferior: degradados sutiles sobre el fondo */}
-      <div className="pointer-events-none absolute inset-0 z-10 opacity-50 mix-blend-soft-light">
-        <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-gradient-to-br from-accent/12 via-transparent to-transparent blur-3xl" />
-        <div className="absolute -right-40 bottom-0 h-80 w-80 rounded-full bg-gradient-to-tl from-primary/12 via-transparent to-transparent blur-3xl" />
+      {/* Subtle ambient gradients */}
+      <div className="pointer-events-none absolute inset-0 z-10 opacity-40">
+        <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-gradient-to-br from-prussian/30 via-transparent to-transparent blur-3xl" />
+        <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-gradient-to-tl from-accent/5 via-transparent to-transparent blur-3xl" />
       </div>
 
-      {/* Capa superior: grid 2 columnas (texto izquierda) */}
+      {/* Bottom edge gradient */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-black to-transparent" />
+
+      {/* Content grid */}
       <div className="relative z-20 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-10 px-6 md:grid-cols-2 md:gap-16">
-        {/* Columna izquierda: texto con sombra para reforzar contraste */}
         <motion.div
           style={{ opacity: contentOpacity, y: contentY }}
           className="relative w-full max-w-xl"
         >
           <div className="relative px-6 py-6 md:px-8 md:py-8">
-            {/* Badge superior opcional (se puede reactivar con otro copy si hace falta) */}
+            {/* Aspirational badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 backdrop-blur-sm"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-glow" />
+              <span className="font-body text-xs font-medium uppercase tracking-wider text-accent">
+                El marketplace #1 de Cuba
+              </span>
+            </motion.div>
 
             <motion.h1
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              className="mt-6 font-display text-[2.4rem] leading-[1.05] tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] md:text-[3.2rem]"
+              className="font-display text-[2.6rem] leading-[1.05] tracking-tight text-white md:text-[3.5rem]"
             >
-              <span className="block">Compra y vende motos</span>
-              <span className="block text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">en Cuba.</span>
+              <span className="block">El futuro de</span>
+              <span className="block">comprar y vender</span>
+              <span className="block text-accent">motos en Cuba.</span>
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.45, ease: [0.4, 0, 0.2, 1] }}
-              className="mt-5 max-w-md font-sans text-[15px] leading-relaxed text-white/95 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)] md:text-[16px]"
+              className="mt-6 max-w-md font-sans text-[15px] leading-relaxed text-white/60 md:text-[16px]"
             >
-              Publicación fácil y rápida. Encuentra motos, piezas, accesorios y talleres. Contacto directo por WhatsApp o llamada.
+              Publica en minutos. Conecta directo con compradores. Motos, piezas, accesorios y talleres verificados en un solo lugar.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6, ease: [0.4, 0, 0.2, 1] }}
-              className="mt-7 flex flex-col gap-4 md:flex-row md:items-center"
+              className="mt-8 flex flex-col gap-4 md:flex-row md:items-center"
             >
               <Link href="/motos-destacadas">
                 <motion.button
                   type="button"
-                  className="group relative inline-flex items-center justify-center rounded-[999px] bg-white px-7 py-3.5 text-sm font-medium text-primary shadow-[0_18px_35px_rgba(0,0,0,0.4)] transition-[box-shadow,transform,background-color] duration-300 ease-[0.22,1,0.36,1] hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-button bg-accent px-8 py-4 text-sm font-semibold text-black shadow-glow transition-all duration-300 hover:bg-accent-hover hover:shadow-[0_0_40px_rgba(252,163,17,0.3)]"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
-                  <span className="absolute inset-0 rounded-[999px] bg-gradient-to-r from-accent/40 via-transparent to-primary/40 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:animate-shimmer" />
                   <span className="relative z-10">Ver motos destacadas</span>
                 </motion.button>
               </Link>
@@ -122,7 +133,7 @@ export function Hero() {
               <Link href="/vender">
                 <motion.button
                   type="button"
-                  className="inline-flex items-center justify-center rounded-[999px] border-2 border-white/80 bg-white/10 backdrop-blur-sm px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-300 ease-[0.22,1,0.36,1] hover:border-white hover:bg-white/20"
+                  className="inline-flex items-center justify-center rounded-button border border-white/15 bg-white/[0.04] px-7 py-3.5 text-sm font-medium text-white/90 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.08]"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -148,7 +159,7 @@ export function Hero() {
                     delay: 0.8 + i * 0.06,
                     ease: [0.4, 0, 0.2, 1],
                   }}
-                  className="inline-flex h-10 items-center rounded-[999px] border border-white/60 bg-white/10 backdrop-blur-sm px-5 text-xs font-medium text-white shadow-sm transition-all duration-300 ease-[0.22,1,0.36,1] hover:border-white hover:bg-white/20 md:h-11 md:text-sm"
+                  className="inline-flex h-10 items-center rounded-full border border-white/10 bg-white/[0.04] px-5 text-xs font-medium text-white/60 backdrop-blur-sm transition-all duration-300 hover:border-accent/30 hover:bg-accent/5 hover:text-accent md:h-11 md:text-sm"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -156,16 +167,12 @@ export function Hero() {
                 </motion.a>
               ))}
             </motion.div>
-
-            {/* Texto auxiliar eliminado según petición del usuario */}
           </div>
         </motion.div>
 
-        {/* Columna derecha vacía: reserva espacio visual para la moto de fondo */}
+        {/* Right column empty - space reserved for 3D model */}
         <div className="hidden w-full md:block" />
       </div>
-
-      {/* Indicador de scroll eliminado según petición del usuario */}
     </section>
   )
 }

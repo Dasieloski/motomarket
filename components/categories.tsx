@@ -19,7 +19,7 @@ export function Categories() {
     <section
       id="categorias"
       ref={sectionRef}
-      className="relative overflow-hidden py-24 md:py-32"
+      className="relative overflow-hidden bg-surface py-24 md:py-32"
     >
       <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-14">
         <motion.div
@@ -29,8 +29,11 @@ export function Categories() {
           transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
           className="mb-20 text-center"
         >
-          <h2 className="font-heading text-display font-semibold tracking-tight text-primary">
-            Explora por categoría
+          <span className="font-body text-label font-medium tracking-widest text-accent">
+            CATEGORIAS
+          </span>
+          <h2 className="mt-5 font-heading text-display font-semibold tracking-tight text-white">
+            Explora por categoria
           </h2>
           <p className="mx-auto mt-5 max-w-md font-body text-body-lg text-primary-secondary leading-relaxed">
             Encuentra exactamente lo que necesitas en nuestro marketplace especializado
@@ -46,8 +49,8 @@ export function Categories() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.55, delay: i * 0.08, ease: [0.4, 0, 0.2, 1] }}
-              className="group relative aspect-[3/4] overflow-hidden rounded-card bg-surface-subtle shadow-soft transition-all duration-smooth hover:shadow-card"
-              whileHover={{ y: -4 }}
+              className="group relative aspect-[3/4] overflow-hidden rounded-card border border-white/[0.06] bg-surface-card shadow-soft transition-all duration-smooth hover:shadow-card hover:border-accent/20"
+              whileHover={{ y: -6 }}
             >
               <div className="absolute inset-0">
                 <Image
@@ -57,11 +60,13 @@ export function Categories() {
                   className="object-cover transition-transform duration-smooth group-hover:scale-105"
                 />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-90 transition-opacity duration-smooth group-hover:opacity-95" />
-              <div className="absolute inset-x-0 bottom-0 border-t border-white/10 p-5 transition-colors sm:p-6">
-                <h3 className="font-body text-base font-medium text-white drop-shadow-sm md:text-lg">
+              {/* Dark overlay with accent tint on hover */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent transition-all duration-smooth group-hover:from-black/85 group-hover:via-prussian/30" />
+              <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+                <h3 className="font-body text-base font-medium text-white md:text-lg">
                   {cat.title}
                 </h3>
+                <div className="mt-2 h-0.5 w-0 rounded-full bg-accent transition-all duration-smooth group-hover:w-8" />
               </div>
             </motion.a>
           ))}

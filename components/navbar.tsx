@@ -62,18 +62,17 @@ export function Navbar() {
           opacity: 1,
         }}
         transition={{ duration: 0.5, ease: easeSmooth }}
-        className={`fixed left-0 right-0 top-0 z-50 flex h-16 items-center md:h-20 transition-[background-color,border-color] duration-300 ${
-          isHome
-            ? scrolled
-              ? "bg-surface-elevated/95 backdrop-blur-xl border-b border-border shadow-nav"
-              : "bg-white/75 backdrop-blur-lg border-b border-black/5 shadow-sm"
-            : "bg-surface-elevated/95 backdrop-blur-xl border-b border-border shadow-nav"
+        className={`fixed left-0 right-0 top-0 z-50 flex h-16 items-center md:h-20 transition-all duration-500 ${
+          scrolled
+            ? "bg-black/80 backdrop-blur-2xl border-b border-white/[0.06] shadow-[0_1px_0_rgba(255,255,255,0.06)]"
+            : "bg-transparent border-b border-transparent"
         }`}
       >
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 md:px-10 lg:px-14">
+          {/* Logo */}
           <Link
             href="/"
-            className="font-logo moto-logo-animation text-xl font-semibold tracking-tight text-primary transition-colors duration-300 hover:text-accent md:text-2xl lg:text-3xl"
+            className="font-logo moto-logo-animation text-xl font-semibold tracking-tight text-white transition-colors duration-300 hover:text-accent md:text-2xl lg:text-3xl"
           >
             <motion.span
               whileHover={{ scale: 1.05 }}
@@ -84,17 +83,14 @@ export function Navbar() {
             </motion.span>
           </Link>
 
+          {/* Desktop links */}
           <div className="hidden items-center gap-5 md:flex md:gap-6 lg:gap-7">
             {isHome ? (
               navLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`nav-link-underline font-body text-sm font-medium tracking-tight transition-colors duration-300 md:text-[15px] ${
-                    !scrolled
-                      ? "text-primary hover:text-accent"
-                      : "text-primary-secondary hover:text-primary"
-                  }`}
+                  className="nav-link-underline font-body text-sm font-medium tracking-tight text-white/70 transition-colors duration-300 hover:text-white md:text-[15px]"
                 >
                   {link.label}
                 </Link>
@@ -110,7 +106,7 @@ export function Navbar() {
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
-                            className="rounded-input p-2.5 text-primary-secondary transition-colors duration-smooth hover:bg-surface-subtle hover:text-accent"
+                            className="rounded-input p-2.5 text-white/50 transition-colors duration-smooth hover:bg-white/[0.06] hover:text-accent"
                           >
                             <Icon className="h-5 w-5" />
                           </motion.button>
@@ -119,11 +115,11 @@ export function Navbar() {
                       <Tooltip.Portal>
                         <Tooltip.Content
                           side="bottom"
-                          className="rounded-input bg-primary px-3 py-1.5 font-body text-xs font-medium text-white shadow-card"
+                          className="rounded-input bg-surface-elevated px-3 py-1.5 font-body text-xs font-medium text-white shadow-card border border-white/[0.06]"
                           sideOffset={5}
                         >
                           {link.label}
-                          <Tooltip.Arrow className="fill-primary" />
+                          <Tooltip.Arrow className="fill-surface-elevated" />
                         </Tooltip.Content>
                       </Tooltip.Portal>
                     </Tooltip.Root>
@@ -133,18 +129,19 @@ export function Navbar() {
             )}
           </div>
 
+          {/* Desktop actions */}
           <div className="hidden items-center gap-5 md:flex lg:gap-6">
             {user ? (
               <>
                 <Link
                   href="/dashboard"
-                  className="font-body text-[15px] font-medium text-primary-secondary transition-colors duration-smooth hover:text-primary"
+                  className="font-body text-[15px] font-medium text-white/60 transition-colors duration-smooth hover:text-white"
                 >
                   Mi cuenta
                 </Link>
                 <Link href="/vender">
                   <motion.button
-                    className="inline-flex h-11 items-center rounded-button bg-primary px-6 font-body text-[15px] font-medium text-white shadow-soft transition-all duration-smooth hover:bg-accent hover:shadow-card md:h-12 md:px-7"
+                    className="inline-flex h-11 items-center rounded-button bg-accent px-6 font-body text-[15px] font-semibold text-black shadow-glow transition-all duration-smooth hover:bg-accent-hover hover:shadow-[0_0_35px_rgba(252,163,17,0.3)] md:h-12 md:px-7"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={{ duration: 0.4, ease: easeSmooth }}
@@ -154,7 +151,7 @@ export function Navbar() {
                 </Link>
                 <motion.button
                   onClick={logout}
-                  className="inline-flex h-11 items-center rounded-button border border-border bg-transparent px-4 font-body text-[15px] font-medium text-primary-secondary transition-all duration-smooth hover:bg-surface-subtle hover:text-primary"
+                  className="inline-flex h-11 items-center rounded-button border border-white/10 bg-white/[0.04] px-4 font-body text-[15px] font-medium text-white/60 transition-all duration-smooth hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.4, ease: easeSmooth }}
@@ -166,13 +163,13 @@ export function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="font-body text-[15px] font-medium text-primary-secondary transition-colors duration-smooth hover:text-primary"
+                  className="font-body text-[15px] font-medium text-white/60 transition-colors duration-smooth hover:text-white"
                 >
-                  Iniciar sesión
+                  Iniciar sesion
                 </Link>
                 <Link href="/register">
                   <motion.button
-                    className="inline-flex h-11 items-center rounded-button bg-primary px-6 font-body text-[15px] font-medium text-white shadow-soft transition-all duration-smooth hover:bg-accent hover:shadow-card md:h-12 md:px-7"
+                    className="inline-flex h-11 items-center rounded-button bg-accent px-6 font-body text-[15px] font-semibold text-black shadow-glow transition-all duration-smooth hover:bg-accent-hover hover:shadow-[0_0_35px_rgba(252,163,17,0.3)] md:h-12 md:px-7"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={{ duration: 0.4, ease: easeSmooth }}
@@ -184,11 +181,12 @@ export function Navbar() {
             )}
           </div>
 
+          {/* Mobile toggle */}
           <motion.button
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 text-primary transition-colors duration-smooth md:hidden"
-            aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+            className="p-2 text-white transition-colors duration-smooth md:hidden"
+            aria-label={mobileOpen ? "Cerrar menu" : "Abrir menu"}
             whileTap={{ scale: 0.95 }}
           >
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -196,6 +194,7 @@ export function Navbar() {
         </div>
       </motion.nav>
 
+      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -204,7 +203,7 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, ease: easeSmooth }}
-              className="fixed inset-0 z-40 bg-primary/20 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
               onClick={() => setMobileOpen(false)}
               aria-hidden
             />
@@ -213,7 +212,7 @@ export function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.45, ease: easeSmooth }}
-              className="fixed right-0 top-0 bottom-0 z-50 flex w-[min(300px,88vw)] flex-col gap-8 bg-surface-elevated px-8 pt-28 pb-12 shadow-card md:hidden"
+              className="fixed right-0 top-0 bottom-0 z-50 flex w-[min(300px,88vw)] flex-col gap-8 border-l border-white/[0.06] bg-surface-elevated px-8 pt-28 pb-12 shadow-card md:hidden"
             >
               {navLinks.map((link, i) => {
                 const Icon = link.icon
@@ -227,7 +226,7 @@ export function Navbar() {
                       initial={{ opacity: 0, x: 16 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.04, duration: 0.4 }}
-                      className="flex items-center gap-3 font-body text-[17px] font-medium text-primary transition-colors hover:text-accent"
+                      className="flex items-center gap-3 font-body text-[17px] font-medium text-white/80 transition-colors hover:text-accent"
                     >
                       {Icon && <Icon className="h-5 w-5" />}
                       <span>{link.label}</span>
@@ -240,7 +239,7 @@ export function Navbar() {
                   <Link
                     href="/dashboard"
                     onClick={() => setMobileOpen(false)}
-                    className="font-body text-[17px] font-medium text-primary transition-colors hover:text-accent"
+                    className="font-body text-[17px] font-medium text-white/80 transition-colors hover:text-accent"
                   >
                     Mi cuenta
                   </Link>
@@ -249,7 +248,7 @@ export function Navbar() {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2, duration: 0.4 }}
-                      className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-button bg-primary px-6 font-body text-[15px] font-medium text-white shadow-soft"
+                      className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-button bg-accent px-6 font-body text-[15px] font-semibold text-black shadow-glow"
                     >
                       Vender mi moto
                     </motion.button>
@@ -262,10 +261,10 @@ export function Navbar() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.25, duration: 0.4 }}
-                    className="mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-button border border-border bg-transparent px-6 font-body text-[15px] font-medium text-primary transition-colors hover:bg-surface-subtle"
+                    className="mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-button border border-white/10 bg-white/[0.04] px-6 font-body text-[15px] font-medium text-white/70 transition-colors hover:bg-white/[0.08] hover:text-white"
                   >
                     <LogOut className="h-4 w-4" />
-                    Cerrar sesión
+                    Cerrar sesion
                   </motion.button>
                 </>
               ) : (
@@ -273,16 +272,16 @@ export function Navbar() {
                   <Link
                     href="/login"
                     onClick={() => setMobileOpen(false)}
-                    className="font-body text-[17px] font-medium text-primary transition-colors hover:text-accent"
+                    className="font-body text-[17px] font-medium text-white/80 transition-colors hover:text-accent"
                   >
-                    Iniciar sesión
+                    Iniciar sesion
                   </Link>
                   <Link href="/register" onClick={() => setMobileOpen(false)}>
                     <motion.button
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2, duration: 0.4 }}
-                      className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-button bg-primary px-6 font-body text-[15px] font-medium text-white shadow-soft"
+                      className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-button bg-accent px-6 font-body text-[15px] font-semibold text-black shadow-glow"
                     >
                       Registrarse
                     </motion.button>

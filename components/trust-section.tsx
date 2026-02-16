@@ -7,13 +7,13 @@ import { ShieldCheck, Star, MessageCircle, Zap } from "lucide-react"
 const features = [
   {
     icon: Star,
-    title: "Reputación",
-    description: "Calificaciones y reseñas de compradores reales que puedes consultar antes de decidir.",
+    title: "Reputacion",
+    description: "Calificaciones y resenas de compradores reales que puedes consultar antes de decidir.",
   },
   {
     icon: ShieldCheck,
-    title: "Verificación",
-    description: "Cada vendedor pasa un proceso de verificación para garantizar tu seguridad.",
+    title: "Verificacion",
+    description: "Cada vendedor pasa un proceso de verificacion para garantizar tu seguridad.",
   },
   {
     icon: MessageCircle,
@@ -22,8 +22,8 @@ const features = [
   },
   {
     icon: Zap,
-    title: "Publicar rápido",
-    description: "Publica tu anuncio con fotos y descripción en menos de 2 minutos.",
+    title: "Publicar rapido",
+    description: "Publica tu anuncio con fotos y descripcion en menos de 2 minutos.",
   },
 ]
 
@@ -36,9 +36,14 @@ export function TrustSection() {
     <section
       id="confianza"
       ref={sectionRef}
-      className="relative py-24 md:py-32"
+      className="relative bg-surface-elevated py-24 md:py-32"
     >
-      <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-14">
+      {/* Subtle ambient glow */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-0 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-6 md:px-10 lg:px-14">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -46,18 +51,18 @@ export function TrustSection() {
           transition={{ duration: 0.6, ease: easeSmooth }}
           className="mb-20 text-center"
         >
-          <span className="font-body text-label font-medium tracking-widest text-primary-muted">
-            Confianza
+          <span className="font-body text-label font-medium tracking-widest text-accent">
+            CONFIANZA
           </span>
-          <h2 className="mt-5 font-heading text-display font-semibold tracking-tight text-primary">
+          <h2 className="mt-5 font-heading text-display font-semibold tracking-tight text-white">
             Compra con total seguridad
           </h2>
           <p className="mx-auto mt-5 max-w-md font-body text-body-lg leading-relaxed text-primary-secondary">
-            Cada detalle está pensado para que tu experiencia sea segura y confiable
+            Cada detalle esta pensado para que tu experiencia sea segura y confiable
           </p>
         </motion.div>
 
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {features.map((feature, i) => (
             <motion.div
               key={feature.title}
@@ -68,13 +73,13 @@ export function TrustSection() {
               className="group flex flex-col items-center text-center"
             >
               <motion.div
-                className="mb-6 flex h-16 w-16 items-center justify-center rounded-card bg-surface-subtle text-accent shadow-soft transition-all duration-smooth group-hover:shadow-card md:h-[72px] md:w-[72px]"
-                whileHover={{ y: -2 }}
+                className="mb-6 flex h-16 w-16 items-center justify-center rounded-card border border-white/[0.06] bg-surface-card text-accent shadow-soft transition-all duration-smooth group-hover:border-accent/20 group-hover:shadow-glow md:h-[72px] md:w-[72px]"
+                whileHover={{ y: -4 }}
                 transition={{ duration: 0.4 }}
               >
                 <feature.icon className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.5} />
               </motion.div>
-              <h3 className="font-body text-lg font-medium text-primary transition-colors duration-smooth group-hover:text-accent md:text-xl">
+              <h3 className="font-body text-lg font-medium text-white transition-colors duration-smooth group-hover:text-accent md:text-xl">
                 {feature.title}
               </h3>
               <p className="mt-3 font-body text-base leading-relaxed text-primary-secondary">

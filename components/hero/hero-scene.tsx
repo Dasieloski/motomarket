@@ -7,8 +7,8 @@ import { motion } from "framer-motion"
 import * as THREE from "three"
 import { MotoModel } from "./moto-model"
 
-// Fondo hero: blanco cálido
-const HERO_BG = "#F5F5F3"
+// Fondo hero: dark matching the brand
+const HERO_BG = "#000000"
 
 // Componente para detectar cuando el canvas está listo
 function CanvasReady({ onReady }: { onReady: () => void }) {
@@ -57,10 +57,11 @@ function SceneContent({
         onDecline={() => setDpr(1)}
         onChange={({ factor }) => setDpr(Math.min(1.5, 1 + factor / 2))}
       />
-      <ambientLight intensity={0.85} />
-      <directionalLight position={[4, 6, 5]} intensity={1.1} castShadow={false} />
-      <directionalLight position={[-3, 4, 3]} intensity={0.4} />
-      <directionalLight position={[0, 2, -2]} intensity={0.25} />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[4, 6, 5]} intensity={1.4} castShadow={false} color="#ffffff" />
+      <directionalLight position={[-3, 4, 3]} intensity={0.6} color="#FCA311" />
+      <directionalLight position={[0, 2, -2]} intensity={0.3} color="#14213D" />
+      <directionalLight position={[2, -1, 3]} intensity={0.2} color="#FCA311" />
       <group>
         <MotoModel scrollProgress={scrollProgress} />
       </group>
@@ -136,18 +137,18 @@ export function HeroScene({
           animate={{ opacity: isLoaded ? 0 : 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
-          className="absolute inset-0 z-10 flex items-center justify-center bg-[#F5F5F3]"
+          className="absolute inset-0 z-10 flex items-center justify-center bg-black"
         >
           <div className="flex flex-col items-center gap-4">
-            <div className="relative h-1 w-32 overflow-hidden rounded-full bg-white/30">
+            <div className="relative h-1 w-32 overflow-hidden rounded-full bg-white/10">
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-primary/60 to-accent/60"
+                className="h-full rounded-full bg-gradient-to-r from-accent/60 to-accent"
                 initial={{ width: 0 }}
                 animate={{ width: isLoaded ? 100 : 50 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               />
             </div>
-            <span className="text-xs font-medium text-primary-muted">Cargando modelo 3D...</span>
+            <span className="text-xs font-medium text-white/40">Cargando modelo 3D...</span>
           </div>
         </motion.div>
       )}

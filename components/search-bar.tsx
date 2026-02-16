@@ -1,18 +1,18 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, Sparkles } from "lucide-react"
+import { Search } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 const searchTerms = [
-  "motos eléctricas",
+  "motos electricas",
   "piezas de freno",
-  "talleres de mecánica",
-  "motos de combustión",
+  "talleres de mecanica",
+  "motos de combustion",
   "cascos y accesorios",
   "Suzuki GN 125",
-  "baterías para moto",
+  "baterias para moto",
 ]
 
 function Typewriter({ terms }: { terms: string[] }) {
@@ -93,46 +93,48 @@ export function SearchBar() {
 
   return (
     <section className="relative bg-surface py-16 md:py-20">
+      {/* Subtle top gradient to blend from hero */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black to-transparent" />
+
       <div className="mx-auto max-w-4xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-          className="relative overflow-hidden rounded-card border border-border bg-surface-elevated shadow-card transition-shadow duration-300 hover:shadow-card-hover md:rounded-[28px]"
+          className="relative overflow-hidden rounded-card border border-white/[0.06] bg-surface-elevated shadow-card transition-shadow duration-300 hover:shadow-card-hover md:rounded-[28px]"
         >
-          {/* Borde superior sutil con acento */}
+          {/* Top accent line */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
 
           <div className="relative p-8 md:p-10">
-            {/* Etiqueta y tipo animado */}
+            {/* Label and typewriter */}
             <div className="mb-6 flex flex-col items-center text-center">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-accent" />
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-glow" />
                 <span className="font-body text-xs font-medium uppercase tracking-wider text-accent">
                   Explora el mercado
                 </span>
               </div>
               <p className="font-body text-sm text-primary-muted">
                 Buscar{" "}
-                <span className="font-display font-semibold text-primary">
+                <span className="font-display font-semibold text-white">
                   <Typewriter terms={searchTerms} />
                 </span>
               </p>
             </div>
 
-            {/* Campo de búsqueda */}
+            {/* Search input */}
             <form onSubmit={handleSubmit}>
               <motion.div
-                className={`flex items-center gap-3 rounded-input border-2 bg-surface transition-all duration-300 md:rounded-2xl ${
+                className={`flex items-center gap-3 rounded-input border-2 transition-all duration-300 md:rounded-2xl ${
                   isFocused
-                    ? "border-accent bg-white shadow-[0_0_0_4px_rgba(26,54,93,0.08)]"
-                    : "border-border bg-surface-subtle/50"
+                    ? "border-accent/40 bg-surface-subtle shadow-[0_0_0_4px_rgba(252,163,17,0.08)]"
+                    : "border-white/[0.06] bg-surface-subtle/50"
                 }`}
-                whileFocus="focused"
                 layout
               >
                 <div className="flex flex-1 items-center pl-5 md:pl-6">
-                  <Search className="h-5 w-5 shrink-0 text-primary-muted md:h-6 md:w-6" />
+                  <Search className={`h-5 w-5 shrink-0 transition-colors duration-300 md:h-6 md:w-6 ${isFocused ? "text-accent" : "text-primary-muted"}`} />
                   <input
                     type="text"
                     value={searchQuery}
@@ -140,7 +142,7 @@ export function SearchBar() {
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     placeholder="Escribe lo que buscas..."
-                    className="h-14 w-full min-w-0 bg-transparent pl-3 pr-4 font-body text-[15px] text-primary placeholder:text-primary-muted focus:outline-none md:h-16 md:text-base"
+                    className="h-14 w-full min-w-0 bg-transparent pl-3 pr-4 font-body text-[15px] text-white placeholder:text-primary-muted focus:outline-none md:h-16 md:text-base"
                     aria-label="Buscar publicaciones"
                   />
                 </div>
@@ -154,7 +156,7 @@ export function SearchBar() {
                       exit={{ opacity: 0, scale: 0.9 }}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="mr-2 shrink-0 rounded-input bg-accent px-5 py-3 font-body text-sm font-medium text-white shadow-soft transition-colors hover:bg-accent-hover md:mr-3 md:px-6 md:py-3.5"
+                      className="mr-2 shrink-0 rounded-input bg-accent px-5 py-3 font-body text-sm font-semibold text-black shadow-glow transition-colors hover:bg-accent-hover md:mr-3 md:px-6 md:py-3.5"
                     >
                       Buscar
                     </motion.button>
@@ -173,7 +175,7 @@ export function SearchBar() {
               </motion.div>
             </form>
 
-            {/* Sugerencias rápidas (solo visibles en desktop) */}
+            {/* Quick suggestions */}
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               {searchTerms.slice(0, 4).map((term) => (
                 <button
@@ -182,7 +184,7 @@ export function SearchBar() {
                   onClick={() => {
                     setSearchQuery(term)
                   }}
-                  className="rounded-full border border-border bg-surface px-3 py-1.5 font-body text-xs text-primary-secondary transition-colors hover:border-accent/50 hover:bg-accent/5 hover:text-accent"
+                  className="rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 font-body text-xs text-primary-secondary transition-all hover:border-accent/30 hover:bg-accent/5 hover:text-accent"
                 >
                   {term}
                 </button>

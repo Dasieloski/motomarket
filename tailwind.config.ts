@@ -15,6 +15,7 @@ const config: Config = {
           DEFAULT: 'var(--surface)',
           elevated: 'var(--surface-elevated)',
           subtle: 'var(--surface-subtle)',
+          card: 'var(--surface-card)',
         },
         primary: {
           DEFAULT: 'var(--text-primary)',
@@ -24,14 +25,17 @@ const config: Config = {
         accent: {
           DEFAULT: 'var(--accent)',
           hover: 'var(--accent-hover)',
+          muted: 'var(--accent-muted)',
         },
-        metallic: {
-          DEFAULT: 'var(--metallic)',
-          light: 'var(--metallic-light)',
+        prussian: {
+          DEFAULT: 'var(--prussian)',
+          light: 'var(--prussian-light)',
+          lighter: 'var(--prussian-lighter)',
         },
         border: {
           DEFAULT: 'var(--border)',
           subtle: 'var(--border-subtle)',
+          accent: 'var(--border-accent)',
         },
       },
       fontFamily: {
@@ -51,6 +55,7 @@ const config: Config = {
         'soft': 'var(--shadow-soft)',
         'card': 'var(--shadow-card)',
         'card-hover': 'var(--shadow-card-hover)',
+        'glow': 'var(--shadow-glow)',
         'nav': 'var(--shadow-nav)',
       },
       transitionDuration: {
@@ -74,11 +79,21 @@ const config: Config = {
           from: { opacity: '0', transform: 'translateY(12px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
+        'pulse-glow': {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '0.8' },
+        },
+        'shimmer': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in-up': 'fade-in-up 0.6s var(--ease-out-expo) forwards',
+        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+        'shimmer': 'shimmer 2s ease-in-out infinite',
       },
       fontSize: {
         'hero': ['clamp(2.75rem, 5vw + 1.5rem, 4.5rem)', { lineHeight: '1.08', letterSpacing: '-0.03em' }],

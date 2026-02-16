@@ -15,7 +15,7 @@ const footerLinks = [
   },
   {
     title: "Soporte",
-    links: ["Centro de ayuda", "Seguridad", "Términos", "Privacidad"],
+    links: ["Centro de ayuda", "Seguridad", "Terminos", "Privacidad"],
   },
 ]
 
@@ -31,7 +31,7 @@ export function Footer() {
   const footerRef = useRef<HTMLElement>(null)
 
   return (
-    <footer ref={footerRef} className="border-t border-border bg-surface-subtle">
+    <footer ref={footerRef} className="border-t border-white/[0.06] bg-surface-elevated">
       <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20 lg:px-14">
         <div className="flex flex-col gap-14 lg:flex-row lg:justify-between">
           <motion.div
@@ -41,7 +41,7 @@ export function Footer() {
             transition={{ duration: 0.55, ease: easeSmooth }}
             className="max-w-sm"
           >
-            <span className="font-logo text-lg font-semibold tracking-tight text-primary">
+            <span className="font-logo text-lg font-semibold tracking-tight text-white">
               MotoMarket
             </span>
             <p className="mt-5 font-body text-body leading-relaxed text-primary-secondary">
@@ -73,15 +73,15 @@ export function Footer() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.55, delay: i * 0.06, ease: easeSmooth }}
               >
-                <h4 className="font-body text-label font-medium tracking-widest text-primary">
-                  {group.title}
+                <h4 className="font-body text-label font-medium tracking-widest text-accent">
+                  {group.title.toUpperCase()}
                 </h4>
                 <ul className="mt-5 flex flex-col gap-3">
                   {group.links.map((link) => (
                     <li key={link}>
                       <motion.a
                         href="#"
-                        className="inline-block font-body text-body text-primary-secondary transition-colors duration-smooth hover:text-primary"
+                        className="inline-block font-body text-body text-primary-secondary transition-colors duration-smooth hover:text-white"
                         whileHover={{ x: 2 }}
                       >
                         {link}
@@ -99,17 +99,17 @@ export function Footer() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row"
+          className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 sm:flex-row"
         >
           <p className="font-body text-label text-primary-muted">
-            © 2026 MotoMarket Cuba. Todos los derechos reservados.
+            {'2026 MotoMarket Cuba. Todos los derechos reservados.'}
           </p>
           <div className="flex items-center gap-6">
-            {["Términos", "Privacidad", "Cookies"].map((label) => (
+            {["Terminos", "Privacidad", "Cookies"].map((label) => (
               <motion.a
                 key={label}
                 href="#"
-                className="font-body text-label text-primary-muted transition-colors duration-smooth hover:text-primary"
+                className="font-body text-label text-primary-muted transition-colors duration-smooth hover:text-white"
                 whileHover={{ x: 2 }}
               >
                 {label}
