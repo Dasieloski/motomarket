@@ -164,12 +164,12 @@ html {
     #0A0D14;
 }
 
-/* Overlay version: same gradients but NO solid base, so 3D canvas shows through */
+/* Overlay version — TEST COLORS (easy to see) */
 .hero-gradient-overlay {
   background: 
-    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(20, 33, 61, 0.70), transparent 50%),
-    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(20, 33, 61, 0.40), transparent 45%),
-    radial-gradient(ellipse 90% 40% at 50% 90%, rgba(10, 13, 20, 0.80), transparent 60%);
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(255, 0, 0, 0.45), transparent 50%),
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(0, 120, 255, 0.45), transparent 45%),
+    radial-gradient(ellipse 90% 40% at 50% 90%, rgba(0, 255, 100, 0.40), transparent 60%);
 }
 
 .hero-orb-1 {

@@ -57,12 +57,12 @@ export function Hero() {
 
       {/* === ANIMATED GRADIENT BACKGROUND === */}
       <div className="pointer-events-none absolute inset-0 z-[1] hero-gradient-overlay">
-        {/* Orb 1 - Large Prussian glow top-left */}
-        <div className="hero-orb-1 absolute -left-20 -top-20 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(20,33,61,0.50)_0%,transparent_70%)] blur-3xl md:h-[700px] md:w-[700px]" />
-        {/* Orb 2 - Warm accent glow bottom-right */}
-        <div className="hero-orb-2 absolute -right-32 bottom-0 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(252,163,17,0.06)_0%,transparent_65%)] blur-3xl md:h-[600px] md:w-[600px]" />
-        {/* Orb 3 - Subtle center Prussian float */}
-        <div className="hero-orb-3 absolute left-1/3 top-1/4 h-[350px] w-[350px] rounded-full bg-[radial-gradient(circle,rgba(20,33,61,0.30)_0%,transparent_60%)] blur-3xl md:h-[500px] md:w-[500px]" />
+        {/* Orb 1 - TEST: Red glow top-left */}
+        <div className="hero-orb-1 absolute -left-20 -top-20 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(255,0,0,0.5)_0%,transparent_70%)] blur-3xl md:h-[700px] md:w-[700px]" />
+        {/* Orb 2 - TEST: Yellow glow bottom-right */}
+        <div className="hero-orb-2 absolute -right-32 bottom-0 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(255,220,0,0.4)_0%,transparent_65%)] blur-3xl md:h-[600px] md:w-[600px]" />
+        {/* Orb 3 - TEST: Cyan glow center */}
+        <div className="hero-orb-3 absolute left-1/3 top-1/4 h-[350px] w-[350px] rounded-full bg-[radial-gradient(circle,rgba(0,255,255,0.45)_0%,transparent_60%)] blur-3xl md:h-[500px] md:w-[500px]" />
       </div>
 
       {/* Left gradient for text legibility */}
