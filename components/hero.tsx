@@ -48,12 +48,16 @@ export function Hero() {
     >
       {/* === ANIMATED GRADIENT BACKGROUND (behind 3D) === */}
       <div className="pointer-events-none absolute inset-0 z-0 hero-gradient-overlay">
-        {/* Orb 1 - TEST: Red glow top-left */}
-        <div className="hero-orb-1 absolute -left-20 -top-20 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(255,0,0,0.5)_0%,transparent_70%)] blur-3xl md:h-[700px] md:w-[700px]" />
-        {/* Orb 2 - TEST: Yellow glow bottom-right */}
-        <div className="hero-orb-2 absolute -right-32 bottom-0 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(255,220,0,0.4)_0%,transparent_65%)] blur-3xl md:h-[600px] md:w-[600px]" />
-        {/* Orb 3 - TEST: Cyan glow center */}
-        <div className="hero-orb-3 absolute left-1/3 top-1/4 h-[350px] w-[350px] rounded-full bg-[radial-gradient(circle,rgba(0,255,255,0.45)_0%,transparent_60%)] blur-3xl md:h-[500px] md:w-[500px]" />
+        {/* Orb 1 - Deep crimson glow top-left (#9d0208) */}
+        <div className="hero-orb-1 absolute -left-16 -top-16 h-[450px] w-[450px] rounded-full bg-[radial-gradient(circle,rgba(157,2,8,0.35)_0%,rgba(106,4,15,0.15)_40%,transparent_70%)] blur-[80px] md:h-[650px] md:w-[650px]" />
+        {/* Orb 2 - Bright fire glow bottom-right (#dc2f02 -> #e85d04) */}
+        <div className="hero-orb-2 absolute -right-24 bottom-10 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(220,47,2,0.28)_0%,rgba(232,93,4,0.12)_45%,transparent_70%)] blur-[90px] md:h-[550px] md:w-[550px]" />
+        {/* Orb 3 - Warm amber accent center (#f48c06 -> #faa307) */}
+        <div className="hero-orb-3 absolute left-[40%] top-[20%] h-[350px] w-[350px] rounded-full bg-[radial-gradient(circle,rgba(244,140,6,0.22)_0%,rgba(250,163,7,0.08)_50%,transparent_70%)] blur-[100px] md:h-[500px] md:w-[500px]" />
+        {/* Orb 4 - Deep blood red lower-left (#370617 -> #6a040f) */}
+        <div className="hero-orb-4 absolute -left-10 bottom-[15%] h-[380px] w-[380px] rounded-full bg-[radial-gradient(circle,rgba(55,6,23,0.45)_0%,rgba(106,4,15,0.18)_50%,transparent_70%)] blur-[70px] md:h-[520px] md:w-[520px]" />
+        {/* Orb 5 - Golden highlight top-right (#ffba08) */}
+        <div className="hero-orb-5 absolute right-[10%] top-[10%] h-[280px] w-[280px] rounded-full bg-[radial-gradient(circle,rgba(255,186,8,0.12)_0%,rgba(250,163,7,0.05)_50%,transparent_70%)] blur-[80px] md:h-[400px] md:w-[400px]" />
       </div>
 
       {/* 3D Canvas (transparent, so gradient shows through) */}
