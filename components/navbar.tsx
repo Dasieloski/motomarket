@@ -84,7 +84,7 @@ export function Navbar() {
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden items-center gap-5 md:flex md:gap-6 lg:gap-7">
+          <div className="hidden items-center gap-4 whitespace-nowrap lg:flex lg:gap-5 xl:gap-7">
             {isHome ? (
               navLinks.map((link) => (
                 <Link
@@ -130,7 +130,7 @@ export function Navbar() {
           </div>
 
           {/* Desktop actions */}
-          <div className="hidden items-center gap-5 md:flex lg:gap-6">
+          <div className="hidden items-center gap-4 whitespace-nowrap lg:flex lg:gap-5">
             {user ? (
               <>
                 <Link
@@ -185,7 +185,7 @@ export function Navbar() {
           <motion.button
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 text-white transition-colors duration-smooth md:hidden"
+            className="p-2 text-white transition-colors duration-smooth lg:hidden"
             aria-label={mobileOpen ? "Cerrar menu" : "Abrir menu"}
             whileTap={{ scale: 0.95 }}
           >
@@ -203,7 +203,7 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, ease: easeSmooth }}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
               onClick={() => setMobileOpen(false)}
               aria-hidden
             />
@@ -212,7 +212,7 @@ export function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.45, ease: easeSmooth }}
-              className="fixed right-0 top-0 bottom-0 z-50 flex w-[min(300px,88vw)] flex-col gap-8 border-l border-white/[0.06] bg-surface-elevated px-8 pt-28 pb-12 shadow-card md:hidden"
+              className="fixed right-0 top-0 bottom-0 z-50 flex w-[min(300px,88vw)] flex-col gap-8 border-l border-white/[0.06] bg-surface-elevated px-8 pt-28 pb-12 shadow-card lg:hidden"
             >
               {navLinks.map((link, i) => {
                 const Icon = link.icon
