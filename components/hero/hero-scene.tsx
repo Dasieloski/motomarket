@@ -2,6 +2,7 @@
 
 import { Suspense, useMemo, useState, useEffect, useRef } from "react"
 import { Canvas, useThree } from "@react-three/fiber"
+import { PerformanceMonitor } from "@react-three/drei"
 import { motion } from "framer-motion"
 import * as THREE from "three"
 import { MotoModel } from "./moto-model"
@@ -13,7 +14,7 @@ const HERO_BG = "#F5F5F3"
 function CanvasReady({ onReady }: { onReady: () => void }) {
   const { gl, scene, camera } = useThree()
   const hasNotified = useRef(false)
-  
+
   useEffect(() => {
     if (!hasNotified.current && gl && scene && camera) {
       // Esperar un frame para asegurar que todo está inicializado
@@ -26,7 +27,7 @@ function CanvasReady({ onReady }: { onReady: () => void }) {
       })
     }
   }, [gl, scene, camera, onReady])
-  
+
   return null
 }
 
@@ -37,6 +38,8 @@ function SceneContent({
   scrollProgress: number
   onLoaded: () => void
 }) {
+  const [dpr, setDpr] = useState(1.5)
+
   useEffect(() => {
     // Notificar cuando el modelo está listo después de asegurar render
     const timer = setTimeout(() => {
@@ -48,6 +51,12 @@ function SceneContent({
   return (
     <>
       <CanvasReady onReady={onLoaded} />
+      {/* Monitor de rendimiento para ajustar DPR dinámicamente */}
+      <PerformanceMonitor
+        onIncline={() => setDpr(1.5)}
+        onDecline={() => setDpr(1)}
+        onChange={({ factor }) => setDpr(Math.min(1.5, 1 + factor / 2))}
+      />
       <ambientLight intensity={0.85} />
       <directionalLight position={[4, 6, 5]} intensity={1.1} castShadow={false} />
       <directionalLight position={[-3, 4, 3]} intensity={0.4} />
@@ -104,7 +113,7 @@ export function HeroScene({
         camera={{ position: [0, 0, 5], fov: 40 }}
         dpr={[1, 1.5]}
         performance={{ min: 0.5 }}
-        frameloop="always"
+        frameloop="demand"
         onCreated={({ gl, size }) => {
           // Asegurar que el canvas tenga dimensiones correctas sin forzar render
           if (gl.domElement) {

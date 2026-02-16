@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useCallback } from "react"
 import dynamic from "next/dynamic"
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion"
 import { ChevronDown, Sparkles } from "lucide-react"
@@ -41,6 +41,11 @@ export function Hero() {
   const contentOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0.1])
   const contentY = useTransform(scrollYProgress, [0, 0.4], [0, 32])
 
+  // Memoizar el callback para evitar re-renders innecesarios
+  const handleModelLoaded = useCallback(() => {
+    setIsModelLoaded(true)
+  }, [])
+
   return (
     <section
       ref={sectionRef}
@@ -52,7 +57,7 @@ export function Hero() {
         <HeroScene
           className="h-full w-full"
           scrollProgress={scrollFor3D}
-          onModelLoaded={() => setIsModelLoaded(true)}
+          onModelLoaded={handleModelLoaded}
         />
       </div>
 
@@ -102,28 +107,28 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.6, ease: [0.4, 0, 0.2, 1] }}
               className="mt-7 flex flex-col gap-4 md:flex-row md:items-center"
             >
-            <Link href="/motos-destacadas">
-              <motion.button
-                type="button"
-                className="group relative inline-flex items-center justify-center rounded-[999px] bg-white px-7 py-3.5 text-sm font-medium text-primary shadow-[0_18px_35px_rgba(0,0,0,0.4)] transition-[box-shadow,transform,background-color] duration-300 ease-[0.22,1,0.36,1] hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <span className="absolute inset-0 rounded-[999px] bg-gradient-to-r from-accent/40 via-transparent to-primary/40 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
-                <span className="relative z-10">Ver motos destacadas</span>
-              </motion.button>
-            </Link>
+              <Link href="/motos-destacadas">
+                <motion.button
+                  type="button"
+                  className="group relative inline-flex items-center justify-center rounded-[999px] bg-white px-7 py-3.5 text-sm font-medium text-primary shadow-[0_18px_35px_rgba(0,0,0,0.4)] transition-[box-shadow,transform,background-color] duration-300 ease-[0.22,1,0.36,1] hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <span className="absolute inset-0 rounded-[999px] bg-gradient-to-r from-accent/40 via-transparent to-primary/40 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
+                  <span className="relative z-10">Ver motos destacadas</span>
+                </motion.button>
+              </Link>
 
-            <Link href="/vender">
-              <motion.button
-                type="button"
-                className="inline-flex items-center justify-center rounded-[999px] border-2 border-white/80 bg-white/10 backdrop-blur-sm px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-300 ease-[0.22,1,0.36,1] hover:border-white hover:bg-white/20"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Vender mi moto
-              </motion.button>
-            </Link>
+              <Link href="/vender">
+                <motion.button
+                  type="button"
+                  className="inline-flex items-center justify-center rounded-[999px] border-2 border-white/80 bg-white/10 backdrop-blur-sm px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-300 ease-[0.22,1,0.36,1] hover:border-white hover:bg-white/20"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Vender mi moto
+                </motion.button>
+              </Link>
             </motion.div>
 
             <motion.div
