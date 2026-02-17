@@ -15,12 +15,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <SearchBar />
-      <PromoBanner
-        title="Vende tu Moto en Minutos"
-        description="Publica tu anuncio gratis y llega a miles de compradores en toda Cuba. Sistema seguro y verificado."
-        ctaText="Publicar Ahora"
-        ctaLink="/vender"
-      />
+      <PromoBanner />
       <Categories />
       <BrandStory />
       <FeaturedListings />
