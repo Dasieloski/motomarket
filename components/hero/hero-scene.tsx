@@ -136,19 +136,9 @@ export function HeroScene({
           animate={{ opacity: isLoaded ? 0 : 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
-          className="absolute inset-0 z-10 flex items-center justify-center bg-[#0A0D14]"
+          className="absolute inset-0 z-10 flex items-center justify-center"
         >
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative h-1 w-32 overflow-hidden rounded-full bg-white/10">
-              <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-accent/60 to-accent"
-                initial={{ width: 0 }}
-                animate={{ width: isLoaded ? 100 : 50 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-              />
-            </div>
-            <span className="text-xs font-medium text-white/40">Cargando modelo 3D...</span>
-          </div>
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
         </motion.div>
       )}
     </div>

@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navbar"
 import { Hero } from "@/components/hero"
 import { SearchBar } from "@/components/search-bar"
+import { PromoBanner } from "@/components/promo-banner" // Import
 import { Categories } from "@/components/categories"
 import { BrandStory } from "@/components/brand-story"
 import { FeaturedListings } from "@/components/featured-listings"
@@ -14,6 +15,12 @@ export default function Home() {
       <Navbar />
       <Hero />
       <SearchBar />
+      <PromoBanner
+        title="Vende tu Moto en Minutos"
+        description="Publica tu anuncio gratis y llega a miles de compradores en toda Cuba. Sistema seguro y verificado."
+        ctaText="Publicar Ahora"
+        ctaLink="/vender"
+      />
       <Categories />
       <BrandStory />
       <FeaturedListings />

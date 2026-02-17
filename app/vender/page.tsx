@@ -231,17 +231,17 @@ function VenderForm() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-8"
+          className="mb-8 text-center md:text-left"
         >
-          <h1 className="font-heading text-4xl font-bold text-primary md:text-5xl">
+          <h1 className="font-heading text-3xl font-bold text-primary md:text-5xl">
             {editId ? "Editar publicación" : "Vender mi moto"}
           </h1>
-          <p className="mt-2 font-body text-[15px] text-primary-secondary">
+          <p className="mt-2 font-body text-sm text-primary-secondary md:text-base">
             Completa el formulario para publicar tu moto, pieza o servicio en Cuba.
           </p>
         </motion.div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2">
           {/* Form */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}

@@ -2,15 +2,45 @@
 
 import { useRef } from "react"
 import { motion } from "framer-motion"
-import Image from "next/image"
 import Link from "next/link"
+import { Bike, Shield, Wrench, Zap, Settings } from "lucide-react"
 
 const categories = [
-  { title: "Motos nuevas", image: "/images/cat-new-motos.jpg", slug: "nuevas", description: "Suzuki, Yamaha, Lifan, 0km" },
-  { title: "Motos usadas", image: "/images/cat-used-motos.jpg", slug: "usadas", description: "Verificadas, Oportunidades" },
-  { title: "Repuestos", image: "/images/cat-parts.jpg", slug: "repuestos", description: "Motores, Llantas, Baterías" },
-  { title: "Accesorios", image: "/images/cat-accessories.jpg", slug: "accesorios", description: "Cascos, Guantes, Luces LED" },
-  { title: "Talleres y servicios", image: "/images/cat-workshops.jpg", slug: "talleres", description: "Mecánica, Pintura, Electricidad" },
+  {
+    title: "Motos nuevas",
+    icon: Bike,
+    slug: "nuevas",
+    description: "Suzuki, Yamaha, Lifan, 0km",
+    gradient: "from-blue-600/20 to-blue-900/40"
+  },
+  {
+    title: "Motos usadas",
+    icon: Shield,
+    slug: "usadas",
+    description: "Verificadas, Oportunidades",
+    gradient: "from-orange-500/20 to-orange-900/40"
+  },
+  {
+    title: "Repuestos",
+    icon: Settings,
+    slug: "repuestos",
+    description: "Motores, Llantas, Baterías",
+    gradient: "from-slate-500/20 to-slate-900/40"
+  },
+  {
+    title: "Accesorios",
+    icon: Zap,
+    slug: "accesorios",
+    description: "Cascos, Guantes, Luces LED",
+    gradient: "from-emerald-500/20 to-emerald-900/40"
+  },
+  {
+    title: "Talleres",
+    icon: Wrench,
+    slug: "talleres",
+    description: "Mecánica, Pintura, Electricidad",
+    gradient: "from-purple-500/20 to-purple-900/40"
+  },
 ]
 
 export function Categories() {
@@ -46,6 +76,7 @@ export function Categories() {
             <Link
               key={cat.title}
               href={`/motos?category=${cat.slug}`}
+              className="w-full"
             >
               <motion.div
                 initial={{ opacity: 0, y: 32 }}
@@ -55,21 +86,25 @@ export function Categories() {
                 className="group relative aspect-[3/4] w-full overflow-hidden rounded-card border border-white/[0.06] bg-surface-card shadow-soft transition-all duration-smooth hover:shadow-card hover:border-accent/20 cursor-pointer"
                 whileHover={{ y: -6 }}
               >
-                <div className="absolute inset-0">
-                  <Image
-                    src={cat.image || "/placeholder.svg"}
-                    alt={cat.title}
-                    fill
-                    className="object-cover transition-transform duration-smooth group-hover:scale-105"
-                  />
+                {/* Dynamic Gradient Background */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${cat.gradient} opacity-50 transition-opacity duration-300 group-hover:opacity-80`} />
+
+                {/* Icon Container - Centered */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+                  <div className="relative mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/5 border border-white/10 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110 group-hover:bg-white/10 group-hover:border-accent/30 shadow-glow-sm">
+                    <cat.icon
+                      className="h-8 w-8 text-white/90 transition-colors duration-300 group-hover:text-accent"
+                      strokeWidth={1.5}
+                    />
+                  </div>
                 </div>
-                {/* Dark overlay with accent tint on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent transition-all duration-smooth group-hover:from-black/85 group-hover:via-prussian/30" />
-                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+
+                {/* Content at Bottom */}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-5 pt-12">
                   <h3 className="font-heading text-base font-medium text-white md:text-lg">
                     {cat.title}
                   </h3>
-                  <p className="mt-1 font-body text-xs text-secondary group-hover:text-white transition-colors">
+                  <p className="mt-1 font-body text-xs text-secondary group-hover:text-white transition-colors line-clamp-2">
                     {cat.description}
                   </p>
                   <div className="mt-3 h-0.5 w-0 rounded-full bg-accent transition-all duration-smooth group-hover:w-8" />
