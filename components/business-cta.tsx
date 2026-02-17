@@ -2,7 +2,8 @@
 
 import { useRef } from "react"
 import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { AnimatedIcon } from "@/components/ui/animated-icon"
+import { ChevronRight } from "lucide-react"
 import Link from "next/link"
 
 const easeSmooth = [0.4, 0, 0.2, 1] as const
@@ -28,7 +29,7 @@ export function BusinessCta() {
           <div className="absolute inset-0 bg-gradient-to-br from-prussian via-surface-card to-surface-card" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_100%,rgba(252,163,17,0.06),transparent)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_80%_at_0%_0%,rgba(20,33,61,0.4),transparent)]" />
-          
+
           {/* Top accent line */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 
@@ -78,7 +79,7 @@ export function BusinessCta() {
                   transition={{ duration: 0.4 }}
                 >
                   Comenzar ahora
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  <AnimatedIcon icon={ChevronRight} size={20} color="black" className="transition-transform group-hover:translate-x-0.5" />
                 </motion.span>
               </Link>
               <Link href="/para-negocios">

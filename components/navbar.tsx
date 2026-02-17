@@ -2,26 +2,39 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, LogOut, Star, User, Bike, Plus, Building2 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
-import * as Tooltip from "@radix-ui/react-tooltip"
+import { AnimatedIcon } from "@/components/ui/animated-icon"
+import {
+  Compass,
+  Star,
+  Building2,
+  FileText,
+  ShieldCheck,
+  Bike,
+  PlusCircle,
+  User,
+  LogOut,
+  LogIn,
+  Menu,
+  X
+} from "lucide-react"
 
-const homeLinks: Array<{ label: string; href: string; icon?: never }> = [
-  { label: "Explorar", href: "#categorias" },
-  { label: "Destacados", href: "#destacados" },
-  { label: "Para Negocios", href: "/para-negocios" },
-  { label: "Nuestra historia", href: "#historia" },
-  { label: "Confianza", href: "#confianza" },
+const homeLinks = [
+  { label: "Explorar", href: "#categorias", icon: Compass },
+  { label: "Destacados", href: "#destacados", icon: Star },
+  { label: "Para Negocios", href: "/para-negocios", icon: Building2 },
+  { label: "Nuestra historia", href: "#historia", icon: FileText },
+  { label: "Confianza", href: "#confianza", icon: ShieldCheck },
 ]
 
-const internalLinks: Array<{ label: string; href: string; icon: typeof Star }> = [
+const internalLinks = [
   { label: "Ver destacados", href: "/motos-destacadas", icon: Star },
   { label: "Para Negocios", href: "/para-negocios", icon: Building2 },
   { label: "Mi cuenta", href: "/dashboard", icon: User },
   { label: "Ver todas las motos", href: "/motos", icon: Bike },
-  { label: "Publicar / Vender mi moto", href: "/vender", icon: Plus },
+  { label: "Publicar / Vender", href: "/vender", icon: PlusCircle },
 ]
 
 const SCROLL_THRESHOLD = 60
@@ -62,11 +75,10 @@ export function Navbar() {
           opacity: 1,
         }}
         transition={{ duration: 0.5, ease: easeSmooth }}
-        className={`fixed left-0 right-0 top-0 z-50 flex h-16 items-center md:h-20 transition-all duration-500 ${
-          scrolled
-            ? "bg-black/80 backdrop-blur-2xl border-b border-white/[0.06] shadow-[0_1px_0_rgba(255,255,255,0.06)]"
-            : "bg-transparent border-b border-transparent"
-        }`}
+        className={`fixed left-0 right-0 top-0 z-50 flex h-16 items-center md:h-20 transition-all duration-500 ${scrolled
+          ? "bg-black/80 backdrop-blur-2xl border-b border-white/[0.06] shadow-[0_1px_0_rgba(255,255,255,0.06)]"
+          : "bg-transparent border-b border-transparent"
+          }`}
       >
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 md:px-10 lg:px-14">
           {/* Logo */}
@@ -83,118 +95,37 @@ export function Navbar() {
             </motion.span>
           </Link>
 
-          {/* Desktop links */}
-          <div className="hidden items-center gap-4 whitespace-nowrap lg:flex lg:gap-5 xl:gap-7">
-            {isHome ? (
-              navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="nav-link-underline font-body text-sm font-medium tracking-tight text-white/70 transition-colors duration-300 hover:text-white md:text-[15px]"
-                >
-                  {link.label}
-                </Link>
-              ))
-            ) : (
-              <Tooltip.Provider delayDuration={200}>
-                {navLinks.map((link) => {
-                  const Icon = link.icon
-                  return (
-                    <Tooltip.Root key={link.label}>
-                      <Tooltip.Trigger asChild>
-                        <Link href={link.href}>
-                          <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="rounded-input p-2.5 text-white/50 transition-colors duration-smooth hover:bg-white/[0.06] hover:text-accent"
-                          >
-                            <Icon className="h-5 w-5" />
-                          </motion.button>
-                        </Link>
-                      </Tooltip.Trigger>
-                      <Tooltip.Portal>
-                        <Tooltip.Content
-                          side="bottom"
-                          className="rounded-input bg-surface-elevated px-3 py-1.5 font-body text-xs font-medium text-white shadow-card border border-white/[0.06]"
-                          sideOffset={5}
-                        >
-                          {link.label}
-                          <Tooltip.Arrow className="fill-surface-elevated" />
-                        </Tooltip.Content>
-                      </Tooltip.Portal>
-                    </Tooltip.Root>
-                  )
-                })}
-              </Tooltip.Provider>
-            )}
-          </div>
+          {/* Actions & Hamburger Toggle */}
+          <div className="flex items-center gap-4 md:gap-6">
+            <Link href="/vender" className="hidden sm:block">
+              <motion.button
+                className="inline-flex h-10 items-center rounded-button bg-accent px-5 font-body text-sm font-semibold text-black shadow-glow transition-all duration-smooth hover:bg-accent-hover hover:shadow-[0_0_35px_rgba(252,163,17,0.3)] md:h-11 md:px-6"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.4, ease: easeSmooth }}
+              >
+                Vender
+              </motion.button>
+            </Link>
 
-          {/* Desktop actions */}
-          <div className="hidden items-center gap-4 whitespace-nowrap lg:flex lg:gap-5">
-            {user ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="font-body text-[15px] font-medium text-white/60 transition-colors duration-smooth hover:text-white"
-                >
-                  Mi cuenta
-                </Link>
-                <Link href="/vender">
-                  <motion.button
-                    className="inline-flex h-11 items-center rounded-button bg-accent px-6 font-body text-[15px] font-semibold text-black shadow-glow transition-all duration-smooth hover:bg-accent-hover hover:shadow-[0_0_35px_rgba(252,163,17,0.3)] md:h-12 md:px-7"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ duration: 0.4, ease: easeSmooth }}
-                  >
-                    Vender mi moto
-                  </motion.button>
-                </Link>
-                <motion.button
-                  onClick={logout}
-                  className="inline-flex h-11 items-center rounded-button border border-white/10 bg-white/[0.04] px-4 font-body text-[15px] font-medium text-white/60 transition-all duration-smooth hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ duration: 0.4, ease: easeSmooth }}
-                >
-                  <LogOut className="h-4 w-4" />
-                </motion.button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="font-body text-[15px] font-medium text-white/60 transition-colors duration-smooth hover:text-white"
-                >
-                  Iniciar sesion
-                </Link>
-                <Link href="/register">
-                  <motion.button
-                    className="inline-flex h-11 items-center rounded-button bg-accent px-6 font-body text-[15px] font-semibold text-black shadow-glow transition-all duration-smooth hover:bg-accent-hover hover:shadow-[0_0_35px_rgba(252,163,17,0.3)] md:h-12 md:px-7"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ duration: 0.4, ease: easeSmooth }}
-                  >
-                    Registrarse
-                  </motion.button>
-                </Link>
-              </>
-            )}
+            <motion.button
+              type="button"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="flex items-center justify-center p-2 text-white transition-colors duration-smooth"
+              aria-label={mobileOpen ? "Cerrar menu" : "Abrir menu"}
+              whileTap={{ scale: 0.9 }}
+            >
+              {mobileOpen ? (
+                <AnimatedIcon icon={X} size={32} color="white" />
+              ) : (
+                <AnimatedIcon icon={Menu} size={32} color="white" />
+              )}
+            </motion.button>
           </div>
-
-          {/* Mobile toggle */}
-          <motion.button
-            type="button"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 text-white transition-colors duration-smooth lg:hidden"
-            aria-label={mobileOpen ? "Cerrar menu" : "Abrir menu"}
-            whileTap={{ scale: 0.95 }}
-          >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </motion.button>
         </div>
       </motion.nav>
 
-      {/* Mobile menu */}
+      {/* Mobile/Full menu */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -203,7 +134,7 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, ease: easeSmooth }}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
               onClick={() => setMobileOpen(false)}
               aria-hidden
             />
@@ -212,11 +143,10 @@ export function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.45, ease: easeSmooth }}
-              className="fixed right-0 top-0 bottom-0 z-50 flex w-[min(300px,88vw)] flex-col gap-8 border-l border-white/[0.06] bg-surface-elevated px-8 pt-28 pb-12 shadow-card lg:hidden"
+              className="fixed right-0 top-0 bottom-0 z-50 flex w-[min(400px,100vw)] flex-col gap-8 border-l border-white/[0.06] bg-surface-elevated px-10 pt-28 pb-12 shadow-card"
             >
-              {navLinks.map((link, i) => {
-                const Icon = link.icon
-                return (
+              <div className="flex flex-col gap-6">
+                {navLinks.map((link, i) => (
                   <Link
                     key={link.label}
                     href={link.href}
@@ -226,68 +156,65 @@ export function Navbar() {
                       initial={{ opacity: 0, x: 16 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.04, duration: 0.4 }}
-                      className="flex items-center gap-3 font-body text-[17px] font-medium text-white/80 transition-colors hover:text-accent"
+                      className="flex items-center gap-4 font-body text-xl font-medium text-white/80 transition-colors hover:text-accent"
                     >
-                      {Icon && <Icon className="h-5 w-5" />}
+                      <AnimatedIcon icon={link.icon} size={28} color="white" />
                       <span>{link.label}</span>
                     </motion.div>
                   </Link>
-                )
-              })}
-              {user ? (
-                <>
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setMobileOpen(false)}
-                    className="font-body text-[17px] font-medium text-white/80 transition-colors hover:text-accent"
-                  >
-                    Mi cuenta
-                  </Link>
-                  <Link href="/vender" onClick={() => setMobileOpen(false)}>
-                    <motion.button
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2, duration: 0.4 }}
-                      className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-button bg-accent px-6 font-body text-[15px] font-semibold text-black shadow-glow"
+                ))}
+              </div>
+
+              <div className="mt-auto flex flex-col gap-4 border-t border-white/[0.06] pt-8">
+                {user ? (
+                  <>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setMobileOpen(false)}
                     >
-                      Vender mi moto
-                    </motion.button>
-                  </Link>
-                  <motion.button
-                    onClick={() => {
-                      logout()
-                      setMobileOpen(false)
-                    }}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.25, duration: 0.4 }}
-                    className="mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-button border border-white/10 bg-white/[0.04] px-6 font-body text-[15px] font-medium text-white/70 transition-colors hover:bg-white/[0.08] hover:text-white"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Cerrar sesion
-                  </motion.button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/login"
-                    onClick={() => setMobileOpen(false)}
-                    className="font-body text-[17px] font-medium text-white/80 transition-colors hover:text-accent"
-                  >
-                    Iniciar sesion
-                  </Link>
-                  <Link href="/register" onClick={() => setMobileOpen(false)}>
+                      <div className="flex items-center gap-4 font-body text-xl font-medium text-white/80 transition-colors hover:text-accent">
+                        <AnimatedIcon icon={User} size={28} color="white" />
+                        <span>Mi cuenta</span>
+                      </div>
+                    </Link>
+                    <Link href="/vender" onClick={() => setMobileOpen(false)}>
+                      <motion.button
+                        className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-button bg-accent px-6 font-body text-[15px] font-semibold text-black shadow-glow"
+                      >
+                        Vender
+                      </motion.button>
+                    </Link>
                     <motion.button
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2, duration: 0.4 }}
-                      className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-button bg-accent px-6 font-body text-[15px] font-semibold text-black shadow-glow"
+                      onClick={() => {
+                        logout()
+                        setMobileOpen(false)
+                      }}
+                      className="mt-2 inline-flex h-12 w-full items-center justify-center gap-3 rounded-button border border-white/10 bg-white/[0.04] px-6 font-body text-[15px] font-medium text-white/70 transition-colors hover:bg-white/[0.08] hover:text-white"
                     >
-                      Registrarse
+                      <AnimatedIcon icon={LogOut} size={20} color="white" />
+                      <span>Cerrar sesión</span>
                     </motion.button>
-                  </Link>
-                </>
-              )}
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-4 font-body text-xl font-medium text-white/80 transition-colors hover:text-accent"
+                    >
+                      <AnimatedIcon icon={LogIn} size={28} color="white" />
+                      <span>Iniciar sesión</span>
+                    </Link>
+                    <Link href="/register" onClick={() => setMobileOpen(false)}>
+                      <motion.button
+                        className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-button bg-accent px-6 font-body text-[15px] font-semibold text-black shadow-glow"
+                      >
+                        Registrarse
+                      </motion.button>
+                    </Link>
+                  </>
+                )}
+              </div>
             </motion.div>
           </>
         )}

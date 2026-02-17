@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { AnimatedIcon } from "@/components/ui/animated-icon"
 import { Search } from "lucide-react"
 import { useRouter } from "next/navigation"
 
@@ -126,15 +127,19 @@ export function SearchBar() {
             {/* Search input */}
             <form onSubmit={handleSubmit}>
               <motion.div
-                className={`flex items-center gap-3 rounded-input border-2 transition-all duration-300 md:rounded-2xl ${
-                  isFocused
-                    ? "border-accent/40 bg-surface-subtle shadow-[0_0_0_4px_rgba(252,163,17,0.08)]"
-                    : "border-white/[0.06] bg-surface-subtle/50"
-                }`}
+                className={`flex items-center gap-3 rounded-input border-2 transition-all duration-300 md:rounded-2xl ${isFocused
+                  ? "border-accent/40 bg-surface-subtle shadow-[0_0_0_4px_rgba(252,163,17,0.08)]"
+                  : "border-white/[0.06] bg-surface-subtle/50"
+                  }`}
                 layout
               >
                 <div className="flex flex-1 items-center pl-5 md:pl-6">
-                  <Search className={`h-5 w-5 shrink-0 transition-colors duration-300 md:h-6 md:w-6 ${isFocused ? "text-accent" : "text-primary-muted"}`} />
+                  <AnimatedIcon
+                    icon={Search}
+                    size={32}
+                    color={isFocused ? "#fca311" : "#ffffff"}
+                    trigger="hover"
+                  />
                   <input
                     type="text"
                     value={searchQuery}

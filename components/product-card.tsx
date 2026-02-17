@@ -4,17 +4,18 @@ import { useState, useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
+import { AnimatedIcon } from "@/components/ui/animated-icon"
 import {
+  Heart,
   MapPin,
   Eye,
-  Heart,
+  ChevronRight,
   Gauge,
-  Calendar,
+  FileText,
   Zap,
   Battery,
   Package,
-  Wrench,
-  ChevronRight,
+  Wrench
 } from "lucide-react"
 
 import { useAuth } from "@/contexts/auth-context"
@@ -36,17 +37,18 @@ const overlayTextClass = "text-white/90"
 
 function QuickSpecs({ moto }: { moto: MotoListing }) {
   if (moto.category === "moto" && moto.motoType === "combustion") {
-    const parts = [
+    const specs = [
       moto.displacement && { icon: Gauge, label: moto.displacement },
       moto.mileage && { icon: Gauge, label: moto.mileage },
-      moto.year && { icon: Calendar, label: moto.year },
-    ].filter(Boolean) as { icon: typeof Gauge; label: string }[]
-    if (parts.length === 0) return <SpecFallback condition={moto.condition} />
+      moto.year && { icon: FileText, label: moto.year },
+    ].filter(Boolean) as { icon: any; label: string | number }[]
+
+    if (specs.length === 0) return <SpecFallback condition={moto.condition} />
     return (
       <div className={`flex flex-wrap items-center gap-3 text-[11px] ${overlayTextClass}`}>
-        {parts.map(({ icon: Icon, label }, i) => (
+        {specs.map(({ icon, label }, i) => (
           <span key={i} className="flex items-center gap-1">
-            <Icon className="h-3.5 w-3.5 shrink-0 opacity-80" />
+            <AnimatedIcon icon={icon} size={16} color="white" />
             {label}
           </span>
         ))}
@@ -54,16 +56,17 @@ function QuickSpecs({ moto }: { moto: MotoListing }) {
     )
   }
   if (moto.category === "moto" && moto.motoType === "electrica") {
-    const parts = [
+    const specs = [
       moto.watts && { icon: Zap, label: moto.watts },
       moto.amperage && { icon: Battery, label: moto.amperage },
-    ].filter(Boolean) as { icon: typeof Zap; label: string }[]
-    if (parts.length === 0) return <SpecFallback condition={moto.condition} />
+    ].filter(Boolean) as { icon: any; label: string | number }[]
+
+    if (specs.length === 0) return <SpecFallback condition={moto.condition} />
     return (
       <div className={`flex flex-wrap items-center gap-3 text-[11px] ${overlayTextClass}`}>
-        {parts.map(({ icon: Icon, label }, i) => (
+        {specs.map(({ icon, label }, i) => (
           <span key={i} className="flex items-center gap-1">
-            <Icon className="h-3.5 w-3.5 shrink-0 opacity-80" />
+            <AnimatedIcon icon={icon} size={16} color="white" />
             {label}
           </span>
         ))}
@@ -75,7 +78,7 @@ function QuickSpecs({ moto }: { moto: MotoListing }) {
     if (!compat) return <SpecFallback condition={moto.condition} />
     return (
       <div className={`flex items-center gap-1.5 text-[11px] ${overlayTextClass}`}>
-        <Package className="h-3.5 w-3.5 shrink-0 opacity-80" />
+        <AnimatedIcon icon={Package} size={16} color="white" />
         <span className="truncate">Compat: {compat}</span>
       </div>
     )
@@ -83,7 +86,7 @@ function QuickSpecs({ moto }: { moto: MotoListing }) {
   if (moto.category === "service" && moto.serviceType) {
     return (
       <div className={`flex items-center gap-1.5 text-[11px] ${overlayTextClass}`}>
-        <Wrench className="h-3.5 w-3.5 shrink-0 opacity-80" />
+        <AnimatedIcon icon={Wrench} size={16} color="white" />
         <span className="truncate">{moto.serviceType}</span>
       </div>
     )
@@ -187,8 +190,11 @@ export function ProductCard({ moto, index }: ProductCardProps) {
                   animate={isFavorite ? { scale: [1, 1.2, 1] } : {}}
                   transition={{ duration: 0.3 }}
                 >
-                  <Heart
-                    className={`h-4 w-4 ${isFavorite ? "fill-red-500 text-red-500" : "text-primary-muted"}`}
+                  <AnimatedIcon
+                    icon={Heart}
+                    size={20}
+                    trigger={isFavorite ? "click" : "hover"}
+                    color={isFavorite ? "#ef4444" : "#94a3b8"}
                   />
                 </motion.div>
               </motion.button>
@@ -213,12 +219,12 @@ export function ProductCard({ moto, index }: ProductCardProps) {
               </div>
               <div className="flex flex-wrap items-center justify-between gap-2 text-[11px]">
                 <span className="flex items-center gap-1 truncate text-white/90">
-                  <MapPin className="h-3 w-3 shrink-0" />
+                  <AnimatedIcon icon={MapPin} size={14} color="white" />
                   {moto.province ?? "—"}
                 </span>
                 {views > 0 && (
                   <span className="flex items-center gap-1 text-white/80">
-                    <Eye className="h-3 w-3" />
+                    <AnimatedIcon icon={Eye} size={14} color="white" />
                     {views} vistas
                   </span>
                 )}
@@ -232,7 +238,7 @@ export function ProductCard({ moto, index }: ProductCardProps) {
                 whileTap={{ scale: 0.98 }}
               >
                 Ver detalles
-                <ChevronRight className="h-4 w-4" />
+                <AnimatedIcon icon={ChevronRight} size={18} color="black" />
               </motion.span>
             </div>
           </div>

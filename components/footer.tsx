@@ -2,6 +2,7 @@
 
 import { useRef } from "react"
 import { motion } from "framer-motion"
+import { AnimatedIcon } from "@/components/ui/animated-icon"
 import { Facebook, Instagram, Linkedin } from "lucide-react"
 
 const footerLinks = [
@@ -58,7 +59,7 @@ export function Footer() {
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Icon className="h-5 w-5" />
+                  <AnimatedIcon icon={Icon} size={24} color="white" />
                 </motion.a>
               ))}
             </div>

@@ -2,7 +2,8 @@
 
 import { useRef } from "react"
 import { motion } from "framer-motion"
-import { ShieldCheck, Star, MessageCircle, Zap } from "lucide-react"
+import { AnimatedIcon } from "@/components/ui/animated-icon"
+import { Star, ShieldCheck, MessageCircle, Zap } from "lucide-react"
 
 const features = [
   {
@@ -77,7 +78,7 @@ export function TrustSection() {
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.4 }}
               >
-                <feature.icon className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.5} />
+                <AnimatedIcon icon={feature.icon} size={32} color="currentColor" />
               </motion.div>
               <h3 className="font-body text-lg font-medium text-white transition-colors duration-smooth group-hover:text-accent md:text-xl">
                 {feature.title}
