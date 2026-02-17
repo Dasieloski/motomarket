@@ -120,7 +120,7 @@ export function FeaturedListings() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredListings.map((listing, i) => (
-            <div key={listing.id} className="h-[420px]">
+            <div key={listing.id}>
               <ProductCard moto={listing} index={i} />
             </div>
           ))}

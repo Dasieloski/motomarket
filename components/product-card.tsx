@@ -76,7 +76,7 @@ export function ProductCard({ moto, index }: ProductCardProps) {
         <article className="relative flex flex-col h-full bg-surface-card border border-border transition-all duration-300 group-hover:border-accent/40 group-hover:shadow-[0_0_30px_-5px_var(--accent-muted)] overflow-hidden">
 
           {/* === IMAGE COMPARTMENT === */}
-          <div className="relative aspect-video w-full overflow-hidden bg-surface-elevated border-b border-border">
+          <div className="relative aspect-[4/3] md:aspect-video w-full overflow-hidden bg-surface-elevated border-b border-border">
             <Image
               src={moto.images?.[0] || "/placeholder-moto.jpg"}
               alt={moto.title}
@@ -109,24 +109,24 @@ export function ProductCard({ moto, index }: ProductCardProps) {
           </div>
 
           {/* === TECH SPEC COMPARTMENT === */}
-          <div className="flex flex-col flex-1 p-3 gap-2">
+          <div className="flex flex-col flex-1 p-2 md:p-3 gap-1 md:gap-2">
 
             {/* Head */}
-            <div>
+            <div className="space-y-0.5">
               <div className="flex justify-between items-start gap-2">
-                <h3 className="font-heading text-base leading-tight text-white group-hover:text-accent transition-colors line-clamp-1">
+                <h3 className="font-heading text-xs md:text-base leading-tight text-white group-hover:text-accent transition-colors line-clamp-2">
                   {moto.title}
                 </h3>
-                <ArrowUpRight className="w-4 h-4 text-secondary group-hover:text-accent opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0" />
+                <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4 text-secondary group-hover:text-accent opacity-0 md:group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0" />
               </div>
-              <div className="mt-0.5 flex items-center gap-1.5 text-secondary">
-                <MapPin className="w-3 h-3" />
-                <span className="text-[10px] uppercase tracking-wide">{moto.province || "Cuba"}</span>
+              <div className="flex items-center gap-1 text-secondary">
+                <MapPin className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                <span className="text-[9px] md:text-[10px] uppercase tracking-wide">{moto.province || "Cuba"}</span>
               </div>
             </div>
 
-            {/* Specs Grid (Mini Table) */}
-            <div className="mt-auto bg-surface-elevated/50 p-2 rounded-sm border border-white/[0.02]">
+            {/* Specs Grid (Mini Table) - Hidden on mobile, visible on desktop */}
+            <div className="hidden md:block mt-auto bg-surface-elevated/50 p-2 rounded-sm border border-white/[0.02]">
               {moto.category === 'moto' && moto.motoType === 'combustion' && (
                 <>
                   <SpecRow icon={Settings} label="Motor" value={moto.displacement ? `${moto.displacement}` : '-'} />
@@ -145,16 +145,16 @@ export function ProductCard({ moto, index }: ProductCardProps) {
             </div>
 
             {/* Footer / Price */}
-            <div className="pt-2 border-t border-border flex items-center justify-between">
+            <div className="mt-auto md:mt-0 pt-1.5 md:pt-2 border-t border-border flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-[10px] text-secondary uppercase tracking-widest">Precio</span>
-                <span className="font-mono text-lg text-accent font-medium">
+                <span className="hidden md:block text-[10px] text-secondary uppercase tracking-widest">Precio</span>
+                <span className="font-mono text-sm md:text-lg text-accent font-medium">
                   {priceDisplay}
                 </span>
               </div>
 
               {business && (
-                <div className="px-2 py-1 bg-prussian/30 border border-prussian-light rounded-sm text-[10px] text-prussian-lighter uppercase font-bold tracking-wide">
+                <div className="px-1.5 py-0.5 md:px-2 md:py-1 bg-prussian/30 border border-prussian-light rounded-sm text-[8px] md:text-[10px] text-prussian-lighter uppercase font-bold tracking-wide">
                   PRO
                 </div>
               )}

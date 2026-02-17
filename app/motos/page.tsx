@@ -19,18 +19,57 @@ export default function MotosPage() {
   const [selectedFilter, setSelectedFilter] = useState<ListingCategory | "all">("all")
   const [provinceFilter, setProvinceFilter] = useState<string>("all")
   const [conditionFilter, setConditionFilter] = useState<ProductCondition | "all">("all")
+
+  // New Dynamic Filters
+  const [motoTypeFilter, setMotoTypeFilter] = useState<"all" | "electrica" | "combustion">("all")
+  const [wattsFilter, setWattsFilter] = useState<string>("all")
+  const [displacementFilter, setDisplacementFilter] = useState<string>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const allMotos = allListings
 
+  // Reset sub-filters when main filter changes
+  useEffect(() => {
+    setMotoTypeFilter("all")
+    setWattsFilter("all")
+    setDisplacementFilter("all")
+  }, [selectedFilter])
+
   const filteredMotos = allMotos.filter((moto) => {
+    // 1. Main Category Filter
     if (selectedFilter !== "all" && moto.category !== selectedFilter) return false
+
+    // 2. Common Filters
     if (provinceFilter !== "all" && (moto.province ?? "") !== provinceFilter) return false
     if (conditionFilter !== "all" && (moto.condition ?? "de_uso") !== conditionFilter) return false
+
+    // 3. Moto Specific Filters (Only applied if category is 'moto' or 'all')
+    if (selectedFilter === "moto" || selectedFilter === "all") {
+      if (motoTypeFilter !== "all") {
+        if (moto.motoType !== motoTypeFilter) return false
+
+        // Sub-filters for Electric
+        if (motoTypeFilter === "electrica" && wattsFilter !== "all") {
+          // Simple string match for this demo, usually ranges
+          if (moto.watts !== wattsFilter) return false
+        }
+
+        // Sub-filters for Combustion
+        if (motoTypeFilter === "combustion" && displacementFilter !== "all") {
+          if (moto.displacement !== displacementFilter) return false
+        }
+      }
+    }
+
+    // 4. Search Query
     if (searchQuery.trim() && !moto.title.toLowerCase().includes(searchQuery.toLowerCase())) return false
     return true
   })
+
+  // Options
+  const WATTS_OPTIONS = ["1000W", "1500W", "2000W", "3000W"]
+  const DISPLACEMENT_OPTIONS = ["50cc", "100cc", "125cc", "150cc", "250cc", "500cc+", "1000cc"]
 
   const totalPages = Math.max(1, Math.ceil(filteredMotos.length / ITEMS_PER_PAGE))
   const paginatedMotos = filteredMotos.slice(
@@ -40,7 +79,7 @@ export default function MotosPage() {
 
   useEffect(() => {
     setCurrentPage(1)
-  }, [selectedFilter, provinceFilter, conditionFilter])
+  }, [selectedFilter, provinceFilter, conditionFilter, motoTypeFilter, wattsFilter, displacementFilter])
 
   const filters = [
     { id: "all" as const, label: "Todas" },
@@ -68,27 +107,113 @@ export default function MotosPage() {
           </p>
         </motion.div>
 
-        {/* Filtros desktop */}
+        {/* Dynamic Desktop Filters */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-8 hidden flex-wrap justify-center gap-3 md:flex"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mb-8 hidden flex-col gap-4 md:flex"
         >
-          {filters.map((f) => (
-            <motion.button
-              key={f.id}
-              onClick={() => setSelectedFilter(f.id)}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className={`rounded-button border-2 px-5 py-2.5 font-body text-sm font-medium transition-all ${selectedFilter === f.id
-                ? "border-accent bg-accent text-white shadow-card"
-                : "border-border bg-surface-elevated text-primary-secondary hover:border-accent/60"
-                }`}
+          {/* Row 1: Main Category & Common Filters */}
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <div className="flex flex-wrap gap-2">
+              {filters.map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setSelectedFilter(f.id)}
+                  className={`rounded-button border px-4 py-2 font-body text-sm font-medium transition-all ${selectedFilter === f.id
+                    ? "border-accent bg-accent text-white shadow-glow-sm"
+                    : "border-border bg-surface-elevated text-primary-secondary hover:border-accent/40"
+                    }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="h-8 w-px bg-border/50" />
+
+            <select
+              value={provinceFilter}
+              onChange={(e) => setProvinceFilter(e.target.value)}
+              className="rounded-input border border-border bg-surface-elevated px-4 py-2 font-body text-sm text-primary focus:border-accent focus:outline-none"
             >
-              {f.label}
-            </motion.button>
-          ))}
+              <option value="all">Todas las provincias</option>
+              {PROVINCIAS_CUBA.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+
+            <div className="flex rounded-input border border-border bg-surface-elevated p-1">
+              {(["all", "nuevo", "de_uso"] as const).map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setConditionFilter(c)}
+                  className={`rounded px-3 py-1 text-xs font-body transition-colors ${conditionFilter === c
+                    ? "bg-accent text-white"
+                    : "text-primary-secondary hover:text-primary"
+                    }`}
+                >
+                  {c === "all" ? "Todos" : c === "nuevo" ? "Nuevo" : "De uso"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <AnimatePresence mode="wait">
+            {selectedFilter === "moto" && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="flex flex-wrap justify-center gap-4 border-t border-border/30 pt-4"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-primary-muted uppercase tracking-wider font-bold">Motor:</span>
+                  <div className="flex gap-2">
+                    {(["all", "electrica", "combustion"] as const).map((t) => (
+                      <button
+                        key={t}
+                        onClick={() => setMotoTypeFilter(t)}
+                        className={`rounded-full border px-3 py-1 text-xs ${motoTypeFilter === t
+                          ? "border-accent bg-accent/10 text-accent"
+                          : "border-border text-primary-secondary hover:border-accent/40"}`}
+                      >
+                        {t === "all" ? "Cualquiera" : t === "electrica" ? "Eléctrica" : "Combustión"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {motoTypeFilter === "electrica" && (
+                  <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2">
+                    <span className="text-xs text-primary-muted uppercase tracking-wider font-bold">Potencia:</span>
+                    <select
+                      value={wattsFilter}
+                      onChange={(e) => setWattsFilter(e.target.value)}
+                      className="rounded-input border border-border bg-surface-elevated px-3 py-1 text-xs text-primary focus:border-accent focus:outline-none"
+                    >
+                      <option value="all">Todas</option>
+                      {WATTS_OPTIONS.map(w => <option key={w} value={w}>{w}</option>)}
+                    </select>
+                  </motion.div>
+                )}
+
+                {motoTypeFilter === "combustion" && (
+                  <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2">
+                    <span className="text-xs text-primary-muted uppercase tracking-wider font-bold">Cilindraje:</span>
+                    <select
+                      value={displacementFilter}
+                      onChange={(e) => setDisplacementFilter(e.target.value)}
+                      className="rounded-input border border-border bg-surface-elevated px-3 py-1 text-xs text-primary focus:border-accent focus:outline-none"
+                    >
+                      <option value="all">Todos</option>
+                      {DISPLACEMENT_OPTIONS.map(d => <option key={d} value={d}>{d}</option>)}
+                    </select>
+                  </motion.div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         {/* Mobile Search & Filter Bar */}
@@ -165,6 +290,92 @@ export default function MotosPage() {
                       ))}
                     </div>
                   </div>
+
+                  {selectedFilter === "moto" && (
+                    <>
+                      <div>
+                        <p className="mb-2 font-body text-sm font-medium text-primary-secondary">Tipo de Motor</p>
+                        <div className="flex gap-2">
+                          {(["all", "electrica", "combustion"] as const).map((t) => (
+                            <button
+                              key={t}
+                              type="button"
+                              onClick={() => setMotoTypeFilter(t)}
+                              className={`rounded-input border px-3 py-1.5 text-sm font-body ${motoTypeFilter === t
+                                ? "border-accent bg-accent/10 text-accent"
+                                : "border-border bg-surface text-primary-secondary"
+                                }`}
+                            >
+                              {t === "all" ? "Todos" : t === "electrica" ? "Eléctrica" : "Combustión"}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {motoTypeFilter === "electrica" && (
+                        <div>
+                          <p className="mb-2 font-body text-sm font-medium text-primary-secondary">Potencia</p>
+                          <div className="flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setWattsFilter("all")}
+                              className={`rounded-input border px-3 py-1.5 text-sm font-body ${wattsFilter === "all"
+                                ? "border-accent bg-accent/10 text-accent"
+                                : "border-border bg-surface text-primary-secondary"
+                                }`}
+                            >
+                              Todas
+                            </button>
+                            {WATTS_OPTIONS.map((w) => (
+                              <button
+                                key={w}
+                                type="button"
+                                onClick={() => setWattsFilter(w)}
+                                className={`rounded-input border px-3 py-1.5 text-sm font-body ${wattsFilter === w
+                                  ? "border-accent bg-accent/10 text-accent"
+                                  : "border-border bg-surface text-primary-secondary"
+                                  }`}
+                              >
+                                {w}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {motoTypeFilter === "combustion" && (
+                        <div>
+                          <p className="mb-2 font-body text-sm font-medium text-primary-secondary">Cilindraje</p>
+                          <div className="flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setDisplacementFilter("all")}
+                              className={`rounded-input border px-3 py-1.5 text-sm font-body ${displacementFilter === "all"
+                                ? "border-accent bg-accent/10 text-accent"
+                                : "border-border bg-surface text-primary-secondary"
+                                }`}
+                            >
+                              Todos
+                            </button>
+                            {DISPLACEMENT_OPTIONS.map((d) => (
+                              <button
+                                key={d}
+                                type="button"
+                                onClick={() => setDisplacementFilter(d)}
+                                className={`rounded-input border px-3 py-1.5 text-sm font-body ${displacementFilter === d
+                                  ? "border-accent bg-accent/10 text-accent"
+                                  : "border-border bg-surface text-primary-secondary"
+                                  }`}
+                              >
+                                {d}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+
                   <div>
                     <p className="mb-2 font-body text-sm font-medium text-primary-secondary">Provincia</p>
                     <select
@@ -204,43 +415,10 @@ export default function MotosPage() {
           )}
         </AnimatePresence>
 
-        {/* Filtros provincia y estado desktop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mb-6 hidden gap-4 md:flex md:flex-wrap md:justify-center"
-        >
-          <select
-            value={provinceFilter}
-            onChange={(e) => setProvinceFilter(e.target.value)}
-            className="rounded-input border border-border bg-surface-elevated px-4 py-2 font-body text-sm text-primary"
-          >
-            <option value="all">Todas las provincias</option>
-            {PROVINCIAS_CUBA.map((p) => (
-              <option key={p} value={p}>{p}</option>
-            ))}
-          </select>
-          <div className="flex gap-2">
-            {(["all", "nuevo", "de_uso"] as const).map((c) => (
-              <button
-                key={c}
-                type="button"
-                onClick={() => setConditionFilter(c)}
-                className={`rounded-button border-2 px-4 py-2 font-body text-sm ${conditionFilter === c
-                  ? "border-accent bg-accent text-white"
-                  : "border-border bg-surface-elevated text-primary-secondary"
-                  }`}
-              >
-                {c === "all" ? "Estado: Todos" : c === "nuevo" ? "Nuevo" : "De uso"}
-              </button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Grid: 2 cols móvil, 2 tablet, 3 desktop */}
+        {/* Product Grid */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={`${selectedFilter}-${provinceFilter}-${conditionFilter}-${currentPage}`}
+            key={`${selectedFilter}-${provinceFilter}-${conditionFilter}-${motoTypeFilter}-${wattsFilter}-${displacementFilter}-${currentPage}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

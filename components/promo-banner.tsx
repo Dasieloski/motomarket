@@ -111,10 +111,10 @@ export function PromoBanner({
     }
 
     return (
-        <section className="relative py-8 md:py-12">
-            <div className="container mx-auto px-6">
+        <section className="relative py-6 md:py-12">
+            <div className="container mx-auto px-3 md:px-6">
                 <div className="relative">
-                    <PremiumCard className="relative overflow-hidden p-0 aspect-[21/9] md:aspect-[3/1]">
+                    <PremiumCard className="relative overflow-hidden p-0 aspect-[16/9] md:aspect-[3/1]">
                         <AnimatePresence initial={false} custom={direction}>
                             <motion.div
                                 key={activeSlide.id}
