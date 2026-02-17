@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fonts are now managed via next/font in layout.tsx */
+
+.font-heading {
+  font-family: var(--font-freshman), sans-serif !important;
+}
+
+.font-varsity {
+  font-family: var(--font-varsity), sans-serif !important;
+}
+
+.font-logo,
+.moto-logo-animation,
+[class*="moto-logo"] {
+  font-family: var(--font-varsity), sans-serif !important;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -26,8 +42,13 @@ body {
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 38 97% 53%;
+    --accent-foreground: 0 0% 0%;
+    --accent-hover: 38 97% 45%;
+    --accent-muted: 38 97% 20%;
+    --prussian: 220 50% 16%;
+    --prussian-light: 220 50% 25%;
+    --prussian-lighter: 220 50% 35%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
@@ -48,6 +69,7 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -61,8 +83,8 @@ body {
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 38 97% 53%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
@@ -88,6 +110,7 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

@@ -12,6 +12,8 @@ import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
 import { PremiumInput } from "@/components/ui/premium-input"
 import { PremiumButton } from "@/components/ui/premium-button"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 
 const loginSchema = z.object({
   email: z.string().email("Email inválido").min(1, "El email es requerido"),
@@ -58,7 +60,8 @@ function LoginForm() {
 
   return (
     <div className="relative min-h-screen bg-surface">
-      <div className="flex min-h-screen items-center justify-center px-6 py-20 md:py-28">
+      <Navbar />
+      <div className="flex min-h-screen items-center justify-center px-6 pt-24 pb-20 md:pt-32 md:pb-28">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -76,7 +79,7 @@ function LoginForm() {
               <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-accent/20 to-primary/20">
                 <Sparkles className="h-7 w-7 text-accent" />
               </div>
-              <h1 className="font-display text-3xl font-bold text-primary md:text-4xl">
+              <h1 className="font-heading text-3xl font-bold text-primary md:text-4xl">
                 Bienvenido de vuelta
               </h1>
               <p className="mt-2 font-body text-[15px] text-primary-secondary">
@@ -162,6 +165,7 @@ function LoginForm() {
           </div>
         </motion.div>
       </div>
+      <Footer />
     </div>
   )
 }

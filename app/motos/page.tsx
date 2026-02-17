@@ -19,6 +19,7 @@ export default function MotosPage() {
   const [selectedFilter, setSelectedFilter] = useState<ListingCategory | "all">("all")
   const [provinceFilter, setProvinceFilter] = useState<string>("all")
   const [conditionFilter, setConditionFilter] = useState<ProductCondition | "all">("all")
+  const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const allMotos = allListings
@@ -27,6 +28,7 @@ export default function MotosPage() {
     if (selectedFilter !== "all" && moto.category !== selectedFilter) return false
     if (provinceFilter !== "all" && (moto.province ?? "") !== provinceFilter) return false
     if (conditionFilter !== "all" && (moto.condition ?? "de_uso") !== conditionFilter) return false
+    if (searchQuery.trim() && !moto.title.toLowerCase().includes(searchQuery.toLowerCase())) return false
     return true
   })
 
@@ -51,14 +53,14 @@ export default function MotosPage() {
     <div className="relative min-h-screen bg-surface">
       <Navbar />
 
-      <div className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 py-8 pt-24 md:px-6 md:py-20 md:pt-32 lg:py-28 lg:pt-36">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-8 text-center md:mb-12"
         >
-          <h1 className="font-display text-3xl font-bold text-primary md:text-5xl">
+          <h1 className="font-heading text-3xl font-bold text-primary md:text-5xl">
             Ver todas las motos
           </h1>
           <p className="mt-3 font-body text-base text-primary-secondary md:text-lg">
@@ -79,29 +81,40 @@ export default function MotosPage() {
               onClick={() => setSelectedFilter(f.id)}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
-              className={`rounded-button border-2 px-5 py-2.5 font-body text-sm font-medium transition-all ${
-                selectedFilter === f.id
-                  ? "border-accent bg-accent text-white shadow-card"
-                  : "border-border bg-surface-elevated text-primary-secondary hover:border-accent/60"
-              }`}
+              className={`rounded-button border-2 px-5 py-2.5 font-body text-sm font-medium transition-all ${selectedFilter === f.id
+                ? "border-accent bg-accent text-white shadow-card"
+                : "border-border bg-surface-elevated text-primary-secondary hover:border-accent/60"
+                }`}
             >
               {f.label}
             </motion.button>
           ))}
         </motion.div>
 
-        {/* Botón filtros móvil */}
+        {/* Mobile Search & Filter Bar */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mb-6 flex justify-center md:hidden"
+          className="mb-6 flex gap-3 md:hidden"
         >
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar..."
+              className="w-full rounded-input border border-border bg-surface-elevated pl-4 pr-10 py-2.5 font-body text-sm text-primary placeholder:text-primary-muted focus:border-accent focus:outline-none"
+            />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-muted">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+            </div>
+          </div>
           <motion.button
             onClick={() => setMobileFiltersOpen(true)}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center gap-2 rounded-button border-2 border-border bg-surface-elevated px-5 py-2.5 font-body text-sm font-medium text-primary shadow-soft"
+            className="flex shrink-0 items-center justify-center rounded-button bg-surface-elevated border border-border px-4 py-2.5 text-primary shadow-soft"
           >
-            Filtros
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="21" y2="21" /><line x1="4" x2="20" y1="3" y2="3" /><line x1="10" x2="20" y1="14" y2="14" /><line x1="4" x2="14" y1="10" y2="10" /><line x1="16" x2="16" y1="21" y2="14" /><line x1="8" x2="8" y1="10" y2="3" /></svg>
           </motion.button>
         </motion.div>
 
@@ -124,7 +137,7 @@ export default function MotosPage() {
                 className="fixed bottom-0 left-0 right-0 z-50 max-h-[85vh] overflow-auto rounded-t-card border-t border-border bg-surface-elevated p-6 shadow-card md:hidden"
               >
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="font-display text-lg font-bold text-primary">Filtros</h2>
+                  <h2 className="font-heading text-lg font-bold text-primary">Filtros</h2>
                   <button
                     type="button"
                     onClick={() => setMobileFiltersOpen(false)}
@@ -142,11 +155,10 @@ export default function MotosPage() {
                           key={f.id}
                           type="button"
                           onClick={() => setSelectedFilter(f.id)}
-                          className={`rounded-input border px-3 py-1.5 text-sm font-body ${
-                            selectedFilter === f.id
-                              ? "border-accent bg-accent/10 text-accent"
-                              : "border-border bg-surface text-primary-secondary"
-                          }`}
+                          className={`rounded-input border px-3 py-1.5 text-sm font-body ${selectedFilter === f.id
+                            ? "border-accent bg-accent/10 text-accent"
+                            : "border-border bg-surface text-primary-secondary"
+                            }`}
                         >
                           {f.label}
                         </button>
@@ -176,11 +188,10 @@ export default function MotosPage() {
                           key={c}
                           type="button"
                           onClick={() => setConditionFilter(c)}
-                          className={`rounded-input border px-3 py-1.5 text-sm font-body ${
-                            conditionFilter === c
-                              ? "border-accent bg-accent/10 text-accent"
-                              : "border-border bg-surface text-primary-secondary"
-                          }`}
+                          className={`rounded-input border px-3 py-1.5 text-sm font-body ${conditionFilter === c
+                            ? "border-accent bg-accent/10 text-accent"
+                            : "border-border bg-surface text-primary-secondary"
+                            }`}
                         >
                           {c === "all" ? "Todos" : c === "nuevo" ? "Nuevo" : "De uso"}
                         </button>
@@ -215,11 +226,10 @@ export default function MotosPage() {
                 key={c}
                 type="button"
                 onClick={() => setConditionFilter(c)}
-                className={`rounded-button border-2 px-4 py-2 font-body text-sm ${
-                  conditionFilter === c
-                    ? "border-accent bg-accent text-white"
-                    : "border-border bg-surface-elevated text-primary-secondary"
-                }`}
+                className={`rounded-button border-2 px-4 py-2 font-body text-sm ${conditionFilter === c
+                  ? "border-accent bg-accent text-white"
+                  : "border-border bg-surface-elevated text-primary-secondary"
+                  }`}
               >
                 {c === "all" ? "Estado: Todos" : c === "nuevo" ? "Nuevo" : "De uso"}
               </button>
@@ -235,7 +245,7 @@ export default function MotosPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:grid-cols-3"
+            className="grid grid-cols-2 justify-items-center gap-3 sm:gap-4 md:gap-5 lg:grid-cols-3"
           >
             {paginatedMotos.map((moto, index) => (
               <ProductCard key={moto.id} moto={moto} index={index} />
@@ -296,7 +306,7 @@ export default function MotosPage() {
           className="mt-16 text-center"
         >
           <PremiumCard className="p-12">
-            <h2 className="font-display text-2xl font-bold text-primary">
+            <h2 className="font-heading text-2xl font-bold text-primary">
               ¿Quieres vender tu moto?
             </h2>
             <p className="mt-2 font-body text-primary-secondary">

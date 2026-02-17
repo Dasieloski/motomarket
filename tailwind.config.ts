@@ -31,6 +31,7 @@ const config: Config = {
           DEFAULT: 'var(--prussian)',
           light: 'var(--prussian-light)',
           lighter: 'var(--prussian-lighter)',
+          depth: 'var(--prussian-depth)', // New volumetric shadow base
         },
         border: {
           DEFAULT: 'var(--border)',
@@ -41,9 +42,27 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
         display: ['var(--font-display)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
-        heading: ['Mirabelle', 'var(--font-display)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
+        technical: ['var(--font-tenada)', 'system-ui', 'sans-serif'], // Semantic name for Tenada
+        heading: ['var(--font-tenada)', 'system-ui', 'sans-serif'],
         body: ['var(--font-body)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
-        logo: ['SaintCarell', 'var(--font-display)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        // MONOLITHIC SCALE
+        'huge': ['clamp(3.5rem, 8vw + 2rem, 8rem)', { lineHeight: '0.9', letterSpacing: '-0.05em', fontWeight: '800' }],
+        'hero': ['clamp(2.75rem, 6vw + 1.5rem, 5rem)', { lineHeight: '1.0', letterSpacing: '-0.04em' }],
+        'display': ['clamp(2rem, 4.5vw + 1rem, 3.5rem)', { lineHeight: '1.1', letterSpacing: '-0.03em' }],
+        'section': ['clamp(1.5rem, 3vw + 0.5rem, 2.25rem)', { lineHeight: '1.2', letterSpacing: '-0.02em' }],
+        // TECHNICAL TEXT
+        'body-lg': ['1.125rem', { lineHeight: '1.6', letterSpacing: '-0.01em' }],
+        'body': ['1rem', { lineHeight: '1.6', letterSpacing: '-0.01em' }],
+        'body-sm': ['0.875rem', { lineHeight: '1.6', letterSpacing: '0em' }],
+        'label': ['0.65rem', { lineHeight: '1.4', letterSpacing: '0.15em', fontWeight: '600' }],
+        'micro': ['10px', { lineHeight: '1.2', letterSpacing: '0.08em', fontWeight: '700' }],
+      },
+      letterSpacing: {
+        'tighter': '-0.05em',
+        'tight': '-0.02em',
+        'technical': '0.15em',
       },
       borderRadius: {
         'card': 'var(--radius-card)',
@@ -94,14 +113,6 @@ const config: Config = {
         'fade-in-up': 'fade-in-up 0.6s var(--ease-out-expo) forwards',
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
         'shimmer': 'shimmer 2s ease-in-out infinite',
-      },
-      fontSize: {
-        'hero': ['clamp(2.75rem, 5vw + 1.5rem, 4.5rem)', { lineHeight: '1.08', letterSpacing: '-0.03em' }],
-        'display': ['clamp(2.25rem, 4vw + 0.75rem, 3.5rem)', { lineHeight: '1.12', letterSpacing: '-0.02em' }],
-        'section': ['clamp(1.875rem, 2.5vw + 0.5rem, 2.5rem)', { lineHeight: '1.2', letterSpacing: '-0.02em' }],
-        'body-lg': ['1.125rem', { lineHeight: '1.65' }],
-        'body': ['1rem', { lineHeight: '1.65' }],
-        'label': ['0.75rem', { lineHeight: '1.4', letterSpacing: '0.12em' }],
       },
     },
   },

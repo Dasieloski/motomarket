@@ -18,8 +18,8 @@ export default function MotosDestacadasPage() {
   return (
     <div className="relative min-h-screen bg-surface">
       <Navbar />
-      
-      <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
+
+      <div className="mx-auto max-w-7xl px-6 pt-24 pb-20 md:pt-32 md:pb-28">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -27,7 +27,7 @@ export default function MotosDestacadasPage() {
           transition={{ duration: 0.6 }}
           className="mb-12 text-center"
         >
-          <h1 className="font-display text-4xl font-bold text-primary md:text-5xl">
+          <h1 className="font-heading text-4xl font-bold text-primary md:text-5xl">
             Motos destacadas
           </h1>
           <p className="mt-4 font-body text-lg text-primary-secondary">
@@ -50,7 +50,7 @@ export default function MotosDestacadasPage() {
           className="mt-16 text-center"
         >
           <PremiumCard className="p-12">
-            <h2 className="font-display text-2xl font-bold text-primary">
+            <h2 className="font-heading text-2xl font-bold text-primary">
               ¿Quieres vender tu moto?
             </h2>
             <p className="mt-2 font-body text-primary-secondary">

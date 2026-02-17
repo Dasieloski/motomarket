@@ -79,7 +79,7 @@ function BenefitCard({
       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-accent">
         <Icon className="h-6 w-6" />
       </div>
-      <h3 className="mt-4 font-display text-lg font-bold text-primary md:text-xl">
+      <h3 className="mt-4 font-heading text-lg font-bold text-primary md:text-xl">
         {title}
       </h3>
       <p className="mt-2 font-body text-sm leading-relaxed text-primary-secondary">
@@ -112,7 +112,7 @@ export default function ParaNegociosPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-4 font-display text-4xl font-bold leading-tight text-primary md:text-5xl lg:text-6xl"
+            className="mt-4 font-heading text-4xl font-bold leading-tight text-primary md:text-5xl lg:text-6xl"
           >
             Haz crecer tu tienda o taller en toda Cuba
           </motion.h1>
@@ -164,7 +164,7 @@ export default function ParaNegociosPage() {
             transition={{ duration: 0.5 }}
             className="mb-14 text-center"
           >
-            <h2 className="font-display text-3xl font-bold text-primary md:text-4xl">
+            <h2 className="font-heading text-3xl font-bold text-primary md:text-4xl">
               Todo lo que tu negocio necesita
             </h2>
             <p className="mt-4 font-body text-lg text-primary-secondary">
@@ -188,7 +188,7 @@ export default function ParaNegociosPage() {
             viewport={{ once: true }}
             className="mb-14 text-center"
           >
-            <h2 className="font-display text-3xl font-bold text-primary md:text-4xl">
+            <h2 className="font-heading text-3xl font-bold text-primary md:text-4xl">
               Planes para cada etapa
             </h2>
             <p className="mt-4 font-body text-lg text-primary-secondary">
@@ -204,11 +204,10 @@ export default function ParaNegociosPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className={`relative flex flex-col rounded-[24px] border-2 bg-surface-elevated p-6 shadow-soft transition-all hover:shadow-card md:p-8 ${
-                  plan.recommended
+                className={`relative flex flex-col rounded-[24px] border-2 bg-surface-elevated p-6 shadow-soft transition-all hover:shadow-card md:p-8 ${plan.recommended
                     ? "border-accent shadow-card"
                     : "border-border hover:border-accent/50"
-                }`}
+                  }`}
               >
                 {plan.recommended && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 font-body text-xs font-semibold text-white">
@@ -216,14 +215,14 @@ export default function ParaNegociosPage() {
                   </div>
                 )}
                 <div className="mb-6">
-                  <h3 className="font-display text-xl font-bold text-primary md:text-2xl">
+                  <h3 className="font-heading text-xl font-bold text-primary md:text-2xl">
                     {plan.name}
                   </h3>
                   <p className="mt-2 font-body text-sm text-primary-secondary">
                     {plan.description}
                   </p>
                   <div className="mt-4 flex items-baseline gap-1">
-                    <span className="font-display text-3xl font-bold text-accent md:text-4xl">
+                    <span className="font-heading text-3xl font-bold text-accent md:text-4xl">
                       ${plan.priceMonthly}
                     </span>
                     <span className="font-body text-primary-muted">/mes</span>
@@ -233,9 +232,8 @@ export default function ParaNegociosPage() {
                   {plan.features.map((f) => (
                     <li
                       key={f.text}
-                      className={`flex items-center gap-2 font-body text-sm ${
-                        f.included ? "text-primary-secondary" : "text-primary-muted line-through"
-                      }`}
+                      className={`flex items-center gap-2 font-body text-sm ${f.included ? "text-primary-secondary" : "text-primary-muted line-through"
+                        }`}
                     >
                       {f.included ? (
                         <Check className="h-4 w-4 shrink-0 text-accent" />
@@ -248,11 +246,10 @@ export default function ParaNegociosPage() {
                 </ul>
                 <Link href={`/registro-empresarial?plan=${plan.id}`} className="mt-8 block">
                   <motion.span
-                    className={`flex w-full items-center justify-center gap-2 rounded-button py-3 font-body font-semibold transition-colors ${
-                      plan.recommended
+                    className={`flex w-full items-center justify-center gap-2 rounded-button py-3 font-body font-semibold transition-colors ${plan.recommended
                         ? "bg-accent text-white hover:bg-accent-hover"
                         : "border-2 border-border bg-surface text-primary hover:border-accent hover:bg-accent/10 hover:text-accent"
-                    }`}
+                      }`}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -274,7 +271,7 @@ export default function ParaNegociosPage() {
           className="mx-auto max-w-2xl rounded-[24px] border border-border bg-surface-elevated p-8 text-center shadow-soft md:p-12"
         >
           <Eye className="mx-auto h-12 w-12 text-accent" />
-          <h2 className="mt-4 font-display text-2xl font-bold text-primary md:text-3xl">
+          <h2 className="mt-4 font-heading text-2xl font-bold text-primary md:text-3xl">
             ¿Listo para vender más?
           </h2>
           <p className="mt-3 font-body text-primary-secondary">

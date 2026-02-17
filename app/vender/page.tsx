@@ -72,33 +72,33 @@ function VenderForm() {
     resolver: zodResolver(listingSchema),
     defaultValues: existingListing
       ? {
-          category: existingListing.category ?? "moto",
-          title: existingListing.title,
-          description: existingListing.description,
-          price: existingListing.price,
-          phone: existingListing.phone,
-          province: existingListing.province ?? "La Habana",
-          condition: existingListing.condition ?? "de_uso",
-          motoType: existingListing.motoType,
-          brand: existingListing.brand,
-          model: existingListing.model,
-          year: existingListing.year,
-          displacement: existingListing.displacement,
-          amperage: existingListing.amperage,
-          watts: existingListing.watts,
-          mileage: existingListing.mileage,
-          partForBrand: existingListing.partForBrand,
-          partForModel: existingListing.partForModel,
-          partType: existingListing.partType,
-          serviceType: existingListing.serviceType,
-          contact: existingListing.contact,
-          location: existingListing.location,
-        }
+        category: existingListing.category ?? "moto",
+        title: existingListing.title,
+        description: existingListing.description,
+        price: existingListing.price,
+        phone: existingListing.phone,
+        province: existingListing.province ?? "La Habana",
+        condition: existingListing.condition ?? "de_uso",
+        motoType: existingListing.motoType,
+        brand: existingListing.brand,
+        model: existingListing.model,
+        year: existingListing.year,
+        displacement: existingListing.displacement,
+        amperage: existingListing.amperage,
+        watts: existingListing.watts,
+        mileage: existingListing.mileage,
+        partForBrand: existingListing.partForBrand,
+        partForModel: existingListing.partForModel,
+        partType: existingListing.partType,
+        serviceType: existingListing.serviceType,
+        contact: existingListing.contact,
+        location: existingListing.location,
+      }
       : {
-          category: "moto",
-          province: "La Habana",
-          condition: "de_uso",
-        },
+        category: "moto",
+        province: "La Habana",
+        condition: "de_uso",
+      },
   })
 
   const category = watch("category")
@@ -135,12 +135,12 @@ function VenderForm() {
   const removeImage = (index: number) => {
     const newFiles = imageFiles.filter((_, i) => i !== index)
     const newPreviews = imagePreviews.filter((_, i) => i !== index)
-    
+
     // Revocar URL del objeto si es un preview local
     if (imagePreviews[index]?.startsWith("blob:")) {
       URL.revokeObjectURL(imagePreviews[index])
     }
-    
+
     setImageFiles(newFiles)
     setImagePreviews(newPreviews)
   }
@@ -223,17 +223,17 @@ function VenderForm() {
   }
 
   return (
-    <div className="relative min-h-screen bg-surface">
+    <div className="relative min-h-screen bg-surface overflow-x-hidden">
       <Navbar />
 
-      <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
+      <div className="container mx-auto px-4 pt-24 pb-20 md:px-6 md:pt-32 md:pb-28">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <h1 className="font-display text-4xl font-bold text-primary md:text-5xl">
+          <h1 className="font-heading text-4xl font-bold text-primary md:text-5xl">
             {editId ? "Editar publicación" : "Vender mi moto"}
           </h1>
           <p className="mt-2 font-body text-[15px] text-primary-secondary">
@@ -270,11 +270,10 @@ function VenderForm() {
                           )
                           input?.click()
                         }}
-                        className={`flex items-center gap-2 rounded-input border px-3 py-2 text-left text-sm font-body transition-all duration-smooth ${
-                          category === option.id
-                            ? "border-accent bg-surface-subtle text-primary"
-                            : "border-border bg-surface-elevated text-primary-secondary hover:border-accent/60"
-                        }`}
+                        className={`flex items-center gap-2 rounded-input border px-3 py-2 text-left text-sm font-body transition-all duration-smooth ${category === option.id
+                          ? "border-accent bg-surface-subtle text-primary"
+                          : "border-border bg-surface-elevated text-primary-secondary hover:border-accent/60"
+                          }`}
                       >
                         {option.icon}
                         <span>{option.label}</span>
@@ -388,11 +387,10 @@ function VenderForm() {
                                 .querySelector<HTMLInputElement>("#motoType-electrica")
                                 ?.click()
                             }}
-                            className={`flex-1 rounded-input border px-3 py-2 text-sm font-body transition-all ${
-                              motoType === "electrica"
-                                ? "border-accent bg-surface-subtle"
-                                : "border-border bg-surface-elevated hover:border-accent/60"
-                            }`}
+                            className={`flex-1 rounded-input border px-3 py-2 text-sm font-body transition-all ${motoType === "electrica"
+                              ? "border-accent bg-surface-subtle"
+                              : "border-border bg-surface-elevated hover:border-accent/60"
+                              }`}
                           >
                             Eléctrica
                           </button>
@@ -403,11 +401,10 @@ function VenderForm() {
                                 .querySelector<HTMLInputElement>("#motoType-combustion")
                                 ?.click()
                             }}
-                            className={`flex-1 rounded-input border px-3 py-2 text-sm font-body transition-all ${
-                              motoType === "combustion"
-                                ? "border-accent bg-surface-subtle"
-                                : "border-border bg-surface-elevated hover:border-accent/60"
-                            }`}
+                            className={`flex-1 rounded-input border px-3 py-2 text-sm font-body transition-all ${motoType === "combustion"
+                              ? "border-accent bg-surface-subtle"
+                              : "border-border bg-surface-elevated hover:border-accent/60"
+                              }`}
                           >
                             Combustión
                           </button>
@@ -694,7 +691,7 @@ function VenderForm() {
             className="sticky top-24 h-fit"
           >
             <PremiumCard className="p-8">
-              <h2 className="mb-6 font-display text-xl font-bold text-primary">
+              <h2 className="mb-6 font-heading text-xl font-bold text-primary">
                 Vista previa
               </h2>
 
@@ -721,14 +718,14 @@ function VenderForm() {
                 </div>
 
                 <div>
-                  <h3 className="font-display text-xl font-bold text-primary">
+                  <h3 className="font-heading text-xl font-bold text-primary">
                     {watchedTitle || "Título de la publicación"}
                   </h3>
                   <p className="mt-2 font-body text-sm leading-relaxed text-primary-secondary">
                     {watchedDescription || "La descripción de tu publicación aparecerá aquí..."}
                   </p>
                   <div className="mt-4">
-                    <span className="font-display text-2xl font-bold text-accent">
+                    <span className="font-heading text-2xl font-bold text-accent">
                       {typeof watchedPrice === "number" && !Number.isNaN(watchedPrice)
                         ? `$${watchedPrice.toLocaleString()}`
                         : "$0"}

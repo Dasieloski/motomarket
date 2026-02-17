@@ -104,7 +104,7 @@ export function BusinessCta() {
                 { value: "98%", label: "Satisfaccion" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <p className="font-display text-2xl font-semibold text-accent md:text-3xl">
+                  <p className="font-heading text-2xl font-semibold text-accent md:text-3xl">
                     {stat.value}
                   </p>
                   <p className="mt-1.5 font-body text-sm text-primary-muted md:text-base">

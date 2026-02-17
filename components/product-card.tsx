@@ -9,13 +9,12 @@ import {
   Heart,
   MapPin,
   Eye,
-  ChevronRight,
-  Gauge,
-  FileText,
+  Settings,
   Zap,
   Battery,
-  Package,
-  Wrench
+  Layers,
+  Wrench,
+  ArrowUpRight
 } from "lucide-react"
 
 import { useAuth } from "@/contexts/auth-context"
@@ -28,92 +27,38 @@ interface ProductCardProps {
 
 function getCategoryLabel(moto: MotoListing): string {
   if (moto.category === "moto")
-    return moto.motoType === "electrica" ? "Eléctrica" : "Combustión"
-  if (moto.category === "part") return "Pieza"
-  return "Servicio"
+    return moto.motoType === "electrica" ? "E-MOTO" : "MOTOR"
+  if (moto.category === "part") return "PIEZA"
+  return "TALLER"
 }
 
-const overlayTextClass = "text-white/90"
-
-function QuickSpecs({ moto }: { moto: MotoListing }) {
-  if (moto.category === "moto" && moto.motoType === "combustion") {
-    const specs = [
-      moto.displacement && { icon: Gauge, label: moto.displacement },
-      moto.mileage && { icon: Gauge, label: moto.mileage },
-      moto.year && { icon: FileText, label: moto.year },
-    ].filter(Boolean) as { icon: any; label: string | number }[]
-
-    if (specs.length === 0) return <SpecFallback condition={moto.condition} />
-    return (
-      <div className={`flex flex-wrap items-center gap-3 text-[11px] ${overlayTextClass}`}>
-        {specs.map(({ icon, label }, i) => (
-          <span key={i} className="flex items-center gap-1">
-            <AnimatedIcon icon={icon} size={16} color="white" />
-            {label}
-          </span>
-        ))}
-      </div>
-    )
-  }
-  if (moto.category === "moto" && moto.motoType === "electrica") {
-    const specs = [
-      moto.watts && { icon: Zap, label: moto.watts },
-      moto.amperage && { icon: Battery, label: moto.amperage },
-    ].filter(Boolean) as { icon: any; label: string | number }[]
-
-    if (specs.length === 0) return <SpecFallback condition={moto.condition} />
-    return (
-      <div className={`flex flex-wrap items-center gap-3 text-[11px] ${overlayTextClass}`}>
-        {specs.map(({ icon, label }, i) => (
-          <span key={i} className="flex items-center gap-1">
-            <AnimatedIcon icon={icon} size={16} color="white" />
-            {label}
-          </span>
-        ))}
-      </div>
-    )
-  }
-  if (moto.category === "part") {
-    const compat = [moto.partForBrand, moto.partForModel].filter(Boolean).join(" ")
-    if (!compat) return <SpecFallback condition={moto.condition} />
-    return (
-      <div className={`flex items-center gap-1.5 text-[11px] ${overlayTextClass}`}>
-        <AnimatedIcon icon={Package} size={16} color="white" />
-        <span className="truncate">Compat: {compat}</span>
-      </div>
-    )
-  }
-  if (moto.category === "service" && moto.serviceType) {
-    return (
-      <div className={`flex items-center gap-1.5 text-[11px] ${overlayTextClass}`}>
-        <AnimatedIcon icon={Wrench} size={16} color="white" />
-        <span className="truncate">{moto.serviceType}</span>
-      </div>
-    )
-  }
-  return <SpecFallback condition={moto.condition} />
-}
-
-function SpecFallback({ condition }: { condition?: "nuevo" | "de_uso" }) {
-  if (!condition) return null
+// Tech-Spec Data Row Component
+function SpecRow({ icon: Icon, label, value }: { icon: any, label: string, value: string | number }) {
+  if (!value) return null
   return (
-    <span className="rounded-full bg-white/20 px-2 py-0.5 text-[11px] font-body text-white/95 backdrop-blur-sm">
-      {condition === "nuevo" ? "Nuevo" : "De uso"}
-    </span>
+    <div className="flex items-center justify-between py-1 border-b border-white/[0.04] last:border-0">
+      <div className="flex items-center gap-1.5 text-secondary">
+        <Icon className="w-3 h-3" />
+        <span className="text-[10px] uppercase tracking-wider font-medium">{label}</span>
+      </div>
+      <span className="text-xs font-medium text-primary font-mono">{value}</span>
+    </div>
   )
 }
 
 export function ProductCard({ moto, index }: ProductCardProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-60px" })
-  const [imageLoaded, setImageLoaded] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
   const { getBusinessById } = useAuth()
   const business = moto.businessId ? getBusinessById(moto.businessId) : undefined
 
   const categoryLabel = getCategoryLabel(moto)
-  const hasMultipleImages = (moto.images?.length ?? 0) > 1
-  const views = moto.views ?? 0
+
+  // Format price
+  const priceDisplay = moto.price > 0
+    ? `$${moto.price.toLocaleString()}`
+    : "CONSULTAR"
 
   return (
     <motion.div
@@ -121,140 +66,102 @@ export function ProductCard({ moto, index }: ProductCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{
-        duration: 0.45,
-        delay: Math.min(index * 0.06, 0.35),
-        ease: [0.4, 0, 0.2, 1],
+        duration: 0.5,
+        delay: Math.min(index * 0.05, 0.3),
+        ease: [0.16, 1, 0.3, 1], // expo.out
       }}
-      className="h-full"
+      className="group h-full w-full"
     >
-      <Link href={`/producto/${moto.id}`} className="block h-full">
-        <motion.article
-          className="relative flex h-[300px] flex-col overflow-hidden rounded-[20px] border border-white/[0.06] bg-surface-card shadow-[var(--shadow-card)] transition-all duration-300 hover:shadow-[var(--shadow-card-hover)] hover:border-accent/20 sm:h-[320px] md:rounded-[24px]"
-          whileHover={{ scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        >
-          {/* 1. Imagen a fondo completo (ocupa todo el card) */}
-          <div className="absolute inset-0 bg-surface-card">
-            {!imageLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className="h-6 w-6 rounded-full border-2 border-white border-t-transparent"
-                />
-              </div>
-            )}
+      <Link href={`/producto/${moto.id}`} className="block h-full w-full">
+        <article className="relative flex flex-col h-full bg-surface-card border border-border transition-all duration-300 group-hover:border-accent/40 group-hover:shadow-[0_0_30px_-5px_var(--accent-muted)] overflow-hidden">
+
+          {/* === IMAGE COMPARTMENT === */}
+          <div className="relative aspect-video w-full overflow-hidden bg-surface-elevated border-b border-border">
             <Image
               src={moto.images?.[0] || "/placeholder-moto.jpg"}
               alt={moto.title}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 768px) 50vw, 33vw"
-              onLoad={() => setImageLoaded(true)}
-              loading="lazy"
+              className="object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
-          </div>
 
-          {/* 2. Overlay en degradado: transparente arriba → oscuro abajo (sin bloque sólido) */}
-          <div
-            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent"
-            aria-hidden
-          />
+            {/* Overlay Gradient for depth */}
+            <div className="absolute inset-0 bg-gradient-to-t from-surface-card/60 via-transparent to-transparent opacity-60" />
 
-          {/* 3. Contenido superpuesto sobre la imagen (encima del overlay) */}
-          <div className="relative z-10 flex flex-1 flex-col justify-between p-3 sm:p-4">
-            {/* Parte superior: badge + favorito */}
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="rounded-full bg-black/60 px-2.5 py-1 font-body text-[10px] font-medium uppercase tracking-wide text-white shadow-soft backdrop-blur-sm">
-                  {categoryLabel}
-                </span>
-                {business && (
-                  <span className="rounded-full bg-accent/90 px-2 py-0.5 font-body text-[9px] font-medium text-black shadow-soft">
-                    Negocio
-                  </span>
-                )}
+            {/* Status Badge - Top Left */}
+            <div className="absolute top-0 left-0">
+              <div className="bg-surface-card/90 backdrop-blur-md px-3 py-1.5 border-r border-b border-border text-[10px] font-bold tracking-widest uppercase text-white">
+                {categoryLabel}
               </div>
-              <motion.button
-                type="button"
-                aria-label={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  setIsFavorite((f) => !f)
-                }}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/90 shadow-soft backdrop-blur-sm transition-colors hover:bg-white"
-                whileTap={{ scale: 0.9 }}
-              >
-                <motion.div
-                  animate={isFavorite ? { scale: [1, 1.2, 1] } : {}}
-                  transition={{ duration: 0.3 }}
-                >
-                  <AnimatedIcon
-                    icon={Heart}
-                    size={20}
-                    trigger={isFavorite ? "click" : "hover"}
-                    color={isFavorite ? "#ef4444" : "#94a3b8"}
-                  />
-                </motion.div>
-              </motion.button>
             </div>
 
-            {/* Parte inferior: título, provincia, specs, precio, botón (todo sobre el degradado) */}
-            <div className="mt-auto space-y-2">
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="min-w-0 flex-1 font-display text-[13px] font-bold leading-tight text-white drop-shadow-sm line-clamp-2 sm:text-sm">
+            {/* Favorite Action - Top Right */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault()
+                setIsFavorite(!isFavorite)
+              }}
+              className="absolute top-0 right-0 p-2 text-white/70 hover:text-accent transition-colors z-20"
+            >
+              <Heart className={`w-5 h-5 ${isFavorite ? "fill-accent text-accent" : ""}`} />
+            </button>
+          </div>
+
+          {/* === TECH SPEC COMPARTMENT === */}
+          <div className="flex flex-col flex-1 p-3 gap-2">
+
+            {/* Head */}
+            <div>
+              <div className="flex justify-between items-start gap-2">
+                <h3 className="font-heading text-base leading-tight text-white group-hover:text-accent transition-colors line-clamp-1">
                   {moto.title}
                 </h3>
-                {moto.price > 0 && (
-                  <span className="shrink-0 font-display text-sm font-bold text-white drop-shadow-sm sm:text-base">
-                    ${moto.price.toLocaleString()}
-                  </span>
-                )}
-                {moto.price === 0 && (
-                  <span className="shrink-0 font-body text-xs font-medium text-white/90">
-                    Consultar
-                  </span>
-                )}
+                <ArrowUpRight className="w-4 h-4 text-secondary group-hover:text-accent opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0" />
               </div>
-              <div className="flex flex-wrap items-center justify-between gap-2 text-[11px]">
-                <span className="flex items-center gap-1 truncate text-white/90">
-                  <AnimatedIcon icon={MapPin} size={14} color="white" />
-                  {moto.province ?? "—"}
-                </span>
-                {views > 0 && (
-                  <span className="flex items-center gap-1 text-white/80">
-                    <AnimatedIcon icon={Eye} size={14} color="white" />
-                    {views} vistas
-                  </span>
-                )}
+              <div className="mt-0.5 flex items-center gap-1.5 text-secondary">
+                <MapPin className="w-3 h-3" />
+                <span className="text-[10px] uppercase tracking-wide">{moto.province || "Cuba"}</span>
               </div>
-              <div className="min-h-[18px]">
-                <QuickSpecs moto={moto} />
-              </div>
-              <motion.span
-                className="flex w-full items-center justify-center gap-2 rounded-[14px] bg-accent/90 py-2.5 font-body text-sm font-semibold text-black shadow-soft backdrop-blur-sm transition-colors hover:bg-accent sm:rounded-[16px] sm:py-3 sm:text-[15px]"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Ver detalles
-                <AnimatedIcon icon={ChevronRight} size={18} color="black" />
-              </motion.span>
             </div>
-          </div>
 
-          {/* Dots si hay varias imágenes */}
-          {hasMultipleImages && (
-            <div className="absolute bottom-24 left-1/2 z-10 flex -translate-x-1/2 gap-1">
-              {moto.images!.slice(0, 5).map((_, i) => (
-                <span
-                  key={i}
-                  className={`h-1 w-1 rounded-full ${i === 0 ? "bg-white" : "bg-white/50"}`}
-                />
-              ))}
+            {/* Specs Grid (Mini Table) */}
+            <div className="mt-auto bg-surface-elevated/50 p-2 rounded-sm border border-white/[0.02]">
+              {moto.category === 'moto' && moto.motoType === 'combustion' && (
+                <>
+                  <SpecRow icon={Settings} label="Motor" value={moto.displacement ? `${moto.displacement}` : '-'} />
+                  <SpecRow icon={Layers} label="Año" value={moto.year || '-'} />
+                </>
+              )}
+              {moto.category === 'moto' && moto.motoType === 'electrica' && (
+                <>
+                  <SpecRow icon={Zap} label="Potencia" value={moto.watts ? `${moto.watts}W` : '-'} />
+                  <SpecRow icon={Battery} label="Batería" value={moto.amperage ? `${moto.amperage}Ah` : '-'} />
+                </>
+              )}
+              {(moto.category === 'part' || moto.category === 'service') && (
+                <SpecRow icon={Wrench} label="Tipo" value={moto.category === 'part' ? 'Repuesto' : moto.serviceType || 'Servicio'} />
+              )}
             </div>
-          )}
-        </motion.article>
+
+            {/* Footer / Price */}
+            <div className="pt-2 border-t border-border flex items-center justify-between">
+              <div className="flex flex-col">
+                <span className="text-[10px] text-secondary uppercase tracking-widest">Precio</span>
+                <span className="font-mono text-lg text-accent font-medium">
+                  {priceDisplay}
+                </span>
+              </div>
+
+              {business && (
+                <div className="px-2 py-1 bg-prussian/30 border border-prussian-light rounded-sm text-[10px] text-prussian-lighter uppercase font-bold tracking-wide">
+                  PRO
+                </div>
+              )}
+            </div>
+
+          </div>
+        </article>
       </Link>
     </motion.div>
   )

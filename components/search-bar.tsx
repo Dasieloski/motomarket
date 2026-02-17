@@ -118,7 +118,7 @@ export function SearchBar() {
               </div>
               <p className="font-body text-sm text-primary-muted">
                 Buscar{" "}
-                <span className="font-display font-semibold text-white">
+                <span className="font-heading font-semibold text-white">
                   <Typewriter terms={searchTerms} />
                 </span>
               </p>

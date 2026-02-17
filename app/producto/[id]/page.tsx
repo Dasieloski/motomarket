@@ -55,7 +55,7 @@ export default function ProductoPage() {
     <div className="relative min-h-screen bg-surface">
       <Navbar />
 
-      <main className="mx-auto max-w-5xl px-4 py-8 md:py-12">
+      <main className="mx-auto max-w-5xl px-4 pt-24 pb-12 md:pt-32 md:pb-20">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -109,11 +109,10 @@ export default function ProductoPage() {
                     key={i}
                     type="button"
                     onClick={() => setCurrentImageIndex(i)}
-                    className={`relative h-16 w-20 shrink-0 overflow-hidden rounded-input transition-all ${
-                      currentImageIndex === i
-                        ? "ring-2 ring-accent ring-offset-2"
-                        : "opacity-70 hover:opacity-100"
-                    }`}
+                    className={`relative h-16 w-20 shrink-0 overflow-hidden rounded-input transition-all ${currentImageIndex === i
+                      ? "ring-2 ring-accent ring-offset-2"
+                      : "opacity-70 hover:opacity-100"
+                      }`}
                   >
                     <Image
                       src={src}
@@ -156,12 +155,12 @@ export default function ProductoPage() {
               )}
             </div>
 
-            <h1 className="font-display text-3xl font-bold leading-tight text-primary md:text-4xl">
+            <h1 className="font-heading text-3xl font-bold leading-tight text-primary md:text-4xl">
               {listing.title}
             </h1>
 
             {listing.price > 0 && (
-              <p className="font-display text-3xl font-bold text-accent">
+              <p className="font-heading text-3xl font-bold text-accent">
                 ${listing.price.toLocaleString()}
               </p>
             )}
@@ -175,7 +174,7 @@ export default function ProductoPage() {
 
             {/* Especificaciones dinámicas */}
             <PremiumCard className="p-6">
-              <h2 className="mb-4 font-display text-lg font-bold text-primary">
+              <h2 className="mb-4 font-heading text-lg font-bold text-primary">
                 Especificaciones
               </h2>
               <dl className="space-y-3 font-body text-sm">
@@ -258,7 +257,7 @@ export default function ProductoPage() {
 
             {listing.description && (
               <div>
-                <h2 className="mb-2 font-display text-lg font-bold text-primary">
+                <h2 className="mb-2 font-heading text-lg font-bold text-primary">
                   Descripción
                 </h2>
                 <p className="font-body text-[15px] leading-relaxed text-primary-secondary whitespace-pre-wrap">

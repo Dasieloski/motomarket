@@ -53,7 +53,7 @@ export default function DashboardPage() {
   return (
     <div className="relative min-h-screen bg-surface">
       <Navbar />
-      
+
       <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
         {/* Header */}
         <motion.div
@@ -64,7 +64,7 @@ export default function DashboardPage() {
         >
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="font-display text-4xl font-bold text-primary md:text-5xl">
+              <h1 className="font-heading text-4xl font-bold text-primary md:text-5xl">
                 Mi cuenta
               </h1>
               <p className="mt-2 font-body text-[15px] text-primary-secondary">
@@ -96,12 +96,12 @@ export default function DashboardPage() {
           <PremiumCard className="p-6">
             <div className="flex items-center gap-4">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-accent/20 to-primary/20">
-                <span className="font-display text-2xl font-bold text-accent">
+                <span className="font-heading text-2xl font-bold text-accent">
                   {user.name.charAt(0).toUpperCase()}
                 </span>
               </div>
               <div>
-                <h2 className="font-display text-xl font-bold text-primary">
+                <h2 className="font-heading text-xl font-bold text-primary">
                   {user.name}
                 </h2>
                 <p className="font-body text-sm text-primary-secondary">{user.email}</p>
@@ -118,7 +118,7 @@ export default function DashboardPage() {
                 <p className="text-xs font-body uppercase tracking-wide text-primary-muted">
                   Publicaciones
                 </p>
-                <p className="mt-1 font-display text-2xl font-bold text-primary">
+                <p className="mt-1 font-heading text-2xl font-bold text-primary">
                   {stats.totalPublications}
                 </p>
               </div>
@@ -126,7 +126,7 @@ export default function DashboardPage() {
                 <p className="text-xs font-body uppercase tracking-wide text-primary-muted">
                   Vistas totales
                 </p>
-                <p className="mt-1 font-display text-2xl font-bold text-primary flex items-center gap-1">
+                <p className="mt-1 font-heading text-2xl font-bold text-primary flex items-center gap-1">
                   <Eye className="h-4 w-4 text-primary-muted" />
                   {stats.totalViews}
                 </p>
@@ -135,7 +135,7 @@ export default function DashboardPage() {
                 <p className="text-xs font-body uppercase tracking-wide text-primary-muted">
                   Activas
                 </p>
-                <p className="mt-1 font-display text-2xl font-bold text-primary">
+                <p className="mt-1 font-heading text-2xl font-bold text-primary">
                   {stats.active}
                 </p>
               </div>
@@ -159,7 +159,7 @@ export default function DashboardPage() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h2 className="font-display text-xl font-bold text-primary">
+                      <h2 className="font-heading text-xl font-bold text-primary">
                         {business.name}
                       </h2>
                       <span className="rounded-full bg-accent/15 px-2.5 py-0.5 font-body text-xs font-semibold text-accent">
@@ -251,7 +251,7 @@ export default function DashboardPage() {
 
         {/* Listings */}
         <div>
-          <h2 className="mb-6 font-display text-2xl font-bold text-primary">
+          <h2 className="mb-6 font-heading text-2xl font-bold text-primary">
             Mis publicaciones ({listings.length})
           </h2>
 
@@ -263,7 +263,7 @@ export default function DashboardPage() {
             >
               <PremiumCard className="p-12 text-center">
                 <Bike className="mx-auto h-16 w-16 text-primary-muted" />
-                <h3 className="mt-4 font-display text-xl font-bold text-primary">
+                <h3 className="mt-4 font-heading text-xl font-bold text-primary">
                   No tienes publicaciones aún
                 </h3>
                 <p className="mt-2 font-body text-sm text-primary-secondary">
@@ -299,7 +299,7 @@ export default function DashboardPage() {
                         />
                       </div>
                       <div className="p-4 md:p-6">
-                        <h3 className="font-display text-base font-bold text-primary line-clamp-1 md:text-lg">
+                        <h3 className="font-heading text-base font-bold text-primary line-clamp-1 md:text-lg">
                           {listing.title}
                         </h3>
                         <p className="mt-1 flex flex-wrap items-center gap-2 text-xs font-body text-primary-muted">
@@ -332,7 +332,7 @@ export default function DashboardPage() {
                         </p>
                         {listing.price > 0 && (
                           <div className="mt-3 md:mt-4">
-                            <span className="font-display text-lg font-bold text-accent md:text-xl">
+                            <span className="font-heading text-lg font-bold text-accent md:text-xl">
                               ${listing.price.toLocaleString()}
                             </span>
                           </div>

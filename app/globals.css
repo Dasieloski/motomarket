@@ -2,75 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Cargar fuente local SaintCarell para el logo MotoMarket */
-@font-face {
-  font-family: 'SaintCarell';
-  src: url('/fonts/SaintCarell_PERSONAL_USE_ONLY.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Cargar fuente local Mirabelle para titulos de secciones */
-@font-face {
-  font-family: 'Mirabelle';
-  src: url('/fonts/Mirabelle.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
+/* Fonts are managed via next/font in layout.tsx */
 
 @layer base {
   :root {
-    /* === DARK PREMIUM PALETTE === */
-    /* #0A0D14 Deep Black | #14213D Prussian Blue | #FCA311 Orange | #E5E5E5 Alabaster | #FFFFFF White */
+    /* === HIGH-TECH BRUTALISM PALETTE === */
+    /* Base: Deep Tech Black */
+    --surface: #050505;
+    --surface-elevated: #0A0A0A;
+    --surface-card: #0F0F0F;
 
-    /* Surfaces - deep dark layered system (NOT pure black) */
-    --surface: #0A0D14;
-    --surface-elevated: #0F1219;
-    --surface-subtle: #141820;
-    --surface-card: #111520;
-    
-    /* Text - high contrast on dark */
-    --text-primary: #F0F0F0;
-    --text-secondary: #8A93A6;
-    --text-muted: #4D566A;
+    /* Primary: Tech White & Muted Greys */
+    --text-primary: #EDEDED;
+    --text-secondary: #949494;
+    --text-muted: #525252;
 
-    /* Brand accent - orange for impact */
-    --accent: #FCA311;
-    --accent-hover: #FFB740;
-    --accent-muted: rgba(252, 163, 17, 0.12);
-    
-    /* Prussian blue - secondary accent */
-    --prussian: #14213D;
-    --prussian-light: #1C2D4F;
-    --prussian-lighter: #243B63;
+    /* Accent: Signal Orange (Critical Actions Only) */
+    --accent: #FF5500;
+    /* International Orange style */
+    --accent-hover: #FF7733;
+    --accent-muted: rgba(255, 85, 0, 0.15);
 
-    /* NEW BORDER SYSTEM - no traditional borders */
-    --border: rgba(255, 255, 255, 0.04);
-    --border-subtle: rgba(255, 255, 255, 0.02);
-    --border-accent: rgba(252, 163, 17, 0.20);
-    --border-glow: rgba(252, 163, 17, 0.35);
+    /* Volume: Prussian Depth (Atmospheric) */
+    --prussian: #081226;
+    --prussian-light: #0F1E3A;
+    --prussian-depth: #020408;
+    /* Deepest shadow tone */
 
-    /* Radii - asymmetric and non-standard */
-    --radius-card: 24px;
-    --radius-button: 16px;
-    --radius-input: 16px;
-    --radius-badge: 10px;
+    /* Structure: Borders & Lines */
+    --border: rgba(255, 255, 255, 0.08);
+    /* Higher contrast for brutalist feel */
+    --border-subtle: rgba(255, 255, 255, 0.04);
+    --border-accent: rgba(255, 85, 0, 0.4);
 
-    /* Shadows - for depth layering instead of borders */
-    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.15);
-    --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 4px 24px rgba(0, 0, 0, 0.4), 0 12px 48px rgba(0, 0, 0, 0.2);
-    --shadow-card-hover: 0 0 0 1px rgba(252, 163, 17, 0.12), 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 60px rgba(252, 163, 17, 0.06);
-    --shadow-glow: 0 0 20px rgba(252, 163, 17, 0.12), 0 0 40px rgba(252, 163, 17, 0.04);
-    --shadow-nav: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 8px 32px rgba(0, 0, 0, 0.4);
-    --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    /* Radii - Tight & Sharper for Tech feel */
+    --radius-card: 4px;
+    /* Tech/Industrial look */
+    --radius-button: 2px;
+    --radius-input: 2px;
+    --radius-badge: 0px;
 
-    --nav-height-desktop: 80px;
-    --nav-height-mobile: 64px;
-    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    /* Shadows - Volumetric not diffuse */
+    --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    --shadow-card: 0 0 0 1px var(--border), 0 10px 30px -10px rgba(0, 0, 0, 0.8);
+    --shadow-card-hover: 0 0 0 1px var(--accent), 0 20px 40px -10px rgba(255, 85, 0, 0.1);
+    --shadow-glow: 0 0 30px rgba(255, 85, 0, 0.15);
+    --shadow-nav: 0 1px 0 0 var(--border);
+
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-    --duration: 0.45s;
   }
 }
 
@@ -78,25 +57,28 @@
   * {
     border-color: var(--border);
   }
-  
+
   body {
     @apply antialiased;
     font-family: var(--font-sans), system-ui, sans-serif;
+    /* Default to Space Grotesk equivalent */
     background-color: var(--surface);
     color: var(--text-primary);
     letter-spacing: -0.01em;
   }
-  
-  /* Very subtle body background texture */
+
+  /* Tech Grid Background */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: -1;
-    background: 
-      radial-gradient(ellipse 100% 60% at 50% -10%, rgba(20, 33, 61, 0.20), transparent 50%),
-      var(--surface);
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100px 100px;
+    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
   }
 }
 
@@ -104,17 +86,24 @@
   .text-balance {
     text-wrap: balance;
   }
-  .font-display {
-    font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+
+  /* Typography Utilities */
+  .font-technical {
+    font-family: var(--font-tenada), sans-serif !important;
   }
-  .font-logo {
-    font-family: 'SaintCarell', var(--font-display), var(--font-sans), system-ui, sans-serif;
+
+  /* Monolithic Type Helpers */
+  .type-monolith {
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
   }
-  .font-heading {
-    font-family: 'Mirabelle', var(--font-display), var(--font-sans), system-ui, sans-serif;
-  }
-  .font-body {
-    font-family: var(--font-body), var(--font-sans), system-ui, sans-serif;
+
+  .type-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
   }
 }
 
@@ -134,44 +123,122 @@ html {
    ============================================ */
 
 @keyframes heroOrb1 {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.30; }
-  20% { transform: translate(60px, -80px) scale(1.18); opacity: 0.45; }
-  40% { transform: translate(120px, 20px) scale(0.95); opacity: 0.25; }
-  60% { transform: translate(30px, 100px) scale(1.12); opacity: 0.40; }
-  80% { transform: translate(-50px, 40px) scale(1.05); opacity: 0.35; }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.30;
+  }
+
+  20% {
+    transform: translate(60px, -80px) scale(1.18);
+    opacity: 0.45;
+  }
+
+  40% {
+    transform: translate(120px, 20px) scale(0.95);
+    opacity: 0.25;
+  }
+
+  60% {
+    transform: translate(30px, 100px) scale(1.12);
+    opacity: 0.40;
+  }
+
+  80% {
+    transform: translate(-50px, 40px) scale(1.05);
+    opacity: 0.35;
+  }
 }
 
 @keyframes heroOrb2 {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.20; }
-  25% { transform: translate(-80px, 50px) scale(1.22); opacity: 0.35; }
-  50% { transform: translate(-40px, -60px) scale(0.88); opacity: 0.15; }
-  75% { transform: translate(70px, -30px) scale(1.15); opacity: 0.30; }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.20;
+  }
+
+  25% {
+    transform: translate(-80px, 50px) scale(1.22);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translate(-40px, -60px) scale(0.88);
+    opacity: 0.15;
+  }
+
+  75% {
+    transform: translate(70px, -30px) scale(1.15);
+    opacity: 0.30;
+  }
 }
 
 @keyframes heroOrb3 {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
-  33% { transform: translate(100px, 60px) scale(1.25); opacity: 0.28; }
-  66% { transform: translate(-60px, -40px) scale(0.92); opacity: 0.12; }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.15;
+  }
+
+  33% {
+    transform: translate(100px, 60px) scale(1.25);
+    opacity: 0.28;
+  }
+
+  66% {
+    transform: translate(-60px, -40px) scale(0.92);
+    opacity: 0.12;
+  }
 }
 
 @keyframes heroOrb4 {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.10; }
-  30% { transform: translate(-90px, -50px) scale(1.3); opacity: 0.22; }
-  60% { transform: translate(50px, 70px) scale(0.85); opacity: 0.08; }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.10;
+  }
+
+  30% {
+    transform: translate(-90px, -50px) scale(1.3);
+    opacity: 0.22;
+  }
+
+  60% {
+    transform: translate(50px, 70px) scale(0.85);
+    opacity: 0.08;
+  }
 }
 
 @keyframes heroOrb5 {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.06; }
-  50% { transform: translate(80px, -90px) scale(1.2); opacity: 0.14; }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.06;
+  }
+
+  50% {
+    transform: translate(80px, -90px) scale(1.2);
+    opacity: 0.14;
+  }
 }
 
 @keyframes heroShimmer {
-  0% { transform: translateX(-100%) rotate(12deg); }
-  100% { transform: translateX(200%) rotate(12deg); }
+  0% {
+    transform: translateX(-100%) rotate(12deg);
+  }
+
+  100% {
+    transform: translateX(200%) rotate(12deg);
+  }
 }
 
 .hero-bg-animated {
-  background: 
+  background:
     radial-gradient(ellipse 80% 60% at 20% 40%, rgba(20, 33, 61, 0.70), transparent 50%),
     radial-gradient(ellipse 60% 50% at 80% 30%, rgba(20, 33, 61, 0.40), transparent 45%),
     radial-gradient(ellipse 90% 40% at 50% 90%, rgba(10, 13, 20, 0.95), transparent 60%),
@@ -180,7 +247,7 @@ html {
 
 /* Overlay: fire palette over 3D canvas — black-dominant premium look */
 .hero-gradient-overlay {
-  background: 
+  background:
     radial-gradient(ellipse 70% 50% at 15% 50%, rgba(157, 2, 8, 0.25), transparent 55%),
     radial-gradient(ellipse 50% 40% at 85% 25%, rgba(208, 0, 0, 0.18), transparent 50%),
     radial-gradient(ellipse 60% 35% at 50% 95%, rgba(3, 7, 30, 0.95), transparent 65%),
@@ -220,7 +287,7 @@ html {
 /* Card-level: uses shadow-based ring instead of border */
 .edge-card {
   border: none;
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.04),
     0 4px 24px rgba(0, 0, 0, 0.35),
     0 12px 48px rgba(0, 0, 0, 0.15);
@@ -228,7 +295,7 @@ html {
 }
 
 .edge-card:hover {
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(252, 163, 17, 0.15),
     0 8px 32px rgba(0, 0, 0, 0.45),
     0 0 60px rgba(252, 163, 17, 0.05);
@@ -238,6 +305,7 @@ html {
 .edge-accent-top {
   position: relative;
 }
+
 .edge-accent-top::before {
   content: '';
   position: absolute;
@@ -249,6 +317,7 @@ html {
   opacity: 0;
   transition: opacity 0.5s var(--ease-smooth);
 }
+
 .edge-accent-top:hover::before {
   opacity: 1;
 }
@@ -258,6 +327,7 @@ html {
   position: relative;
   overflow: hidden;
 }
+
 .edge-contour::after {
   content: '';
   position: absolute;
@@ -272,6 +342,7 @@ html {
   opacity: 0;
   transition: opacity 0.5s var(--ease-smooth);
 }
+
 .edge-contour:hover::after {
   opacity: 1;
 }
@@ -279,13 +350,14 @@ html {
 /* Button edge: inset glow */
 .edge-button {
   border: none;
-  box-shadow: 
+  box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     0 1px 3px rgba(0, 0, 0, 0.3);
   transition: box-shadow 0.4s var(--ease-smooth);
 }
+
 .edge-button:hover {
-  box-shadow: 
+  box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 2px 8px rgba(0, 0, 0, 0.4),
     0 0 20px rgba(252, 163, 17, 0.08);
@@ -294,13 +366,14 @@ html {
 /* Input edge: subtle bottom accent */
 .edge-input {
   border: none;
-  box-shadow: 
+  box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.04),
     0 2px 8px rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.4s var(--ease-smooth);
 }
+
 .edge-input:focus-within {
-  box-shadow: 
+  box-shadow:
     inset 0 0 0 1px rgba(252, 163, 17, 0.20),
     0 0 0 4px rgba(252, 163, 17, 0.06),
     0 4px 16px rgba(0, 0, 0, 0.3);
@@ -313,6 +386,7 @@ html {
 .nav-link-underline {
   position: relative;
 }
+
 .nav-link-underline::after {
   content: '';
   position: absolute;
@@ -324,6 +398,7 @@ html {
   border-radius: 1px;
   transition: width var(--duration) var(--ease-smooth), left var(--duration) var(--ease-smooth);
 }
+
 .nav-link-underline:hover::after {
   left: 0;
   width: 100%;
@@ -333,6 +408,7 @@ html {
 .nav-pill-active {
   position: relative;
 }
+
 .nav-pill-active::before {
   content: '';
   position: absolute;
@@ -350,117 +426,57 @@ html {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.15);
 }
 
 /* ============================================
-   MOTOMARKET LOGO ANIMATIONS
+/* ============================================
+   MOTOMARKET LOGO ANIMATIONS - ENGINE IDLE
    ============================================ */
 
-@keyframes motoAcceleration {
-  0% { transform: translateX(0) scale(1); }
-  50% { transform: translateX(4px) scale(1.02); }
-  100% { transform: translateX(0) scale(1); }
-}
+@keyframes engineIdle {
 
-@keyframes motoVibration {
-  0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
-  25% { transform: translateX(1px) translateY(-0.5px) rotate(0.2deg); }
-  50% { transform: translateX(-1px) translateY(0.5px) rotate(-0.2deg); }
-  75% { transform: translateX(0.6px) translateY(-0.3px) rotate(0.1deg); }
-}
-
-@keyframes motoGlow {
-  0% {
-    text-shadow: 
-      0 0 8px rgba(252, 163, 17, 0.4),
-      0 0 15px rgba(252, 163, 17, 0.2),
-      0 0 25px rgba(252, 163, 17, 0.1);
-  }
-  25% {
-    text-shadow: 
-      3px 0 12px rgba(252, 163, 17, 0.5),
-      6px 0 18px rgba(252, 163, 17, 0.3),
-      9px 0 28px rgba(252, 163, 17, 0.2);
-  }
-  50% {
-    text-shadow: 
-      6px 0 15px rgba(252, 163, 17, 0.6),
-      12px 0 22px rgba(252, 163, 17, 0.4),
-      18px 0 35px rgba(252, 163, 17, 0.3);
-  }
-  75% {
-    text-shadow: 
-      3px 0 12px rgba(252, 163, 17, 0.5),
-      6px 0 18px rgba(252, 163, 17, 0.3),
-      9px 0 28px rgba(252, 163, 17, 0.2);
-  }
+  0%,
   100% {
-    text-shadow: 
-      0 0 8px rgba(252, 163, 17, 0.4),
-      0 0 15px rgba(252, 163, 17, 0.2),
-      0 0 25px rgba(252, 163, 17, 0.1);
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 0 rgba(255, 85, 0, 0));
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: scale(1.01);
+    filter: drop-shadow(0 0 8px rgba(255, 85, 0, 0.3));
   }
 }
 
 .moto-logo-animation {
-  animation: 
-    motoAcceleration 2s ease-in-out infinite,
-    motoVibration 1.8s ease-in-out infinite,
-    motoGlow 3s ease-in-out infinite;
-  will-change: transform, text-shadow;
+  animation: engineIdle 4s ease-in-out infinite;
+  will-change: transform, opacity, filter;
 }
 
 .moto-logo-animation:hover {
-  animation: 
-    motoAcceleration 1s ease-in-out infinite,
-    motoVibration 0.9s ease-in-out infinite,
-    motoGlow 1.5s ease-in-out infinite;
-  transform: scale(1.08);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media (max-width: 768px) {
-  .moto-logo-animation {
-    animation: 
-      motoAcceleration 2.5s ease-in-out infinite,
-      motoVibration 2s ease-in-out infinite,
-      motoGlow 3.5s ease-in-out infinite;
-  }
-  .moto-logo-animation:hover {
-    animation: 
-      motoAcceleration 1.2s ease-in-out infinite,
-      motoVibration 1s ease-in-out infinite,
-      motoGlow 2s ease-in-out infinite;
-    transform: scale(1.05);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .moto-logo-animation {
-    animation: none;
-  }
-  .moto-logo-animation:hover {
-    animation: none;
-    transform: scale(1.02);
-  }
-  .hero-orb-1, .hero-orb-2, .hero-orb-3, .hero-orb-4, .hero-orb-5 {
-    animation: none;
-  }
+  animation: engineIdle 2s ease-in-out infinite;
+  /* Faster idle on hover */
+  color: var(--accent);
 }
 
 /* Glow utility for accent elements */
 .glow-accent {
-  box-shadow: 0 0 20px rgba(252, 163, 17, 0.12), 0 0 40px rgba(252, 163, 17, 0.04);
+  box-shadow: 0 0 20px rgba(255, 85, 0, 0.15), 0 0 40px rgba(255, 85, 0, 0.05);
 }
+
 .glow-accent-hover:hover {
-  box-shadow: 0 0 25px rgba(252, 163, 17, 0.20), 0 0 50px rgba(252, 163, 17, 0.08);
+  box-shadow: 0 0 30px rgba(255, 85, 0, 0.25), 0 0 60px rgba(255, 85, 0, 0.1);
 }

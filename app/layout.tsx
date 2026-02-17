@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next"
 import { Space_Grotesk, Syne, Work_Sans } from "next/font/google"
 
 import { ScrollProvider } from "@/components/scroll-provider"
+import localFont from "next/font/local"
 import { AuthProvider } from "@/contexts/auth-context"
 import "lenis/dist/lenis.css"
 import "./globals.css"
@@ -31,6 +32,12 @@ const workSans = Work_Sans({
   weight: ["300", "400", "500", "600", "700"],
 })
 
+const tenada = localFont({
+  src: "../public/fonts/Tenada.ttf",
+  variable: "--font-tenada",
+  display: "swap",
+})
+
 export const metadata: Metadata = {
   title: "MotoMarket Cuba - Compra y vende motos con confianza",
   description:
@@ -38,7 +45,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#050505", /* Updated to match new surface color */
 }
 
 export default function RootLayout({
@@ -47,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" className={`${spaceGrotesk.variable} ${syne.variable} ${workSans.variable}`}>
+    <html lang="es" className={`${spaceGrotesk.variable} ${workSans.variable} ${tenada.variable}`}>
       <body className="font-sans antialiased overflow-x-hidden">
         <AuthProvider>
           <ScrollProvider>{children}</ScrollProvider>

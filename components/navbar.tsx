@@ -84,7 +84,7 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="font-logo moto-logo-animation text-xl font-semibold tracking-tight text-white transition-colors duration-300 hover:text-accent md:text-2xl lg:text-3xl"
+            className="font-technical moto-logo-animation text-xl font-medium tracking-tight text-white transition-colors duration-300 hover:text-accent md:text-2xl lg:text-3xl"
           >
             <motion.span
               whileHover={{ scale: 1.05 }}

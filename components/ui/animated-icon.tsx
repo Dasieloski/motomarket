@@ -22,7 +22,7 @@ export function AnimatedIcon({
     icon,
     size = 24,
     color = "currentColor",
-    strokeWidth = 2,
+    strokeWidth = 1.5, // Thinner, more technical stroke
     className,
     trigger = "hover",
     ...motionProps
@@ -36,20 +36,20 @@ export function AnimatedIcon({
         return null
     }
 
-    // Animation variants
+    // Animation variants - Tech/Brutalist style (No wiggle, precise snapping)
     const variants = {
         hover: {
-            scale: 1.15,
-            rotate: [0, -10, 10, 0],
-            transition: { duration: 0.4, ease: "easeInOut" as const }
+            scale: 1.1,
+            filter: "drop-shadow(0 0 4px rgba(255, 85, 0, 0.5))", // Tech glow
+            transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } // expo.out
         },
         tap: {
-            scale: 0.9,
+            scale: 0.95,
             transition: { duration: 0.1 }
         },
         loop: {
             rotate: 360,
-            transition: { duration: 2, repeat: Infinity, ease: "linear" as const }
+            transition: { duration: 3, repeat: Infinity, ease: "linear" as const }
         }
     }
 
