@@ -107,15 +107,7 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html.smooth-scroll {
-    scroll-behavior: smooth;
-  }
-}
+/* scroll-behavior: smooth removed to prevent conflicts with Lenis and improve mobile performance */
 
 /* ============================================
    ANIMATED HERO BACKGROUND

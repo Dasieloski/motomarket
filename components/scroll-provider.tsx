@@ -44,9 +44,8 @@ const lenisOptions = {
   easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
   orientation: "vertical" as const,
   smoothWheel: true,
-  touchMultiplier: 2,
-  syncTouch: true,
-  syncTouchLerp: 0.075,
+  // syncTouch is disabled to allow native momentum scroll on mobile (more responsive)
+  syncTouch: false,
 }
 
 export function ScrollProvider({ children }: { children: React.ReactNode }) {
