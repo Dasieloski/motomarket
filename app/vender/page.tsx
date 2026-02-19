@@ -18,6 +18,17 @@ import { ProvinceSelect } from "@/components/ui/province-select"
 import { ConditionToggle } from "@/components/ui/condition-toggle"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { useToast } from "@/hooks/use-toast"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 const listingSchema = z.object({
   category: z.enum(["moto", "part", "service"]),
@@ -27,6 +38,7 @@ const listingSchema = z.object({
     .number({ invalid_type_error: "El precio debe ser un número" })
     .min(0, "El precio debe ser mayor o igual a 0")
     .optional(),
+  paymentMethods: z.array(z.enum(["transferencia_cup", "efectivo_cup", "pago_exterior"])).optional(),
   phone: z.string().min(8, "El teléfono es obligatorio y debe tener al menos 8 dígitos"),
   province: z.enum([...PROVINCIAS_CUBA] as [string, ...string[]], {
     required_error: "Selecciona la provincia",
@@ -55,10 +67,13 @@ function VenderForm() {
   const searchParams = useSearchParams()
   const editId = searchParams?.get("edit")
   const { user, listings, addListing, updateListing, isLoading } = useAuth()
-  const [imageFiles, setImageFiles] = useState<File[]>([])
+  const [imageFilesMap, setImageFilesMap] = useState<Map<string, File>>(new Map())
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [currentStep, setCurrentStep] = useState(1)
+  const totalSteps = 5
+  const { toast } = useToast()
 
   const existingListing = editId ? listings.find((l) => l.id === editId) : null
 
@@ -67,38 +82,41 @@ function VenderForm() {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<ListingFormData>({
     resolver: zodResolver(listingSchema),
     defaultValues: existingListing
       ? {
-        category: existingListing.category ?? "moto",
-        title: existingListing.title,
-        description: existingListing.description,
-        price: existingListing.price,
-        phone: existingListing.phone,
-        province: existingListing.province ?? "La Habana",
-        condition: existingListing.condition ?? "de_uso",
-        motoType: existingListing.motoType,
-        brand: existingListing.brand,
-        model: existingListing.model,
-        year: existingListing.year,
-        displacement: existingListing.displacement,
-        amperage: existingListing.amperage,
-        watts: existingListing.watts,
-        mileage: existingListing.mileage,
-        partForBrand: existingListing.partForBrand,
-        partForModel: existingListing.partForModel,
-        partType: existingListing.partType,
-        serviceType: existingListing.serviceType,
-        contact: existingListing.contact,
-        location: existingListing.location,
-      }
+          category: existingListing.category ?? "moto",
+          title: existingListing.title,
+          description: existingListing.description,
+          price: existingListing.price,
+          paymentMethods: existingListing.paymentMethods ?? [],
+          phone: existingListing.phone,
+          province: existingListing.province ?? "La Habana",
+          condition: existingListing.condition ?? "de_uso",
+          motoType: existingListing.motoType,
+          brand: existingListing.brand,
+          model: existingListing.model,
+          year: existingListing.year,
+          displacement: existingListing.displacement,
+          amperage: existingListing.amperage,
+          watts: existingListing.watts,
+          mileage: existingListing.mileage,
+          partForBrand: existingListing.partForBrand,
+          partForModel: existingListing.partForModel,
+          partType: existingListing.partType,
+          serviceType: existingListing.serviceType,
+          contact: existingListing.contact,
+          location: existingListing.location,
+        }
       : {
-        category: "moto",
-        province: "La Habana",
-        condition: "de_uso",
-      },
+          category: "moto",
+          province: "La Habana",
+          condition: "de_uso",
+          paymentMethods: [],
+        },
   })
 
   const category = watch("category")
@@ -106,13 +124,75 @@ function VenderForm() {
   const watchedTitle = watch("title")
   const watchedDescription = watch("description")
   const watchedPrice = watch("price")
+  const watchedPaymentMethods = watch("paymentMethods")
+  const watchedCurrency = watch("currency")
+  const watchedProvince = watch("province")
+  const watchedCondition = watch("condition")
+
+  const handleNextStep = () => {
+    let hasErrors = false
+
+    // Paso 1: Validar categoría (siempre se puede avanzar)
+
+    // Paso 2: Validar información básica
+    if (currentStep === 2) {
+      if (errors.title || errors.province || errors.condition) {
+        hasErrors = true
+      }
+    }
+    // Paso 3: Validar especificaciones según categoría
+    else if (currentStep === 3) {
+      if (category === "moto") {
+        if (errors.brand || errors.model || errors.year || errors.motoType || errors.mileage) {
+          hasErrors = true
+        }
+        if (motoType === "combustion" && errors.displacement) {
+          hasErrors = true
+        }
+        if (motoType === "electrica" && (errors.amperage || errors.watts)) {
+          hasErrors = true
+        }
+      } else if (category === "part") {
+        if (errors.partForBrand || errors.partForModel || errors.partType) {
+          hasErrors = true
+        }
+      } else if (category === "service") {
+        if (errors.serviceType || errors.contact || errors.location) {
+          hasErrors = true
+        }
+      }
+    }
+    // Paso 4: Validar descripción y precio
+    else if (currentStep === 4) {
+      if (errors.description || errors.phone) {
+        hasErrors = true
+      }
+    }
+    // Paso 5: No hay validación adicional (imágenes son opcionales)
+
+    if (!hasErrors) {
+      setCurrentStep((s) => Math.min(totalSteps, s + 1))
+    }
+  }
 
   useEffect(() => {
     if (existingListing && existingListing.images) {
       // Si hay imágenes existentes (URLs), crear previews
       setImagePreviews(existingListing.images)
+    } else if (!editId) {
+      // Cargar borrador si existe
+      const draft = localStorage.getItem("motomarket_draft_listing")
+      if (draft) {
+        try {
+          const parsed = JSON.parse(draft) as { form: ListingFormData; images: string[] }
+          reset(parsed.form)
+          setImagePreviews(parsed.images ?? [])
+        } catch {
+          // ignorar borrador corrupto
+        }
+      }
     }
-  }, [existingListing])
+  }, [existingListing, editId, reset])
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -124,30 +204,60 @@ function VenderForm() {
     const files = Array.from(e.target.files || [])
     if (files.length === 0) return
 
-    const newFiles = [...imageFiles, ...files]
-    setImageFiles(newFiles)
+    const newFilesMap = new Map(imageFilesMap)
+    const newPreviews: string[] = []
 
-    // Crear previews
-    const newPreviews = files.map((file) => URL.createObjectURL(file))
+    files.forEach((file) => {
+      const preview = URL.createObjectURL(file)
+      newFilesMap.set(preview, file)
+      newPreviews.push(preview)
+    })
+
+    setImageFilesMap(newFilesMap)
     setImagePreviews([...imagePreviews, ...newPreviews])
   }
 
   const removeImage = (index: number) => {
-    const newFiles = imageFiles.filter((_, i) => i !== index)
-    const newPreviews = imagePreviews.filter((_, i) => i !== index)
-
+    const previewToRemove = imagePreviews[index]
+    
     // Revocar URL del objeto si es un preview local
-    if (imagePreviews[index]?.startsWith("blob:")) {
-      URL.revokeObjectURL(imagePreviews[index])
+    if (previewToRemove?.startsWith("blob:")) {
+      URL.revokeObjectURL(previewToRemove)
     }
 
-    setImageFiles(newFiles)
+    // Remover del map si existe
+    const newFilesMap = new Map(imageFilesMap)
+    newFilesMap.delete(previewToRemove)
+    setImageFilesMap(newFilesMap)
+
+    const newPreviews = imagePreviews.filter((_, i) => i !== index)
     setImagePreviews(newPreviews)
   }
 
+  // Guardado de borrador automático
+  useEffect(() => {
+    if (editId) return
+    const subscription = watch((value) => {
+      try {
+        const payload = {
+          form: value as ListingFormData,
+          images: imagePreviews,
+        }
+        localStorage.setItem("motomarket_draft_listing", JSON.stringify(payload))
+      } catch {
+        // ignorar errores de almacenamiento
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [watch, editId, imagePreviews])
+
   const onSubmit = async (data: ListingFormData) => {
     if (imagePreviews.length === 0) {
-      alert("Por favor agrega al menos una imagen")
+      toast({
+        variant: "destructive",
+        title: "Faltan imágenes",
+        description: "Agrega al menos una foto para publicar tu anuncio.",
+      })
       return
     }
 
@@ -156,15 +266,17 @@ function VenderForm() {
     // Convertir archivos a URLs base64 para almacenamiento local (simulación)
     // En producción, esto se subiría a un servidor
     const imageUrls = await Promise.all(
-      imagePreviews.map(async (preview, index) => {
-        if (preview.startsWith("blob:")) {
-          const file = imageFiles[index]
+      imagePreviews.map(async (preview) => {
+        const file = imageFilesMap.get(preview)
+        if (file) {
+          // Es un archivo nuevo (blob)
           return new Promise<string>((resolve) => {
             const reader = new FileReader()
             reader.onloadend = () => resolve(reader.result as string)
             reader.readAsDataURL(file)
           })
         }
+        // Es una URL existente
         return preview
       })
     )
@@ -176,15 +288,25 @@ function VenderForm() {
       views: existingListing?.views ?? 0,
       province: data.province as ProvinciaCuba,
       condition: data.condition as ProductCondition,
+      paymentMethods: (data.paymentMethods as any[]) ?? [],
     }
 
     if (editId && existingListing) {
       updateListing(editId, {
         ...basePayload,
       })
+      toast({
+        title: "Publicación actualizada",
+        description: "Tus cambios se han guardado correctamente.",
+      })
     } else {
       addListing({
         ...basePayload,
+      })
+      localStorage.removeItem("motomarket_draft_listing")
+      toast({
+        title: "Publicación creada",
+        description: "Tu anuncio ya está visible en el listado.",
       })
     }
 
@@ -249,9 +371,21 @@ function VenderForm() {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <PremiumCard className="p-8">
+              <div className="mb-6 space-y-2">
+                <p className="font-body text-xs font-medium uppercase tracking-wide text-primary-muted">
+                  Paso {currentStep} de {totalSteps}
+                </p>
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-subtle">
+                  <div
+                    className="h-full rounded-full bg-accent transition-all"
+                    style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+                  />
+                </div>
+              </div>
+
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                {/* Tipo de publicación */}
-                <div className="space-y-3">
+                {/* Paso 1: Tipo de publicación */}
+                <div className={currentStep === 1 ? "space-y-3" : "hidden"}>
                   <p className="font-body text-sm font-medium text-primary-secondary">
                     ¿Qué quieres publicar?
                   </p>
@@ -340,7 +474,9 @@ function VenderForm() {
                   </AnimatePresence>
                 </div>
 
-                <div>
+                {/* Paso 2: Información básica */}
+                <div className={currentStep === 2 ? "space-y-6" : "hidden"}>
+                  <div>
                   <PremiumInput
                     label="Título de la publicación"
                     placeholder="Ej: Yamaha R1 2024 en excelente estado"
@@ -348,25 +484,28 @@ function VenderForm() {
                     error={errors.title?.message}
                     {...register("title")}
                   />
-                </div>
+                  </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-4 sm:grid-cols-2">
                   <ProvinceSelect
                     label="Provincia de Cuba *"
-                    value={watch("province") ?? "La Habana"}
+                    value={watchedProvince ?? "La Habana"}
                     onChange={(v) => setValue("province", v)}
                     error={errors.province?.message}
                   />
                   <ConditionToggle
                     label="Estado del producto *"
-                    value={watch("condition") ?? "de_uso"}
+                    value={watchedCondition ?? "de_uso"}
                     onChange={(v) => setValue("condition", v)}
                     error={errors.condition?.message}
                   />
+                  </div>
                 </div>
 
-                {/* Campos específicos según tipo */}
-                <AnimatePresence mode="wait">
+                {/* Paso 3: Especificaciones */}
+                <div className={currentStep === 3 ? "space-y-6" : "hidden"}>
+                  {/* Campos específicos según tipo */}
+                  <AnimatePresence mode="wait">
                   {category === "moto" && (
                     <motion.div
                       key="section-moto"
@@ -571,9 +710,12 @@ function VenderForm() {
                       </div>
                     </motion.div>
                   )}
-                </AnimatePresence>
+                  </AnimatePresence>
+                </div>
 
-                <div>
+                {/* Paso 4: Descripción y precio */}
+                <div className={currentStep === 4 ? "space-y-6" : "hidden"}>
+                  <div>
                   <label className="mb-2 block font-body text-sm font-medium text-primary-secondary">
                     Descripción
                   </label>
@@ -587,21 +729,54 @@ function VenderForm() {
                       {errors.description.message}
                     </p>
                   )}
-                </div>
+                  </div>
 
-                <div>
-                  <PremiumInput
-                    label="Precio (USD)"
-                    type="number"
-                    placeholder="25000"
-                    icon={<DollarSign className="h-4 w-4" />}
-                    error={errors.price?.message}
-                    {...register("price", { valueAsNumber: true })}
-                  />
-                </div>
+                  <div>
+                  <div className="grid gap-4 sm:grid-cols-1">
+                    <PremiumInput
+                      label="Precio (en USD)"
+                      type="number"
+                      placeholder="25000"
+                      icon={<DollarSign className="h-4 w-4" />}
+                      error={errors.price?.message}
+                      {...register("price", { valueAsNumber: true })}
+                    />
+                  </div>
 
-                {/* Teléfono obligatorio */}
-                <div>
+                  {/* Métodos de pago que acepta */}
+                  <div>
+                    <label className="mb-3 block font-body text-sm font-medium text-primary-secondary">
+                      ¿Qué métodos de pago aceptas?
+                    </label>
+                    <div className="space-y-3">
+                      {[
+                        { id: "transferencia_cup", label: "Transferencia en CUP" },
+                        { id: "efectivo_cup", label: "Efectivo en CUP" },
+                        { id: "pago_exterior", label: "Pago en el exterior" },
+                      ].map((method) => (
+                        <label key={method.id} className="flex items-center gap-3 rounded-input border border-border bg-surface-elevated px-4 py-3 cursor-pointer hover:bg-surface-subtle transition-colors">
+                          <input
+                            type="checkbox"
+                            value={method.id}
+                            onChange={(e) => {
+                              const current = watch("paymentMethods") || []
+                              if (e.target.checked) {
+                                setValue("paymentMethods", [...current, method.id as any])
+                              } else {
+                                setValue("paymentMethods", current.filter((m) => m !== method.id))
+                              }
+                            }}
+                            className="h-4 w-4 rounded border-border bg-surface-elevated accent-accent"
+                          />
+                          <span className="font-body text-sm text-primary">{method.label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  </div>
+
+                  {/* Teléfono obligatorio */}
+                  <div>
                   <PremiumInput
                     label="Teléfono de contacto *"
                     type="tel"
@@ -617,10 +792,13 @@ function VenderForm() {
                   >
                     Este número será visible en tu publicación para que los compradores te contacten.
                   </motion.p>
+                  </div>
                 </div>
 
-                {/* Subida de imágenes local */}
-                <div>
+                {/* Paso 5: Imágenes */}
+                <div className={currentStep === 5 ? "space-y-6" : "hidden"}>
+                  {/* Subida de imágenes local */}
+                  <div>
                   <label className="mb-2 block font-body text-sm font-medium text-primary-secondary">
                     Imágenes
                   </label>
@@ -667,6 +845,7 @@ function VenderForm() {
                             type="button"
                             onClick={() => removeImage(index)}
                             className="absolute right-1 top-1 rounded-full bg-red-500 p-1 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                            aria-label="Eliminar imagen"
                           >
                             <X className="h-3 w-3" />
                           </button>
@@ -674,11 +853,37 @@ function VenderForm() {
                       ))}
                     </motion.div>
                   )}
+
+                  <p className="mt-2 text-xs font-body text-primary-secondary">
+                    Tip: las publicaciones con 5 o más fotos suelen recibir muchas más visitas.
+                  </p>
+                </div>
                 </div>
 
-                <PremiumButton type="submit" isLoading={isSubmitting} className="w-full">
-                  {editId ? "Actualizar publicación" : "Publicar"}
-                </PremiumButton>
+                {/* Controles de navegación del wizard */}
+                <div className="flex items-center justify-between pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentStep((s) => Math.max(1, s - 1))}
+                    disabled={currentStep === 1}
+                    className="rounded-input border border-border bg-surface-elevated px-4 py-2 text-sm font-body text-primary hover:bg-surface-subtle disabled:opacity-50"
+                  >
+                    Anterior
+                  </button>
+                  {currentStep < totalSteps ? (
+                    <PremiumButton
+                      type="button"
+                      onClick={handleNextStep}
+                      className="bg-accent text-white hover:bg-accent/90"
+                    >
+                      Siguiente
+                    </PremiumButton>
+                  ) : (
+                    <PremiumButton type="submit" isLoading={isSubmitting} className="min-w-[140px] bg-accent text-white hover:bg-accent/90">
+                      {editId ? "Actualizar publicación" : "Publicar"}
+                    </PremiumButton>
+                  )}
+                </div>
               </form>
             </PremiumCard>
           </motion.div>
@@ -727,7 +932,9 @@ function VenderForm() {
                   <div className="mt-4">
                     <span className="font-heading text-2xl font-bold text-accent">
                       {typeof watchedPrice === "number" && !Number.isNaN(watchedPrice)
-                        ? `$${watchedPrice.toLocaleString()}`
+                        ? watchedCurrency === "CUP"
+                          ? `₡${watchedPrice.toLocaleString()}`
+                          : `$${watchedPrice.toLocaleString()}`
                         : "$0"}
                     </span>
                   </div>

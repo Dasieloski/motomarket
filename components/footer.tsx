@@ -12,7 +12,7 @@ const footerLinks = [
   },
   {
     title: "Empresa",
-    links: ["Sobre nosotros", "Contacto", "Blog", "Prensa"],
+    links: ["Sobre nosotros", "Contacto", "Blog", "Prensa", "Roadmap"],
   },
   {
     title: "Soporte",
@@ -81,7 +81,7 @@ export function Footer() {
                   {group.links.map((link) => (
                     <li key={link}>
                       <motion.a
-                        href="#"
+                        href={link === "Roadmap" ? "/roadmap" : "#"}
                         className="inline-block font-body text-body text-primary-secondary transition-colors duration-smooth hover:text-white"
                         whileHover={{ x: 2 }}
                       >

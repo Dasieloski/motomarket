@@ -19,6 +19,7 @@ import {
 
 import { useAuth } from "@/contexts/auth-context"
 import type { MotoListing } from "@/contexts/auth-context"
+import { toast } from "@/hooks/use-toast"
 
 interface ProductCardProps {
   moto: MotoListing
@@ -50,12 +51,41 @@ export function ProductCard({ moto, index }: ProductCardProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-60px" })
   const [isFavorite, setIsFavorite] = useState(false)
-  const { getBusinessById } = useAuth()
+  const { getBusinessById, allListings } = useAuth()
   const business = moto.businessId ? getBusinessById(moto.businessId) : undefined
 
   const categoryLabel = getCategoryLabel(moto)
 
-  // Format price
+  const createdAtDate = moto.createdAt ? new Date(moto.createdAt) : null
+  const daysSinceCreated =
+    createdAtDate && !Number.isNaN(createdAtDate.getTime())
+      ? (Date.now() - createdAtDate.getTime()) / (1000 * 60 * 60 * 24)
+      : null
+
+  const isNewListing = moto.condition === "nuevo" && daysSinceCreated !== null && daysSinceCreated <= 7
+
+  const similarListings = allListings.filter((listing) => {
+    if (listing.id === moto.id) return false
+    if (listing.category !== moto.category) return false
+    if (listing.category === "moto" && listing.motoType && moto.motoType) {
+      return listing.motoType === moto.motoType
+    }
+    return listing.price > 0
+  })
+
+  const averagePrice =
+    similarListings.length > 0
+      ? similarListings.reduce((sum, l) => sum + (l.price || 0), 0) /
+        similarListings.length
+      : null
+
+  const isGoodPrice =
+    averagePrice !== null &&
+    moto.price > 0 &&
+    similarListings.length >= 3 &&
+    moto.price <= averagePrice * 0.9
+
+  // Format price - Always USD
   const priceDisplay = moto.price > 0
     ? `$${moto.price.toLocaleString()}`
     : "CONSULTAR"
@@ -88,11 +118,22 @@ export function ProductCard({ moto, index }: ProductCardProps) {
             {/* Overlay Gradient for depth */}
             <div className="absolute inset-0 bg-gradient-to-t from-surface-card/60 via-transparent to-transparent opacity-60" />
 
-            {/* Status Badge - Top Left */}
-            <div className="absolute top-0 left-0">
-              <div className="bg-surface-card/90 backdrop-blur-md px-3 py-1.5 border-r border-b border-border text-[10px] font-bold tracking-widest uppercase text-white">
-                {categoryLabel}
+            {/* Status & meta badges - Top Left */}
+            <div className="absolute top-0 left-0 flex flex-col gap-1 p-2">
+              <div className="inline-flex items-center gap-1 rounded-full bg-surface-card/90 backdrop-blur-md px-3 py-1 border border-border text-[10px] font-bold tracking-widest uppercase text-white">
+                <span>{categoryLabel}</span>
+                {moto.condition === "nuevo" && (
+                  <span className="rounded-full bg-accent/20 px-2 py-0.5 text-[9px] font-semibold text-accent">
+                    Nuevo
+                  </span>
+                )}
               </div>
+
+              {isGoodPrice && (
+                <div className="inline-flex items-center rounded-full bg-emerald-500/90 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white shadow-soft">
+                  Buen precio
+                </div>
+              )}
             </div>
 
             {/* Favorite Action - Top Right */}
@@ -100,7 +141,14 @@ export function ProductCard({ moto, index }: ProductCardProps) {
               type="button"
               onClick={(e) => {
                 e.preventDefault()
-                setIsFavorite(!isFavorite)
+                const next = !isFavorite
+                setIsFavorite(next)
+                if (next) {
+                  toast({
+                    title: "Publicación guardada en favoritos",
+                    description: "Más adelante podrás gestionar tus favoritos desde tu cuenta.",
+                  })
+                }
               }}
               className="absolute top-0 right-0 p-2 text-white/70 hover:text-accent transition-colors z-20"
             >
@@ -112,16 +160,29 @@ export function ProductCard({ moto, index }: ProductCardProps) {
           <div className="flex flex-col flex-1 p-2 md:p-3 gap-1 md:gap-2">
 
             {/* Head */}
-            <div className="space-y-0.5">
+            <div className="space-y-1">
               <div className="flex justify-between items-start gap-2">
                 <h3 className="font-heading text-xs md:text-base leading-tight text-white group-hover:text-accent transition-colors line-clamp-2">
                   {moto.title}
                 </h3>
                 <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4 text-secondary group-hover:text-accent opacity-0 md:group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0" />
               </div>
-              <div className="flex items-center gap-1 text-secondary">
+
+              <div className="flex flex-wrap items-center gap-1 text-secondary text-[9px] md:text-[10px] uppercase tracking-wide">
                 <MapPin className="w-2.5 h-2.5 md:w-3 md:h-3" />
-                <span className="text-[9px] md:text-[10px] uppercase tracking-wide">{moto.province || "Cuba"}</span>
+                <span>{moto.province || "Cuba"}</span>
+                {moto.year && (
+                  <>
+                    <span className="mx-1 text-[8px] text-secondary/60">•</span>
+                    <span>{moto.year}</span>
+                  </>
+                )}
+                {moto.mileage && (
+                  <>
+                    <span className="mx-1 text-[8px] text-secondary/60">•</span>
+                    <span>{moto.mileage}</span>
+                  </>
+                )}
               </div>
             </div>
 

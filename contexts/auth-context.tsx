@@ -36,11 +36,33 @@ export const PROVINCIAS_CUBA = [
 
 export type ProvinciaCuba = (typeof PROVINCIAS_CUBA)[number]
 
+export type PaymentMethod = "transferencia_cup" | "efectivo_cup" | "pago_exterior"
+
+export const PAYMENT_METHODS = {
+  transferencia_cup: "Transferencia en CUP",
+  efectivo_cup: "Efectivo en CUP",
+  pago_exterior: "Pago en el exterior",
+} as const
+
+export interface Review {
+  id: string
+  rating: number // 1-5
+  text: string
+  reviewerName: string
+  createdAt: string
+}
+
+// Función auxiliar para formatear precios en USD
+export function formatPrice(amount: number): string {
+  return `$${amount.toLocaleString()}`
+}
+
 export interface MotoListing {
   id: string
   title: string
   description: string
-  price: number
+  price: number // Siempre en USD
+  paymentMethods: PaymentMethod[] // Métodos de pago que acepta el vendedor
   images: string[]
   userId: string
   createdAt: string
@@ -68,6 +90,8 @@ export interface MotoListing {
   businessId?: string
   /** Publicación destacada (según plan) */
   isHighlighted?: boolean
+  /** Reseñas de compradores */
+  reviews?: Review[]
 }
 
 /** Perfil de negocio (cuenta empresarial) */
