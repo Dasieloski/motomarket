@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Sidebar } from "@/components/admin/sidebar";
 import { AdminHeader } from "@/components/admin/header";

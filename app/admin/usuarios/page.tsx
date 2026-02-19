@@ -1,62 +1,116 @@
+"use client";
+
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Sidebar } from "@/components/admin/sidebar";
+import { AdminHeader } from "@/components/admin/header";
+import { AdminTable } from "@/components/admin/admin-table";
+import { QuickStats } from "@/components/admin/quick-stats";
+import { Shield, AlertCircle, CheckCircle, Trash2, Edit, Users, UserCheck } from "lucide-react";
+import { motion } from "framer-motion";
 
 const usuarios = [
-  { id: 1, nombre: "Juan Pérez", usuario: "juanperez", email: "juan@mail.com", estado: "Activo" },
-  { id: 2, nombre: "María Gómez", usuario: "maria88", email: "maria@mail.com", estado: "Activo" },
-  { id: 3, nombre: "Carlos Martínez", usuario: "carlosm", email: "carlos@mail.com", estado: "Suspendido" },
+  { id: 1, nombre: "Juan Pérez", usuario: "juanperez", email: "juan@mail.com", estado: "Activo", verificado: true, publicaciones: 5 },
+  { id: 2, nombre: "María Gómez", usuario: "maria88", email: "maria@mail.com", estado: "Activo", verificado: true, publicaciones: 8 },
+  { id: 3, nombre: "Carlos Martínez", usuario: "carlosm", email: "carlos@mail.com", estado: "Suspendido", verificado: false, publicaciones: 2 },
+  { id: 4, nombre: "Ana López", usuario: "ana_m", email: "ana@mail.com", estado: "Activo", verificado: true, publicaciones: 12 },
+  { id: 5, nombre: "Pedro Díaz", usuario: "pedro", email: "pedro@mail.com", estado: "Activo", verificado: false, publicaciones: 1 },
+];
+
+const columns = [
+  {
+    key: "nombre",
+    label: "Nombre",
+    sortable: true,
+    render: (value: string) => <span className="font-medium text-primary">{value}</span>,
+  },
+  {
+    key: "usuario",
+    label: "Usuario",
+    sortable: true,
+    render: (value: string) => <span className="text-primary-secondary">@{value}</span>,
+  },
+  {
+    key: "email",
+    label: "Email",
+    sortable: true,
+    render: (value: string) => <span className="text-primary-secondary text-xs">{value}</span>,
+  },
+  {
+    key: "verificado",
+    label: "Verificado",
+    sortable: true,
+    render: (value: boolean) => (
+      <div className={`inline-flex items-center gap-2 ${value ? "text-emerald-600" : "text-amber-600"}`}>
+        {value ? <CheckCircle size={14} /> : <AlertCircle size={14} />}
+        {value ? "Sí" : "No"}
+      </div>
+    ),
+  },
+  {
+    key: "publicaciones",
+    label: "Publicaciones",
+    sortable: true,
+    render: (value: number) => <span className="font-medium text-accent">{value}</span>,
+  },
+  {
+    key: "estado",
+    label: "Estado",
+    sortable: true,
+    render: (value: string) => (
+      <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${
+        value === "Activo" ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-600"
+      }`}>
+        {value === "Activo" ? <CheckCircle size={14} /> : <AlertCircle size={14} />}
+        {value}
+      </div>
+    ),
+  },
 ];
 
 export default function UsuariosAdmin() {
+  const totalUsuarios = usuarios.length;
+  const activos = usuarios.filter((u) => u.estado === "Activo").length;
+  const verificados = usuarios.filter((u) => u.verificado).length;
+  const totalPublicaciones = usuarios.reduce((sum, u) => sum + u.publicaciones, 0);
+
+  const renderActions = (row: any) => (
+    <>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-accent/10 text-accent hover:bg-accent hover:text-white transition-all text-xs font-medium"
+      >
+        <Edit size={14} />
+        Editar
+      </motion.button>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white transition-all text-xs font-medium"
+      >
+        <Trash2 size={14} />
+        Eliminar
+      </motion.button>
+    </>
+  );
+
   return (
-    <section>
-      <Card className="mb-8">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="font-heading text-2xl font-bold text-primary">Gestión de usuarios</h1>
-            <input
-              type="text"
-              placeholder="Buscar usuario..."
-              className="rounded-input border border-border bg-surface-elevated px-4 py-2 text-sm text-primary focus:border-accent focus:outline-none"
-            />
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm text-left">
-              <thead>
-                <tr className="border-b border-border text-primary-muted">
-                  <th className="py-2 px-3 font-medium">Nombre</th>
-                  <th className="py-2 px-3 font-medium">Usuario</th>
-                  <th className="py-2 px-3 font-medium">Email</th>
-                  <th className="py-2 px-3 font-medium">Estado</th>
-                  <th className="py-2 px-3 font-medium">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {usuarios.map((u) => (
-                  <tr key={u.id} className="border-b border-border hover:bg-accent/5 transition-colors">
-                    <td className="py-2 px-3 font-body text-primary">{u.nombre}</td>
-                    <td className="py-2 px-3 text-primary-secondary">{u.usuario}</td>
-                    <td className="py-2 px-3 text-primary-secondary">{u.email}</td>
-                    <td className="py-2 px-3">
-                      <span className={
-                        u.estado === "Activo"
-                          ? "bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-xs"
-                          : "bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs"
-                      }>
-                        {u.estado}
-                      </span>
-                    </td>
-                    <td className="py-2 px-3 flex gap-2">
-                      <button className="rounded bg-accent text-white px-3 py-1 text-xs font-medium shadow hover:bg-accent-hover transition-colors">Editar</button>
-                      <button className="rounded bg-red-500 text-white px-3 py-1 text-xs font-medium shadow hover:bg-red-600 transition-colors">Eliminar</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
-    </section>
+    <div className="min-h-screen flex bg-surface">
+      <Sidebar />
+      <div className="flex-1 flex flex-col min-h-screen">
+        <AdminHeader />
+        <main className="flex-1 p-6 md:p-10 bg-surface">
+          <QuickStats
+            stats={[
+              { label: "Total usuarios", value: totalUsuarios, icon: Users, color: "var(--accent)", trend: { value: 8, direction: "up" } },
+              { label: "Activos", value: activos, icon: CheckCircle, color: "#10b981", trend: { value: 15, direction: "up" } },
+              { label: "Verificados", value: verificados, icon: UserCheck, color: "#3b82f6", trend: { value: 20, direction: "up" } },
+              { label: "Total publicaciones", value: totalPublicaciones, icon: Shield, color: "#f59e42" },
+            ]}
+          />
+          <AdminTable title="Gestión de usuarios" columns={columns} data={usuarios} renderActions={renderActions} />
+        </main>
+      </div>
+    </div>
   );
 }
