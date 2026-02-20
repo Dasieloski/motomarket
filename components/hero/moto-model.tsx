@@ -1,11 +1,12 @@
 "use client"
 
 import { useRef, useMemo, useState, useEffect } from "react"
-import { useFrame, useThree } from "@react-three/fiber"
+import { useFrame } from "@react-three/fiber"
 import { useGLTF } from "@react-three/drei"
 import type { Group } from "three"
 import * as THREE from "three"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js"
+import type { MotionValue } from "framer-motion"
 
 // Ruta al modelo principal de la moto (asegúrate de que exista en public/models3d/moto.glb)
 const MODEL_PATH = "/models3d/moto.glb"
@@ -16,7 +17,7 @@ dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5
 dracoLoader.preload()
 
 interface MotoModelProps {
-  scrollProgress: number
+  scrollProgress: MotionValue<number>
 }
 
 export function MotoModel({ scrollProgress }: MotoModelProps) {
@@ -26,11 +27,7 @@ export function MotoModel({ scrollProgress }: MotoModelProps) {
   const currentRotationX = useRef(0)
   const idlePhase = useRef(0)
   const [isModelReady, setIsModelReady] = useState(false)
-  const [opacity, setOpacity] = useState(1) // Iniciar visible desde el principio
-  const prevScrollProgress = useRef(scrollProgress)
-
   const { scene } = useGLTF(MODEL_PATH)
-  const { invalidate } = useThree()
 
   // Clonar para no compartir estado entre instancias
   const clonedScene = useMemo(() => {
@@ -66,13 +63,6 @@ export function MotoModel({ scrollProgress }: MotoModelProps) {
     }
   }, [clonedScene])
 
-  // Invalidar cuando cambia el scroll para render-on-demand
-  useEffect(() => {
-    if (Math.abs(scrollProgress - prevScrollProgress.current) > 0.001) {
-      prevScrollProgress.current = scrollProgress
-      invalidate()
-    }
-  }, [scrollProgress, invalidate])
 
   useFrame((_, delta) => {
     if (!groupRef.current || !isModelReady) return
@@ -83,11 +73,12 @@ export function MotoModel({ scrollProgress }: MotoModelProps) {
 
     // Scroll (equivalente a ScrollTrigger): ligero extra de rotación y zoom muy sutil
     const maxExtraRotation = 0.18 // ≈ 10° extra
-    const scrollExtraY = scrollProgress * maxExtraRotation
+    const scrollValue = scrollProgress.get()
+    const scrollExtraY = scrollValue * maxExtraRotation
     // Importante: en Three.js la cámara mira hacia -Z, por lo que el modelo
     // debe estar en valores negativos de Z para ser visible.
     const baseZ = -6.9
-    const scrollOffsetZ = baseZ + scrollProgress * 0.4
+    const scrollOffsetZ = baseZ + scrollValue * 0.4
 
     // Animación continua sutil: flotación muy ligera
     idlePhase.current += delta * 0.4
@@ -113,8 +104,6 @@ export function MotoModel({ scrollProgress }: MotoModelProps) {
     groupRef.current.position.y = baseY + floatY
     groupRef.current.position.z = scrollOffsetZ
 
-    // Invalidar para el siguiente frame (render continuo para animación suave)
-    invalidate()
   })
 
   // Siempre renderizar el grupo cuando hay escena clonada (posición inicial = misma que useFrame)

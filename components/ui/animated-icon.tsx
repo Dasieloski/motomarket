@@ -2,10 +2,9 @@
 
 import React from "react"
 import { motion, HTMLMotionProps } from "framer-motion"
-import * as LucideIcons from "lucide-react"
 
 interface AnimatedIconProps extends Omit<HTMLMotionProps<"div">, "children"> {
-    icon: keyof typeof LucideIcons | React.ComponentType<any>
+    icon: React.ComponentType<any>
     size?: number | string
     color?: string
     strokeWidth?: number
@@ -27,21 +26,13 @@ export function AnimatedIcon({
     trigger = "hover",
     ...motionProps
 }: AnimatedIconProps) {
-    const IconComponent = typeof icon === "string"
-        ? (LucideIcons[icon as keyof typeof LucideIcons] as React.ComponentType<any>)
-        : icon
-
-    if (!IconComponent) {
-        console.warn(`Icon "${icon}" not found in lucide-react`)
-        return null
-    }
+    const IconComponent = icon
 
     // Animation variants - Tech/Brutalist style (No wiggle, precise snapping)
     const variants = {
         hover: {
             scale: 1.1,
-            filter: "drop-shadow(0 0 4px rgba(255, 85, 0, 0.5))", // Tech glow
-            transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } // expo.out
+            transition: { duration: 0.3, ease: "easeOut" }
         },
         tap: {
             scale: 0.95,
