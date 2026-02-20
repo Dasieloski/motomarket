@@ -79,6 +79,7 @@ export function HeroScene({
       powerPreference: "high-performance" as const,
       stencil: false,
       depth: true,
+      logarithmicDepthBuffer: false,
     }),
     []
   )
@@ -99,20 +100,14 @@ export function HeroScene({
           ...glConfig,
           toneMapping: THREE.ACESFilmicToneMapping,
           outputColorSpace: THREE.SRGBColorSpace,
+          antialias: typeof window !== 'undefined' && window.devicePixelRatio <= 2,
         }}
         camera={{ position: [0, 0, 5], fov: 40 }}
-        dpr={[1, 1.5]}
-        performance={{ min: 0.5 }}
-        frameloop="demand"
+        dpr={typeof window !== 'undefined' && window.devicePixelRatio > 1.5 ? 1 : 1}
+        performance={{ min: 0.5, max: 0.8 }}
+        frameloop="always"
         onCreated={({ gl, size }) => {
-          // Asegurar que el canvas tenga dimensiones correctas sin forzar render
-          if (gl.domElement) {
-            const width = gl.domElement.clientWidth || size.width
-            const height = gl.domElement.clientHeight || size.height
-            if (width > 0 && height > 0) {
-              gl.setSize(width, height, false)
-            }
-          }
+          gl.setSize(gl.domElement.clientWidth || size.width, gl.domElement.clientHeight || size.height, false)
         }}
       >
         <Suspense fallback={null}>

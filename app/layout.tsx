@@ -12,30 +12,31 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "600", "700"],
+  preload: true,
 })
 
 const syne = Syne({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["700", "800"],
+  preload: true,
 })
-
-// Mirabelle ahora se carga localmente, no desde Google Fonts
 
 // Work Sans para texto de cuerpo - limpio y legible
 const workSans = Work_Sans({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
+  preload: true,
 })
 
 const tenada = localFont({
   src: "../public/fonts/Tenada.ttf",
   variable: "--font-tenada",
-  display: "swap",
+  display: "optional",
 })
 
 export const metadata: Metadata = {

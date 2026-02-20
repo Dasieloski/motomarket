@@ -5,11 +5,11 @@ import { motion, useScroll, useTransform, type MotionValue } from "framer-motion
 import dynamic from "next/dynamic"
 import { ArrowRight, ChevronDown } from "lucide-react"
 
-// Dynamic import for the 3D scene (Spline) - Keeping this as is, but framing it better
+// Dynamic import for the 3D scene - Only loaded when needed
 const HeroScene = dynamic(() => import("./hero/hero-scene").then((mod) => mod.HeroScene), {
   ssr: false,
   loading: () => (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex h-full w-full items-center justify-center bg-gradient-to-b from-transparent to-surface/50">
       <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
     </div>
   ),
