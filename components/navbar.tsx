@@ -74,11 +74,12 @@ export function Navbar() {
           y: visible ? 0 : -100,
           opacity: 1,
         }}
-        transition={{ duration: 0.5, ease: easeSmooth }}
+        transition={{ duration: 0.3, ease: easeSmooth }}
         className={`fixed left-0 right-0 top-0 z-50 flex h-16 items-center md:h-20 transition-all duration-500 ${scrolled
           ? "bg-black/80 backdrop-blur-2xl border-b border-white/[0.06] shadow-[0_1px_0_rgba(255,255,255,0.06)]"
           : "bg-transparent border-b border-transparent"
           }`}
+        style={{ willChange: 'transform, opacity' }}
       >
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 md:px-10 lg:px-14">
           {/* Logo */}
@@ -133,7 +134,7 @@ export function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.4, ease: easeSmooth }}
+              transition={{ duration: 0.2, ease: easeSmooth }}
               className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
               onClick={() => setMobileOpen(false)}
               aria-hidden

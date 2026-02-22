@@ -1,15 +1,15 @@
 "use client"
 
-import { useRef, useState } from "react"
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion"
+import { useRef } from "react"
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion"
 import dynamic from "next/dynamic"
 import { ArrowRight, ChevronDown } from "lucide-react"
 
-// Dynamic import for the 3D scene (Spline) - Keeping this as is, but framing it better
+// Dynamic import for the 3D scene - Only loaded when needed
 const HeroScene = dynamic(() => import("./hero/hero-scene").then((mod) => mod.HeroScene), {
   ssr: false,
   loading: () => (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex h-full w-full items-center justify-center bg-gradient-to-b from-transparent to-surface/50">
       <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
     </div>
   ),
@@ -24,12 +24,6 @@ export function Hero() {
     offset: ["start start", "end start"],
   })
 
-  // State for 3D model scroll progress
-  const [scrollFor3D, setScrollFor3D] = useState(0)
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    setScrollFor3D(latest)
-  })
 
   // Monolithic text movement
   const yText = useTransform(scrollYProgress, [0, 1], [0, 100])
@@ -54,7 +48,7 @@ export function Hero() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-accent/5 blur-[100px] rounded-full" />
 
           {/* The 3D Scene */}
-          <HeroScene scrollProgress={scrollFor3D} />
+          <HeroScene scrollProgress={scrollYProgress as MotionValue<number>} />
 
           {/* Gradient Overlays for Integration */}
           <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-90" />

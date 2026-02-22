@@ -2,13 +2,10 @@
 
 import { Suspense, useMemo, useState, useEffect, useRef } from "react"
 import { Canvas, useThree } from "@react-three/fiber"
-import { PerformanceMonitor } from "@react-three/drei"
-import { motion } from "framer-motion"
+import { motion, type MotionValue } from "framer-motion"
 import * as THREE from "three"
 import { MotoModel } from "./moto-model"
 
-// Fondo hero: deep Prussian dark (NOT pure black)
-const HERO_BG = "#0A0D14"
 
 // Componente para detectar cuando el canvas está listo
 function CanvasReady({ onReady }: { onReady: () => void }) {
@@ -35,11 +32,9 @@ function SceneContent({
   scrollProgress,
   onLoaded,
 }: {
-  scrollProgress: number
+  scrollProgress: MotionValue<number>
   onLoaded: () => void
 }) {
-  const [dpr, setDpr] = useState(1.5)
-
   useEffect(() => {
     // Notificar cuando el modelo está listo después de asegurar render
     const timer = setTimeout(() => {
@@ -51,12 +46,6 @@ function SceneContent({
   return (
     <>
       <CanvasReady onReady={onLoaded} />
-      {/* Monitor de rendimiento para ajustar DPR dinámicamente */}
-      <PerformanceMonitor
-        onIncline={() => setDpr(1.5)}
-        onDecline={() => setDpr(1)}
-        onChange={({ factor }) => setDpr(Math.min(1.5, 1 + factor / 2))}
-      />
       <ambientLight intensity={0.5} />
       <directionalLight position={[4, 6, 5]} intensity={1.4} castShadow={false} color="#ffffff" />
       <directionalLight position={[-3, 4, 3]} intensity={0.6} color="#FCA311" />
@@ -71,7 +60,7 @@ function SceneContent({
 
 interface HeroSceneProps {
   className?: string
-  scrollProgress: number
+  scrollProgress: MotionValue<number>
   onModelLoaded?: () => void
 }
 
@@ -90,6 +79,7 @@ export function HeroScene({
       powerPreference: "high-performance" as const,
       stencil: false,
       depth: true,
+      logarithmicDepthBuffer: false,
     }),
     []
   )
@@ -110,20 +100,14 @@ export function HeroScene({
           ...glConfig,
           toneMapping: THREE.ACESFilmicToneMapping,
           outputColorSpace: THREE.SRGBColorSpace,
+          antialias: typeof window !== 'undefined' && window.devicePixelRatio <= 2,
         }}
         camera={{ position: [0, 0, 5], fov: 40 }}
-        dpr={[1, 1.5]}
-        performance={{ min: 0.5 }}
-        frameloop="demand"
+        dpr={typeof window !== 'undefined' && window.devicePixelRatio > 1.5 ? 1 : 1}
+        performance={{ min: 0.5, max: 0.8 }}
+        frameloop="always"
         onCreated={({ gl, size }) => {
-          // Asegurar que el canvas tenga dimensiones correctas sin forzar render
-          if (gl.domElement) {
-            const width = gl.domElement.clientWidth || size.width
-            const height = gl.domElement.clientHeight || size.height
-            if (width > 0 && height > 0) {
-              gl.setSize(width, height, false)
-            }
-          }
+          gl.setSize(gl.domElement.clientWidth || size.width, gl.domElement.clientHeight || size.height, false)
         }}
       >
         <Suspense fallback={null}>
